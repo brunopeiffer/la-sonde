@@ -1,0 +1,53 @@
+{
+  "_note": "Baromètres des préoccupations. Chaque vague contient la source exacte. L'agent ajoute les nouvelles vagues chaque mois. Les pourcentages sont ceux publiés (réponses multiples, total > 100).",
+  "series": [
+    {
+      "id": "ipsos-tribune",
+      "institute": "Ipsos bva-CESI",
+      "sponsor": "La Tribune Dimanche",
+      "question": { "fr": "Principales préoccupations (3 réponses possibles)", "en": "Main concerns (up to 3 answers)" },
+      "waves": [
+        {
+          "date": "2026-02-12", "field": "11-12 février 2026", "n": 1000,
+          "source": "https://www.breizh-info.com/2026/02/16/256831/barometre-ipsos-cesi-fevrier-2026-pouvoir-dachat-en-tete-immigration-et-insecurite-au-plus-haut-macron-au-plus-bas/",
+          "values": { "pouvoir_achat": 43, "systeme_social": 38, "delinquance": 33, "immigration": 28, "dette": 26 }
+        },
+        {
+          "date": "2026-10-08", "field": "7-8 octobre 2026", "n": 1000,
+          "source": "https://www.ipsos.com/fr-fr/barometre-politique-ipsos-bva-la-tribune-dimanche",
+          "values": { "pouvoir_achat": 54, "systeme_social": 44, "dette": 33, "delinquance": 29, "environnement": 27 }
+        }
+      ]
+    }
+  ],
+  "themes": {
+    "pouvoir_achat": { "fr": "Pouvoir d'achat", "en": "Cost of living", "icon": "€", "color": "#ff5a36" },
+    "systeme_social": { "fr": "Avenir du système social", "en": "Future of social security", "icon": "✚", "color": "#ff9f1c" },
+    "delinquance": { "fr": "Délinquance / sécurité", "en": "Crime / security", "icon": "⚑", "color": "#3a57e8" },
+    "immigration": { "fr": "Immigration", "en": "Immigration", "icon": "⇄", "color": "#8a5cf6" },
+    "dette": { "fr": "Dette et déficits", "en": "Debt and deficits", "icon": "↘", "color": "#00a6a6" },
+    "environnement": { "fr": "Environnement", "en": "Environment", "icon": "❦", "color": "#22b04b" },
+    "sante": { "fr": "Santé", "en": "Health", "icon": "♥", "color": "#e8174a" }
+  },
+  "stakes": {
+    "source": "https://www.ipsos.com/fr-fr/presidentielle-2027-le-retour-du-vote-sur-enjeux",
+    "label": { "fr": "Enquête électorale Ipsos bva-CESI pour le CEVIPOF, la Fondation Jean-Jaurès et Le Monde, 2-9 avril 2026, 10 962 inscrits", "en": "Ipsos bva-CESI electoral survey for CEVIPOF, Fondation Jean-Jaurès and Le Monde, 2-9 April 2026, 10,962 registered voters" },
+    "ranking": [
+      { "rank": 1, "theme": "sante" },
+      { "rank": 2, "theme": "pouvoir_achat" },
+      { "rank": 5, "theme": "delinquance" },
+      { "rank": 8, "theme": "immigration" }
+    ],
+    "facts": {
+      "fr": ["7 enjeux jugés déterminants par plus de 50 % des inscrits, 11 par plus de 40 %", "9 des 11 premiers enjeux sont économiques ou sociaux", "Un nouveau recul de l'âge de la retraite figure parmi les enjeux les moins cités"],
+      "en": ["7 issues seen as decisive by more than 50% of registered voters, 11 by more than 40%", "9 of the top 11 issues are economic or social", "Raising the retirement age again ranks among the least cited issues"]
+    },
+    "byElectorate": [
+      { "who": { "fr": "LFI, Écologistes, PS", "en": "LFI, Greens, PS" }, "themes": { "fr": "Santé, pouvoir d'achat, éducation, inégalités (+ environnement chez les Écologistes)", "en": "Health, cost of living, education, inequality (+ environment for Greens)" } },
+      { "who": { "fr": "Renaissance, Horizons", "en": "Renaissance, Horizons" }, "themes": { "fr": "Santé, déficits, attractivité économique, place de la France dans le monde, éducation, travail", "en": "Health, deficits, economic attractiveness, France's place in the world, education, work" } },
+      { "who": { "fr": "LR", "en": "LR" }, "themes": { "fr": "Partagés entre économie et régalien (immigration, sécurité)", "en": "Split between economy and law-and-order (immigration, security)" } },
+      { "who": { "fr": "RN", "en": "RN" }, "themes": { "fr": "Immigration, sécurité, pouvoir d'achat, santé, travail", "en": "Immigration, security, cost of living, health, work" } },
+      { "who": { "fr": "Reconquête", "en": "Reconquête" }, "themes": { "fr": "Immigration, sécurité, impôts et taxes, déficits", "en": "Immigration, security, taxes, deficits" } }
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+name = "lasonde-votes"
+main = "src/index.js"
+compatibility_date = "2025-06-01"
+
+# Origines autorisées à voter (votre site). Ajoutez votre domaine une fois en ligne.
+[vars]
+ALLOWED_ORIGINS = "https://la-sonde.fr,https://www.la-sonde.fr"
+# Adresse du site publié : le serveur y relit la liste des débats (data/site.json).
+SITE_URL = "https://la-sonde.fr"
+
+[[durable_objects.bindings]]
+name = "ROOMS"
+class_name = "DebateRoom"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["DebateRoom"]

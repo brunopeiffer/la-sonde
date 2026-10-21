@@ -1,0 +1,27 @@
+{
+  "_note": "Profils de priorités par électorat, repris de l'enquête électorale Ipsos bva-CESI / CEVIPOF (avril 2026). Seuls les enjeux nommés par la source sont listés : pour LR, la source indique un partage entre économie et régalien sans détailler les enjeux économiques.",
+  "source": "https://www.ipsos.com/fr-fr/presidentielle-2027-le-retour-du-vote-sur-enjeux",
+  "max": 5,
+  "themes": {
+    "sante": { "fr": "Santé", "en": "Health" },
+    "pouvoir_achat": { "fr": "Pouvoir d'achat", "en": "Cost of living" },
+    "education": { "fr": "Éducation", "en": "Education" },
+    "inegalites": { "fr": "Inégalités", "en": "Inequality" },
+    "environnement": { "fr": "Environnement", "en": "Environment" },
+    "deficits": { "fr": "Déficits publics", "en": "Public deficits" },
+    "attractivite": { "fr": "Attractivité économique", "en": "Economic attractiveness" },
+    "place_monde": { "fr": "Place de la France dans le monde", "en": "France's place in the world" },
+    "travail": { "fr": "Travail", "en": "Work" },
+    "immigration": { "fr": "Immigration", "en": "Immigration" },
+    "securite": { "fr": "Sécurité", "en": "Security" },
+    "impots": { "fr": "Impôts et taxes", "en": "Taxes" }
+  },
+  "profiles": [
+    { "id": "gauche", "label": { "fr": "LFI, Écologistes, PS", "en": "LFI, Greens, PS" }, "themes": ["sante", "pouvoir_achat", "education", "inegalites", "environnement"], "color": "#e8174a" },
+    { "id": "centre", "label": { "fr": "Renaissance, Horizons", "en": "Renaissance, Horizons" }, "themes": ["sante", "deficits", "attractivite", "place_monde", "education", "travail"], "color": "#d98200" },
+    { "id": "lr", "label": { "fr": "LR", "en": "LR" }, "themes": ["immigration", "securite"], "note": { "fr": "La source indique aussi des enjeux économiques, sans les détailler.", "en": "The source also mentions economic issues without detailing them." }, "color": "#1e96dc" },
+    { "id": "rn", "label": { "fr": "RN", "en": "RN" }, "themes": ["immigration", "securite", "pouvoir_achat", "sante", "travail"], "color": "#1f3fbf" },
+    { "id": "reconquete", "label": { "fr": "Reconquête", "en": "Reconquête" }, "themes": ["immigration", "securite", "impots", "deficits"], "color": "#8f4a17" }
+  ],
+  "national": ["sante", "pouvoir_achat"]
+}

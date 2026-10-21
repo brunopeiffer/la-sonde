@@ -1,0 +1,19 @@
+{
+  "_note": "Événements ajoutés manuellement ou par l'agent. Les déclarations/retraits de candidature sont aussi tirés automatiquement du fichier candidats MieuxVoter.",
+  "events": [
+    {
+      "date": "2026-07-07",
+      "fr": "Cour d'appel de Paris : Marine Le Pen condamnée mais reste éligible pour 2027",
+      "en": "Paris appeals court: Marine Le Pen convicted but remains eligible for 2027",
+      "source": "https://lcp.fr/actualites/marine-le-pen-condamnee-dans-l-affaire-des-assistants-parlementaires-reste-eligible-pour",
+      "major": true
+    },
+    {
+      "date": "2026-10-11",
+      "fr": "Primaire socialiste : Raphaël Glucksmann désigné dès le 1er tour (66,2 %)",
+      "en": "Socialist primary: Raphaël Glucksmann wins in the first round (66.2%)",
+      "source": "https://lcp.fr/actualites/primaire-socialiste-vainqueur-des-le-1er-tour-raphael-glucksmann-sera-le-candidat-de-la",
+      "major": true
+    }
+  ]
+}

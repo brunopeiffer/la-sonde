@@ -1,0 +1,116 @@
+{
+  "siteName": "La Sonde",
+  "siteNameEn": "La Sonde",
+  "author": "Bruno Peiffer",
+  "siteUrl": "https://la-sonde.fr",
+  "election": {
+    "round1": "2027-04-18",
+    "round2": "2027-05-02",
+    "blackout": [
+      {
+        "from": "2027-04-17T00:00:00+02:00",
+        "to": "2027-04-18T20:00:00+02:00"
+      },
+      {
+        "from": "2027-05-01T00:00:00+02:00",
+        "to": "2027-05-02T20:00:00+02:00"
+      }
+    ]
+  },
+  "previousElection": {
+    "round1": "2022-04-10"
+  },
+  "model": {
+    "bandwidthDays": 12,
+    "houseEffectShrink": 4,
+    "houseEffectWindowDays": 240,
+    "monteCarloDraws": 20000,
+    "referenceWindowDays": 35,
+    "transfersWindowDays": 150
+  },
+  "excludeSponsors": [
+    "Parti du vote blanc",
+    "Sébastien Bonnal"
+  ],
+  "institutes": [
+    "IFOP",
+    "ELABE",
+    "Ipsos BVA",
+    "Harris Interactive",
+    "Toluna Harris Interactive",
+    "OpinionWay",
+    "ODOXA",
+    "Cluster17",
+    "YouGov",
+    "Verian",
+    "CSA",
+    "Viavoice",
+    "BVA"
+  ],
+  "trustedDomains": [
+    "commission-des-sondages.fr",
+    "ifop.com",
+    "elabe.fr",
+    "ipsos.com",
+    "harris-interactive.fr",
+    "toluna-group.com",
+    "opinion-way.com",
+    "odoxa.fr",
+    "cluster17.com",
+    "fr.yougov.com",
+    "today.yougov.com",
+    "veriangroup.com",
+    "csa.eu",
+    "viavoice.fr",
+    "bfmtv.com",
+    "tf1info.fr",
+    "lci.fr",
+    "francetvinfo.fr",
+    "rtl.fr",
+    "m6info.fr",
+    "lefigaro.fr",
+    "lemonde.fr",
+    "leparisien.fr",
+    "latribune.fr",
+    "lesechos.fr",
+    "cnews.fr",
+    "publicsenat.fr",
+    "huffingtonpost.fr",
+    "politico.eu",
+    "lepoint.fr",
+    "lejdd.fr",
+    "nouvelobs.com",
+    "sudradio.fr",
+    "radioclassique.fr",
+    "legrandcontinent.eu",
+    "cesi.fr",
+    "sciencespo.fr"
+  ],
+  "donate": "https://ko-fi.com/VOTRE_PSEUDO",
+  "contact": "contact@la-sonde.fr",
+  "api": "",
+  "features": {
+    "probabilities": true,
+    "simulator": true,
+    "debates": true,
+    "quiz": true
+  },
+  "instituteSites": {
+    "IFOP": "https://www.ifop.com",
+    "ELABE": "https://elabe.fr",
+    "Ipsos BVA": "https://www.ipsos.com/fr-fr",
+    "Harris Interactive": "https://harris-interactive.fr",
+    "OpinionWay": "https://www.opinion-way.com",
+    "ODOXA": "https://www.odoxa.fr",
+    "Cluster17": "https://cluster17.com",
+    "YouGov": "https://fr.yougov.com",
+    "Verian": "https://www.veriangroup.com"
+  },
+  "turnstileSiteKey": "",
+  "agent": {
+    "everyDays": 2,
+    "maxSearches": 6,
+    "verifySearches": 3,
+    "model": "claude-haiku-4-5"
+  }
+}

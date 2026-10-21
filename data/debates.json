@@ -1,0 +1,59 @@
+{
+  "_note": "Débats télévisés ouverts au vote des internautes. Heures en ISO avec fuseau. 'segments' (facultatif) : thèmes abordés, minute de début depuis le début du débat. Le serveur n'accepte les votes qu'entre 'start' et 'end' + 60 min.",
+  "debates": [
+    {
+      "id": "demo",
+      "demo": true,
+      "title": {
+        "fr": "Débat de démonstration",
+        "en": "Demo debate"
+      },
+      "channel": {
+        "fr": "Démonstration",
+        "en": "Demo"
+      },
+      "start": "2026-01-01T21:00:00+01:00",
+      "end": "2026-01-01T23:00:00+01:00",
+      "candidates": [
+        "A",
+        "B"
+      ],
+      "segments": [
+        {
+          "min": 0,
+          "fr": "Pouvoir d'achat",
+          "en": "Cost of living"
+        },
+        {
+          "min": 35,
+          "fr": "Sécurité",
+          "en": "Security"
+        },
+        {
+          "min": 70,
+          "fr": "Europe et international",
+          "en": "Europe and world"
+        },
+        {
+          "min": 100,
+          "fr": "Conclusions",
+          "en": "Closing statements"
+        }
+      ],
+      "names": {
+        "A": {
+          "fr": "Candidat A",
+          "en": "Candidate A"
+        },
+        "B": {
+          "fr": "Candidat B",
+          "en": "Candidate B"
+        }
+      },
+      "colors": {
+        "A": "#7c3aed",
+        "B": "#f97316"
+      }
+    }
+  ]
+}

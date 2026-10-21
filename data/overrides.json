@@ -1,0 +1,11 @@
+{
+  "_note": "Corrections locales appliquées par-dessus la base MieuxVoter (qui peut avoir quelques jours de retard). Ajoutées à la main ou par l'agent, toujours avec une source.",
+  "withdrawals": [
+    { "id": "OF", "date": "2026-10-11", "fr": "Olivier Faure, battu à la primaire socialiste, n'est plus candidat", "en": "Olivier Faure, beaten in the Socialist primary, is no longer running", "source": "https://lcp.fr/actualites/primaire-socialiste-vainqueur-des-le-1er-tour-raphael-glucksmann-sera-le-candidat-de-la" },
+    { "id": "SRo", "date": "2026-10-11", "fr": "Ségolène Royal, battue à la primaire socialiste, n'est plus candidate", "en": "Ségolène Royal, beaten in the Socialist primary, is no longer running", "source": "https://lcp.fr/actualites/primaire-socialiste-vainqueur-des-le-1er-tour-raphael-glucksmann-sera-le-candidat-de-la" }
+  ],
+  "declarations": [],
+  "required": [
+    { "id": "RG", "since": "2026-10-11", "why": { "fr": "Raphaël Glucksmann est le candidat désigné par la primaire PS / Place publique : les listes testées sans lui sont écartées des probabilités.", "en": "Raphaël Glucksmann is the PS / Place publique nominee: line-ups tested without him are left out of the odds." } }
+  ]
+}
