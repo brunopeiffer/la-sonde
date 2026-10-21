@@ -1,0 +1,64 @@
+name: Mise à jour et publication
+
+on:
+  schedule:
+    - cron: "17 5 * * *"       # chaque matin : avec l'agent de veille
+    - cron: "17 11,17 * * *"   # midi et soir : synchronisation simple (sans coût)
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Synchroniser la base ouverte des sondages
+        run: node scripts/fetch-sources.mjs
+
+      - name: Agent de veille (sondages récents + préoccupations)
+        if: github.event.schedule == '17 5 * * *' || github.event_name == 'workflow_dispatch'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
+          FORCE: ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
+        run: node scripts/agent.mjs
+
+      - name: Calculer moyennes, probabilités et résumé
+        run: node scripts/model.mjs
+
+      - name: Enregistrer les données
+        run: |
+          git config user.name "lasonde-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data site/data
+          git diff --cached --quiet || git commit -m "Données du $(date -u +%F' '%H:%M) UTC"
+          git push || true
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
