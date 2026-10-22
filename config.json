@@ -118,8 +118,8 @@
   "turnstileSiteKey": "",
   "agent": {
     "everyDays": 2,
-    "maxSearches": 6,
-    "verifySearches": 3,
+    "maxSearches": 4,
+    "verifySearches": 2,
     "model": "claude-haiku-5-5",
     "monthlyBudgetUsd": 4,
     "prices": {

@@ -57,14 +57,15 @@ const searchDomains = () => cfg.trustedDomains.filter(d => !BLOCKED.has(d));
 async function ask(prompt, maxSearches = 8) {
   if (spent >= BUDGET) throw new Error('budget mensuel atteint');
   const messages = [{ role: 'user', content: prompt }];
-  let text = '';
-  for (let turn = 0; turn < 4; turn++) {
+  let text = '', last = null, finalize = false;
+  for (let turn = 0; turn < 5; turn++) {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
       body: JSON.stringify({
-        model: MODEL, max_tokens: 6000,
+        model: MODEL, max_tokens: 8000,
         tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches, allowed_domains: searchDomains() }],
+        ...(finalize ? { tool_choice: { type: 'none' } } : {}),
         messages
       })
     });
@@ -82,14 +83,29 @@ async function ask(prompt, maxSearches = 8) {
     calls++; searches += ns;
     spent += ((u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) + (u.cache_read_input_tokens || 0)) / 1e6 * PRICES.inputPerMTok
       + (u.output_tokens || 0) / 1e6 * PRICES.outputPerMTok + ns / 1000 * PRICES.searchPer1000;
+    last = j;
     text += j.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
     // Recherche longue : l'API rend la main (« pause_turn ») ; on la laisse continuer.
-    if (j.stop_reason !== 'pause_turn') break;
+    if (j.stop_reason === 'pause_turn') { messages.push({ role: 'assistant', content: j.content }); continue; }
+    if (extract(text) || finalize) break;
+    // Pas de bloc JSON : on demande la réponse finale, sans nouvelle recherche.
+    finalize = true;
     messages.push({ role: 'assistant', content: j.content });
+    messages.push({ role: 'user', content: 'Donne maintenant ta réponse finale, uniquement sous la forme du bloc <json>…</json> demandé, sans nouvelle recherche.' });
   }
-  const m = text.match(/<json>([\s\S]*?)<\/json>/);
-  if (!m) throw new Error('réponse sans bloc <json>');
-  return JSON.parse(m[1]);
+  const data = extract(text);
+  if (!data) throw new Error(`réponse sans JSON exploitable (arrêt : ${last && last.stop_reason}) : « ${text.replace(/\s+/g, ' ').slice(-200)} »`);
+  return data;
+}
+// Le JSON peut arriver entre <json>…</json>, dans un bloc ```json, ou nu : on accepte les trois.
+function extract(text) {
+  const cands = [];
+  for (const m of text.matchAll(/<json>([\s\S]*?)<\/json>/g)) cands.push(m[1]);
+  for (const m of text.matchAll(/```(?:json)?\s*([\s\S]*?)```/g)) cands.push(m[1]);
+  const a = text.lastIndexOf('{"'), b = text.lastIndexOf('}');
+  if (a >= 0 && b > a) { let i = text.lastIndexOf('{"polls"'); if (i < 0) i = text.indexOf('{"'); cands.push(text.slice(i, b + 1)); }
+  for (const c of cands.reverse()) { try { return JSON.parse(c.trim()); } catch { /* suivant */ } }
+  return null;
 }
 
 // Correspondance nom complet → identifiant candidat (fichier MieuxVoter).
@@ -143,10 +159,12 @@ Cherche les sondages d'INTENTIONS DE VOTE pour l'élection présidentielle fran�
 Ignore les sondages commandés par un parti ou un candidat, les sondages « souhait de victoire » et les sondages déjà connus ci-dessous :
 ${[...known.values()].map(s => '- ' + s).join('\n') || '- (aucun)'}
 Pour chaque nouveau sondage, relève EXACTEMENT les chiffres publiés pour CHAQUE hypothèse testée (noms complets des candidats), l'échantillon (nombre d'inscrits interrogés ou, à défaut, de personnes interrogées), les dates de terrain et l'URL de la source primaire.
+Cherche d'abord sur les sites des instituts (pages « actualités » ou « publications ») et sur commission-des-sondages.fr.
 N'invente rien : si un chiffre n'est pas lisible dans une source, n'inclus pas ce sondage.
 Réponds uniquement par un bloc <json>…</json> au format ${SCHEMA}. Si rien de nouveau : <json>{"polls":[]}</json>`;
   const found = (await ask(prompt, AG.maxSearches || 6)).polls || [];
   log(`${found.length} sondage(s) candidat(s)`);
+  SUMMARY.push(`Recherche : ${found.length} sondage(s) récent(s) non encore dans la base${found.length ? ' : ' + found.map(p => `${p.institute} (${p.end})`).join(', ') : ''}.`);
   let added = 0;
   for (const p of found) {
     const errs = validate(p);
@@ -180,7 +198,7 @@ async function concernsWatch() {
   const themes = Object.keys(C.themes).join(', ');
   const res = await ask(`Trouve la vague la plus récente (postérieure au ${last}) du « Baromètre politique Ipsos bva-CESI pour La Tribune Dimanche » et relève les pourcentages EXACTS des principales préoccupations des Français.
 Codes de thèmes autorisés : ${themes}. N'inclus que les thèmes dont le pourcentage est publié.
-Réponds par <json>{"found":true|false,"date":"YYYY-MM-DD (fin de terrain)","field":"texte des dates de terrain","n":1000,"source":"URL","values":{"pouvoir_achat":54}}</json>`, 5);
+Réponds par <json>{"found":true|false,"date":"YYYY-MM-DD (fin de terrain)","field":"texte des dates de terrain","n":1000,"source":"URL","values":{"pouvoir_achat":54}}</json>`, 3);
   if (!res.found || !res.date || res.date <= last || !domainOK(res.source || '')) { log('Pas de nouvelle vague exploitable.'); return; }
   const vals = Object.fromEntries(Object.entries(res.values || {}).filter(([k, v]) => C.themes[k] && v > 0 && v < 100));
   if (Object.keys(vals).length < 3) { log('Vague incomplète, ignorée.'); return; }
@@ -196,7 +214,7 @@ async function candidacyWatch() {
   if (O.lastCheck && toDay(TODAY) - toDay(O.lastCheck) < 7) { log('Candidatures vérifiées récemment.'); return; }
   const res = await ask(`Aujourd'hui : ${TODAY}. Liste les annonces de candidature et les retraits de candidature à l'élection présidentielle française de 2027 survenus dans les 30 derniers jours (y compris les candidats battus à une primaire qui renoncent).
 Pour chacun : nom complet, type ("declaration" ou "withdrawal"), date (YYYY-MM-DD), une phrase factuelle en français et en anglais, URL de la source. N'inclus que des faits confirmés par un média national.
-Réponds par <json>{"items":[{"name":"Nom Complet","type":"withdrawal","date":"YYYY-MM-DD","fr":"…","en":"…","source":"URL"}]}</json>`, 6);
+Réponds par <json>{"items":[{"name":"Nom Complet","type":"withdrawal","date":"YYYY-MM-DD","fr":"…","en":"…","source":"URL"}]}</json>`, 3);
   let n = 0;
   for (const it of res.items || []) {
     const id = idOf(it.name || '');
