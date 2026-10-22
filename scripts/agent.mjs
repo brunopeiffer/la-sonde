@@ -12,7 +12,7 @@ const P = (...a) => path.join(ROOT, ...a);
 const cfg = readJSON(P('config.json'));
 const KEY = process.env.ANTHROPIC_API_KEY;
 const AG = cfg.agent || {};
-let MODEL = process.env.CLAUDE_MODEL || AG.model || 'claude-haiku-4-5';
+let MODEL = process.env.CLAUDE_MODEL || AG.model || 'claude-haiku-5-5';
 const TODAY = new Date().toISOString().slice(0, 10);
 const log = (...a) => console.log('[agent]', ...a);
 
@@ -50,6 +50,10 @@ try {
 } catch (e) { SUMMARY.push(`⚠ ${e.message}`); }
 log('Modèle utilisé :', MODEL);
 
+// Certains sites (paywall, robots.txt) refusent le robot de recherche d'Anthropic : on les retire et on les mémorise.
+const BLOCKED = new Set(state.blockedDomains || []);
+const searchDomains = () => cfg.trustedDomains.filter(d => !BLOCKED.has(d));
+
 async function ask(prompt, maxSearches = 8) {
   if (spent >= BUDGET) throw new Error('budget mensuel atteint');
   const messages = [{ role: 'user', content: prompt }];
@@ -60,11 +64,19 @@ async function ask(prompt, maxSearches = 8) {
       headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
       body: JSON.stringify({
         model: MODEL, max_tokens: 6000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches, allowed_domains: cfg.trustedDomains }],
+        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches, allowed_domains: searchDomains() }],
         messages
       })
     });
-    if (!r.ok) throw new Error(`API ${r.status}: ${(await r.text()).slice(0, 300)}`);
+    if (!r.ok) {
+      const err = await r.text();
+      if (r.status === 400 && /not accessible to our user agent/i.test(err)) {
+        const doms = [...(err.match(/accessible to our user agent:\s*\[([^\]]*)\]/) || ['', ''])[1].matchAll(/'([a-z0-9.-]+)'/gi)].map(m => m[1]);
+        const fresh = doms.filter(d => !BLOCKED.has(d));
+        if (fresh.length) { fresh.forEach(d => BLOCKED.add(d)); SUMMARY.push(`ℹ Sites inaccessibles au robot de recherche, retirés : ${fresh.join(', ')}`); turn--; continue; }
+      }
+      throw new Error(`API ${r.status}: ${err.slice(0, 300)}`);
+    }
     const j = await r.json();
     const u = j.usage || {}, ns = (u.server_tool_use || {}).web_search_requests || 0;
     calls++; searches += ns;
@@ -205,7 +217,7 @@ Réponds par <json>{"items":[{"name":"Nom Complet","type":"withdrawal","date":"Y
 try { await pollWatch(); } catch (e) { log('Veille sondages en échec :', e.message); SUMMARY.push(`⚠ Veille sondages en échec : ${e.message}`); }
 try { await concernsWatch(); } catch (e) { log('Veille préoccupations en échec :', e.message); SUMMARY.push(`⚠ Veille préoccupations en échec : ${e.message}`); }
 try { await candidacyWatch(); } catch (e) { log('Veille candidatures en échec :', e.message); SUMMARY.push(`⚠ Veille candidatures en échec : ${e.message}`); }
-writeJSON(STATE_PATH, { ...state, lastRun: TODAY, month: MONTH, spentUsd: Math.round(spent * 1000) / 1000 }, true);
+writeJSON(STATE_PATH, { ...state, lastRun: TODAY, month: MONTH, spentUsd: Math.round(spent * 1000) / 1000, blockedDomains: [...BLOCKED].sort() }, true);
 const recap = `### Agent de veille — ${TODAY} (modèle ${MODEL})\n\n${SUMMARY.length ? SUMMARY.map(x => '- ' + x).join('\n') : '- Rien de nouveau.'}\n\n${calls} appel(s), ${searches} recherche(s). Coût estimé ce mois-ci : ${spent.toFixed(2)} $ sur ${BUDGET} $.\n`;
 log(recap.replace(/\n+/g, ' | '));
 if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, recap);
