@@ -55,7 +55,7 @@ const BLOCKED = new Set(state.blockedDomains || []);
 let FETCH = AG.fetch === false ? false : 'beta';  // 'beta' → 'ga' (sans en-tête) → false
 const searchDomains = () => cfg.trustedDomains.filter(d => !BLOCKED.has(d));
 
-async function ask(prompt, maxSearches = 8) {
+async function ask(prompt, maxSearches = 8, maxFetches = AG.maxFetches || 2) {
   if (spent >= BUDGET) throw new Error('budget mensuel atteint');
   const messages = [{ role: 'user', content: prompt }];
   let text = '', last = null, finalize = false;
@@ -67,7 +67,7 @@ async function ask(prompt, maxSearches = 8) {
         model: MODEL, max_tokens: 8000,
         tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches, allowed_domains: searchDomains() },
           // Lecture complète d'une page ou d'un PDF (notice de la Commission, rapport d'institut).
-          ...(FETCH ? [{ type: 'web_fetch_20250910', name: 'web_fetch', max_uses: AG.maxFetches || 3, allowed_domains: searchDomains(), max_content_tokens: AG.maxFetchTokens || 30000 }] : [])],
+          ...(FETCH ? [{ type: 'web_fetch_20250910', name: 'web_fetch', max_uses: maxFetches, allowed_domains: searchDomains(), max_content_tokens: AG.maxFetchTokens || 20000 }] : [])],
         ...(finalize ? { tool_choice: { type: 'none' } } : {}),
         messages
       })
@@ -173,18 +173,25 @@ Les petits candidats annoncés « 2 % ou moins » : indique 1 ; « moins de 1 % 
 N'invente rien : un chiffre douteux = hypothèse non relevée.
 Réponds uniquement par un bloc <json>…</json> au format ${SCHEMA}. Si rien de nouveau : <json>{"polls":[]}</json>`;
   const res0 = await ask(prompt, AG.maxSearches || 6);
-  const found = res0.polls || [];
+  // Un même sondage peut revenir deux fois : on garde la version la plus complète.
+  const byKey = new Map();
+  for (const p of res0.polls || []) {
+    const k = `${norm(p.institute || '').slice(0, 5)}|${p.end}|${p.round}`;
+    const prev = byKey.get(k);
+    if (!prev || (p.hypotheses || []).length > (prev.hypotheses || []).length) byKey.set(k, p);
+  }
+  const found = [...byKey.values()];
   for (const k of res0.skipped || []) SUMMARY.push(`… Repéré mais écarté par l'agent : ${k.institute || '?'} (${k.end || '?'}) — ${k.reason || 'sans raison'}`);
   log(`${found.length} sondage(s) candidat(s)`);
-  SUMMARY.push(`Recherche : ${found.length} sondage(s) récent(s) non encore dans la base${found.length ? ' : ' + found.map(p => `${p.institute} (${p.end})`).join(', ') : ''}.`);
+  SUMMARY.push(`Recherche : ${found.length} sondage(s) récent(s) non encore dans la base${found.length ? ' : ' + found.map(p => `${p.institute} (${p.end}, ${p.round === 2 ? '2nd' : '1er'} tour)`).join(', ') : ''}.`);
   let added = 0;
   for (const p of found) {
     const errs = validate(p);
     if (errs.length) { log('✗ rejeté', p.institute, p.end, errs.join('; ')); SUMMARY.push(`✗ Rejeté : ${p.institute} ${p.end} (${errs.join('; ')})`); continue; }
     // Double contrôle indépendant.
-    const check = await ask(`Vérifie ce relevé de sondage contre sa source (${p.source}) ou la notice de la Commission des sondages. Relevé : ${JSON.stringify(p)}
-Réponds par <json>{"confirmed":true|false,"reason":"…","hypotheses":[{"results":{"Nom Complet":valeur}}]}</json> avec les chiffres tels que publiés.`, AG.verifySearches || 3);
-    if (!check.confirmed) { log('✗ non confirmé', p.institute, p.end, check.reason); SUMMARY.push(`✗ Non confirmé : ${p.institute} ${p.end}`); continue; }
+    const check = await ask(`Vérifie ce relevé de sondage en ouvrant directement sa source avec web_fetch (${p.source}) ou la notice de la Commission des sondages. Relevé : ${JSON.stringify(p)}
+Réponds par <json>{"confirmed":true|false,"reason":"…","hypotheses":[{"results":{"Nom Complet":valeur}}]}</json> avec les chiffres tels que publiés.`, AG.verifySearches ?? 1, AG.verifyFetches ?? 1);
+    if (!check.confirmed) { log('✗ non confirmé', p.institute, p.end, check.reason); SUMMARY.push(`✗ Non confirmé : ${p.institute} ${p.end} (${p.round === 2 ? '2nd' : '1er'} tour)${check.reason ? ' — ' + check.reason : ''}`); continue; }
     // Comparaison par candidat (identifiant), en cherchant pour chaque hypothèse la plus proche dans la vérification.
     const ver = (check.hypotheses || []).map(h => Object.fromEntries(Object.entries(h.results || {}).map(([n, v]) => [idOf(n), +v]).filter(([id]) => id)));
     const mismatch = p.hypotheses.some(h => !ver.some(w => Object.entries(h.ids).every(([id, v]) => w[id] !== undefined && Math.abs(w[id] - v) <= 0.5)));
@@ -194,7 +201,7 @@ Réponds par <json>{"confirmed":true|false,"reason":"…","hypotheses":[{"result
     if (store.polls.some(x => x.survey === survey)) continue;
     store.polls.push({ survey, institute: p.institute, sponsor: p.sponsor, start: p.start, end: p.end, n: p.n, round: p.round, source: p.source,
       foundAt: TODAY, hypotheses: p.hypotheses.map(h => ({ label: h.label || '', results: h.ids })) });
-    added++; log('✔ ajouté', survey); SUMMARY.push(`✔ Sondage ajouté : ${p.institute} pour ${p.sponsor}, terrain ${p.start} → ${p.end} (${p.hypotheses.length} hypothèse(s))`);
+    added++; log('✔ ajouté', survey); SUMMARY.push(`✔ Sondage ajouté : ${p.institute} pour ${p.sponsor}, terrain ${p.start} → ${p.end}, ${p.round === 2 ? '2nd' : '1er'} tour (${p.hypotheses.length} hypothèse(s))`);
   }
   // On purge les entrées de plus de 60 jours (la base MieuxVoter a pris le relais).
   store.polls = store.polls.filter(p => toDay(TODAY) - toDay(p.end) <= 60);
