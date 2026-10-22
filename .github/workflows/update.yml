@@ -40,6 +40,21 @@ jobs:
       - name: Calculer moyennes, probabilités et résumé
         run: node scripts/model.mjs
 
+      - name: Pages par candidat et plan du site
+        run: node scripts/pages.mjs
+
+      - name: Image du jour
+        run: |
+          npm install --no-save --no-package-lock @resvg/resvg-js@2.6.2 || echo "resvg indisponible"
+          node scripts/share.mjs
+
+      - name: Publication Bluesky (si les secrets sont configurés)
+        if: github.event.schedule == '17 5 * * *' || github.event_name == 'workflow_dispatch'
+        env:
+          BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
+          BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
+        run: node scripts/bluesky.mjs
+
       - name: Enregistrer les données
         run: |
           git config user.name "lasonde-bot"
