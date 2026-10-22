@@ -127,7 +127,7 @@ for (const r of parseCSV(fs.readFileSync(P('data/sources/mieuxvoter_presidentiel
 const store = readJSON(P('data/agent_polls.json'));
 for (const p of store.polls) known.set(p.survey, `${p.institute} (${p.sponsor}), terrain ${p.start} → ${p.end}`);
 
-const SCHEMA = `{"polls":[{"institute":"IFOP","sponsor":"LCI, Le Figaro","start":"YYYY-MM-DD","end":"YYYY-MM-DD","n":1000,"round":1,
+const SCHEMA = `{"skipped":[{"institute":"IFOP","end":"YYYY-MM-DD","reason":"pourquoi il n'est pas inclus"}],"polls":[{"institute":"IFOP","sponsor":"LCI, Le Figaro","start":"YYYY-MM-DD","end":"YYYY-MM-DD","n":1000,"round":1,
 "source":"URL de la page de l'institut, de la notice ou du média","hypotheses":[{"label":"Hypothèse avec X","results":{"Nom Complet":34.5}}]}]}`;
 
 function validate(p) {
@@ -159,10 +159,13 @@ Cherche les sondages d'INTENTIONS DE VOTE pour l'élection présidentielle fran�
 Ignore les sondages commandés par un parti ou un candidat, les sondages « souhait de victoire » et les sondages déjà connus ci-dessous :
 ${[...known.values()].map(s => '- ' + s).join('\n') || '- (aucun)'}
 Pour chaque nouveau sondage, relève EXACTEMENT les chiffres publiés pour CHAQUE hypothèse testée (noms complets des candidats), l'échantillon (nombre d'inscrits interrogés ou, à défaut, de personnes interrogées), les dates de terrain et l'URL de la source primaire.
-Cherche d'abord sur les sites des instituts (pages « actualités » ou « publications ») et sur commission-des-sondages.fr.
+Méthode conseillée : une recherche générale (« sondage présidentielle 2027 intentions de vote » + le mois en cours), puis les sites des instituts cités (pages « actualités » ou « publications », souvent avec un PDF) et commission-des-sondages.fr.
+Si tu repères un sondage mais ne peux pas en relever tous les chiffres de façon certaine, mets-le dans "skipped" avec la raison, au lieu de l'ignorer en silence.
 N'invente rien : si un chiffre n'est pas lisible dans une source, n'inclus pas ce sondage.
 Réponds uniquement par un bloc <json>…</json> au format ${SCHEMA}. Si rien de nouveau : <json>{"polls":[]}</json>`;
-  const found = (await ask(prompt, AG.maxSearches || 6)).polls || [];
+  const res0 = await ask(prompt, AG.maxSearches || 6);
+  const found = res0.polls || [];
+  for (const k of res0.skipped || []) SUMMARY.push(`… Repéré mais écarté par l'agent : ${k.institute || '?'} (${k.end || '?'}) — ${k.reason || 'sans raison'}`);
   log(`${found.length} sondage(s) candidat(s)`);
   SUMMARY.push(`Recherche : ${found.length} sondage(s) récent(s) non encore dans la base${found.length ? ' : ' + found.map(p => `${p.institute} (${p.end})`).join(', ') : ''}.`);
   let added = 0;
