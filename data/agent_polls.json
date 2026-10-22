@@ -1,4 +1,94 @@
 {
   "_note": "Sondages trouvés par l'agent automatique avant leur intégration dans la base MieuxVoter. Marqués 'provisoire' sur le site. Dédoublonnés automatiquement.",
-  "polls": []
+  "polls": [
+    {
+      "survey": "20261013_1014_op_ag2",
+      "institute": "OpinionWay",
+      "sponsor": "CNews",
+      "start": "2026-10-13",
+      "end": "2026-10-14",
+      "n": 978,
+      "round": 2,
+      "source": "http://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10319-pres-iv-opinionway-cnews-15-octobre.pdf",
+      "foundAt": "2026-10-22",
+      "hypotheses": [
+        {
+          "label": "Second tour : Jean-Luc Mélenchon contre Marine Le Pen",
+          "results": {
+            "MLP": 68,
+            "JLM": 32
+          }
+        },
+        {
+          "label": "Second tour : Édouard Philippe contre Marine Le Pen",
+          "results": {
+            "MLP": 56,
+            "EP": 44
+          }
+        },
+        {
+          "label": "Second tour : Raphaël Glucksmann contre Marine Le Pen",
+          "results": {
+            "MLP": 56,
+            "RG": 44
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261012_1015_yo_ag2",
+      "institute": "YouGov",
+      "sponsor": "Le HuffPost",
+      "start": "2026-10-12",
+      "end": "2026-10-15",
+      "n": 976,
+      "round": 2,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10323-pres-iv-yougov-le-huffpost-18-octobre.pdf",
+      "foundAt": "2026-10-22",
+      "hypotheses": [
+        {
+          "label": "Second tour 1 : Édouard Philippe contre Marine Le Pen, valeurs pondérées",
+          "results": {
+            "EP": 48,
+            "MLP": 52
+          }
+        },
+        {
+          "label": "Second tour 2 : Raphaël Glucksmann contre Marine Le Pen, valeurs pondérées",
+          "results": {
+            "RG": 45,
+            "MLP": 55
+          }
+        },
+        {
+          "label": "Second tour 3 : François Hollande contre Marine Le Pen, valeurs pondérées",
+          "results": {
+            "FH": 45,
+            "MLP": 55
+          }
+        },
+        {
+          "label": "Second tour 4 : Jean-Luc Mélenchon contre Marine Le Pen, valeurs pondérées",
+          "results": {
+            "JLM": 32,
+            "MLP": 68
+          }
+        },
+        {
+          "label": "Second tour 5 : Gabriel Attal contre Marine Le Pen, valeurs pondérées",
+          "results": {
+            "GA": 45,
+            "MLP": 55
+          }
+        },
+        {
+          "label": "Second tour 6 : Édouard Philippe contre Jean-Luc Mélenchon, valeurs pondérées",
+          "results": {
+            "EP": 66,
+            "JLM": 34
+          }
+        }
+      ]
+    }
+  ]
 }
