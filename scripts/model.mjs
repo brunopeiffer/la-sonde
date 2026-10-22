@@ -474,6 +474,31 @@ function build() {
   const hist = updateHistory(hist0, today, { asOf: out.asOf, open: open.open,
     q: Object.fromEntries(mc.qualify.map(x => [x.c, x.p])), v: Object.fromEntries(standings.map(x => [x.c, x.v])) });
   writeJSON(histPath, hist, true);
+  // ---------- « Et si… ? » : listes testées, base, positions ----------
+  {
+    const req = (OVR.required || []).filter(r => r.since <= new Date().toISOString().slice(0, 10)).map(r => r.id);
+    const win = FR.r1.filter(p => FR.lastPoll - p.t <= 90);
+    const groups = {};
+    for (const p of win) { const k = Object.keys(p.results).sort().join(','); (groups[k] = groups[k] || []).push(p); }
+    const tested = Object.entries(groups).map(([k, ps]) => ({ k, ps, surveys: new Set(ps.map(p => p.survey)).size }))
+      .filter(g => g.surveys >= 2).filter(g => { const cs = g.k.split(','); return !cs.some(c => WITHDRAWN.has(c)) && req.every(r => cs.includes(r)); })
+      .map(g => {
+        const cs = g.k.split(','), set = {};
+        for (const c of cs) {
+          let sw = 0, sx = 0;
+          for (const p of g.ps) { const w = p.w * Math.pow(0.5, (FR.lastPoll - p.t) / 21); sw += w; sx += w * (p.results[c] - ((FR.house[c] || {})[p.institute] || 0)); }
+          set[c] = Math.max(0.2, sx / sw);
+        }
+        const S = Object.values(set).reduce((a, b) => a + b, 0);
+        for (const c in set) set[c] = round1(set[c] * 100 / S);
+        return { cs, set, surveys: g.surveys, last: fromDay(Math.max(...g.ps.map(p => p.t))) };
+      });
+    const POS = readJSON(P('data/positions.json'));
+    out.whatif = {
+      base: allScen.set.map(x => ({ c: x.c, v: round1(x.share), band: (standings.find(s => s.c === x.c) || { band: 1.5 }).band })),
+      tested, pos: POS.positions, lambda: POS.lambda, abst: POS.abstention, source: POS.source
+    };
+  }
   out.momentum = Object.fromEntries(Object.entries(MOM).map(([c, m]) => { const { slope, se, sd30, ...r } = m; return [c, r]; }));
   out.crossings = cross; out.openness = { ...open, hist: hist.map(h => [h.d, h.open]) }; out.decoded = dec;
   // Effets instituts pour chaque candidat (pages candidats).

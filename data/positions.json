@@ -1,0 +1,13 @@
+{
+  "_note": "Positions indicatives sur l'axe gauche (0) – droite (10), utilisées seulement quand aucun report n'est mesuré dans les sondages. Inspirées des classements d'experts des partis européens (Chapel Hill Expert Survey) et de l'étiquette de chaque candidat. Choix éditorial publié et modifiable.",
+  "source": "https://www.chesdata.eu/",
+  "lambda": 1.2,
+  "abstention": 0.25,
+  "positions": {
+    "NA": 0.5, "PP": 0.8, "FRo": 1.6, "JLM": 1.5, "CA": 2.0, "FR": 2.2, "MT": 2.8,
+    "OF": 3.3, "SRo": 3.4, "RG": 3.5, "FH": 3.6, "BC": 4.0,
+    "FB": 5.2, "DV": 5.5, "GA": 5.6, "EP": 6.0, "BLM": 6.2, "GD": 6.5, "XB": 6.6,
+    "DL": 7.0, "LW": 7.2, "BR": 7.3, "NDA": 8.0, "EC": 8.3, "MLP": 8.6, "JB": 8.6,
+    "MM": 9.3, "EZ": 9.4, "SK": 9.4
+  }
+}

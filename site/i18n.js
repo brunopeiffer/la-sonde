@@ -146,6 +146,7 @@ window.METHOD = {
 <p><b>Scénarios et probabilités.</b> Les scores dépendent de la liste testée : nous modélisons séparément les listes les plus testées sur 60 jours. Pour chacune, 20 000 élections sont simulées. L'incertitude de chaque candidat est calibrée sur l'écart réel entre les sondages et le résultat de 2022 (écart-type = √score × (a + b·√jours restants)). La victoire combine la probabilité de chaque duel avec la moyenne des sondages de second tour de ce duel.</p>
 <p><b>Reports de voix.</b> Dans une même enquête, deux hypothèses qui ne diffèrent que d'un candidat montrent où vont ses électeurs. Nous faisons la moyenne de ces écarts sur 5 mois. Les arrondis des instituts rendent chaque comparaison imprécise ; seule la moyenne a du sens.</p>
 <p><b>Détecteur de bascule.</b> Pour chaque candidat, nous calculons la pente des sondages des cinq dernières semaines, corrigés des effets instituts, avec sa marge d'erreur (les hypothèses d'une même enquête ne sont pas comptées comme indépendantes). Une flèche n'apparaît que si la hausse ou la baisse est établie à 90 % au moins. La projection à 30 jours prolonge cette pente en l'amortissant de 3 % par jour ; sa fourchette à 80 % combine l'incertitude de la pente, celle de la moyenne et une dérive aléatoire. Le baromètre d'incertitude est la probabilité, tirée des 20 000 simulations, que le duel final ne soit pas le duel actuellement en tête.</p>
+<p><b>Simulateur « Et si… ? ».</b> Point de départ : la liste avec tous les candidats déclarés. Quand des candidats se retirent, nous cherchons d'abord des sondages qui ont testé la même configuration (mêmes candidats principaux) : c'est alors leur moyenne corrigée qui s'affiche (« testé »). Sinon, les électeurs du candidat retiré sont répartis selon les reports observés dans les sondages qui le testent avec et sans lui (« mesuré »). À défaut, une part (25 %) est répartie proportionnellement, comme une abstention, et le reste va surtout aux candidats proches sur l'axe gauche-droite, pondérés par leur poids électoral (« estimé »). Les positions utilisées sont indicatives, inspirées des classements d'experts des partis européens (Chapel Hill Expert Survey), et listées ci-dessous.</p>
 <p><b>Limites.</b> Un sondage mesure une intention à un instant donné. Les marges d'erreur sont indicatives (méthode des quotas). Les probabilités dépendent d'hypothèses simples et d'une seule élection de référence ; elles seront affinées.</p>
 <p><b>Code ouvert.</b> Tout le calcul est public et reproductible sur GitHub.</p>`,
   en: `
@@ -155,6 +156,7 @@ window.METHOD = {
 <p><b>Scenarios and odds.</b> Scores depend on the line-up, so we model the most-tested line-ups of the last 60 days separately, simulating 20,000 elections for each. Each candidate's uncertainty is calibrated on the actual gap between polls and the 2022 result (sd = √score × (a + b·√days left)). Win odds combine the chance of each pairing with the run-off poll average for that pairing.</p>
 <p><b>Vote flows.</b> Within one survey, two scenarios differing by a single candidate show where that candidate's voters go. We average those gaps over 5 months. Pollster rounding makes each comparison noisy; only the average is meaningful.</p>
 <p><b>Momentum detector.</b> For each candidate we estimate the slope of house-adjusted polls over the last five weeks, with its margin of error (scenarios from the same survey are not treated as independent). An arrow appears only when a rise or fall is established with at least 90% confidence. The 30-day projection extends that slope, damped by 3% a day; its 80% range combines slope uncertainty, average uncertainty and random drift. The uncertainty gauge is the probability, from the 20,000 simulations, that the run-off will not be the pairing currently in the lead.</p>
+<p><b>“What if?” simulator.</b> Starting point: the line-up with every declared candidate. When candidates drop out, we first look for polls that tested the same line-up (same main candidates) and show their adjusted average (“tested”). Otherwise, the withdrawn candidate's voters are split according to transfers observed in polls testing scenarios with and without them (“measured”). Failing that, 25% are spread proportionally, like abstention, and the rest go mostly to candidates nearby on the left-right axis, weighted by their electoral size (“estimated”). Positions are indicative, based on expert rankings of European parties (Chapel Hill Expert Survey), and listed below.</p>
 <p><b>Limits.</b> A poll measures intention at a point in time. Margins of error are indicative (quota sampling). Odds rest on simple assumptions and a single reference election; they will be refined.</p>
 <p><b>Open code.</b> All calculations are public and reproducible on GitHub.</p>`
 };
@@ -284,3 +286,31 @@ Object.assign(window.I18N.fr, { 'gh.vote': 'Vote', 'gh.dm': 'J-{d}', 'gh.last': 
 Object.assign(window.I18N.en, { 'gh.vote': 'Vote', 'gh.dm': 'D-{d}', 'gh.last': 'Latest poll · {d} days out', 'is.missing': '. Themes missing from a wave were not published for that wave.' });
 Object.assign(window.I18N.fr, {"nav.cands": "Candidats", "cf.tag": "Fiches", "cf.title": "Une page par candidat", "cf.desc": "Moyenne, tendance, probabilités, derniers sondages et effets instituts : tout ce qu'il faut savoir sur chaque candidat suivi.", "cf.go": "Voir la fiche", "cf.hint": "Fiches candidats"});
 Object.assign(window.I18N.en, {"nav.cands": "Candidates", "cf.tag": "Profiles", "cf.title": "One page per candidate", "cf.desc": "Average, trend, odds, latest polls and house effects: everything about each candidate we track (pages in French).", "cf.go": "View profile", "cf.hint": "Candidate profiles"});
+Object.assign(window.I18N.fr, {
+  'nav.whatif': 'Et si… ?', 'wi.tag': 'Simulateur', 'wi.title': 'Et si… un candidat se retirait ?',
+  'wi.desc': "Retirez un ou plusieurs candidats : le site redistribue leurs électeurs et affiche les nouveaux scores du premier tour, avec une fourchette. Chaque résultat dit s'il est mesuré dans des sondages ou estimé.",
+  'wi.who': 'Qui se retire ?', 'wi.whoDesc': 'Cliquez sur un ou plusieurs candidats pour les retirer.', 'wi.examples': 'Exemples',
+  'wi.preset': 'Sans {c}', 'wi.reset': 'Tout réinitialiser', 'wi.res': 'Premier tour simulé',
+  'wi.pick': 'Choisissez au moins un candidat à retirer.',
+  'wi.base': "Point de départ : la liste avec tous les candidats déclarés (scénario construit par La Sonde). Les scores diffèrent de la moyenne générale, qui mélange des listes où certains candidats sont absents.",
+  'wi.noteMatch': "Des instituts ont déjà testé cette configuration : résultats issus de {n} enquête(s), la dernière le {d}, corrigées des effets instituts.",
+  'wi.noteChain': "Aucun institut n'a testé cette configuration : les voix sont redistribuées selon les reports mesurés dans les sondages quand ils existent, sinon selon la proximité politique. Plusieurs retraits sont traités en cascade.",
+  'wi.lvPoll': 'testé', 'wi.lvMeas': 'mesuré', 'wi.lvEst': 'estimé',
+  'wi.lgPoll': 'cette liste a été testée par des instituts', 'wi.lgMeas': 'reports observés dans les sondages', 'wi.lgEst': 'reports supposés selon la proximité politique (le plus fragile)',
+  'wi.warn': "Simulation de La Sonde à partir des sondages publiés, pas un sondage. Les reports de voix réels dépendront de la campagne, des consignes et du contexte du retrait. Les résultats « estimés » reposent sur des positions politiques indicatives, publiées dans la méthode."
+});
+Object.assign(window.I18N.en, {
+  'nav.whatif': 'What if?', 'wi.tag': 'Simulator', 'wi.title': 'What if a candidate dropped out?',
+  'wi.desc': 'Remove one or more candidates: the site redistributes their voters and shows the new first-round scores, with a range. Each result says whether it is measured in polls or estimated.',
+  'wi.who': 'Who drops out?', 'wi.whoDesc': 'Click one or more candidates to remove them.', 'wi.examples': 'Examples',
+  'wi.preset': 'Without {c}', 'wi.reset': 'Reset', 'wi.res': 'Simulated first round',
+  'wi.pick': 'Pick at least one candidate to remove.',
+  'wi.base': 'Starting point: the line-up with every declared candidate (built by La Sonde). Scores differ from the overall average, which blends line-ups where some candidates are missing.',
+  'wi.noteMatch': 'Pollsters have already tested this line-up: results from {n} survey(s), latest {d}, adjusted for house effects.',
+  'wi.noteChain': 'No pollster has tested this line-up: votes are redistributed using transfers measured in polls where available, otherwise by political proximity. Several withdrawals are handled in cascade.',
+  'wi.lvPoll': 'tested', 'wi.lvMeas': 'measured', 'wi.lvEst': 'estimated',
+  'wi.lgPoll': 'this line-up has been tested by pollsters', 'wi.lgMeas': 'transfers observed in polls', 'wi.lgEst': 'transfers assumed from political proximity (least reliable)',
+  'wi.warn': 'A La Sonde simulation based on published polls, not a poll. Real vote transfers will depend on the campaign, endorsements and the circumstances of the withdrawal. "Estimated" results rely on indicative political positions, published in the method.'
+});
+Object.assign(window.I18N.fr, { 'wi.posT': 'Positions gauche (0) – droite (10) utilisées par le simulateur' });
+Object.assign(window.I18N.en, { 'wi.posT': 'Left (0) – right (10) positions used by the simulator' });

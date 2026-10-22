@@ -426,3 +426,27 @@ a.clink:hover b, .prow a.nm:hover span { text-decoration: underline; text-underl
 .cf-go { grid-column: 1 / -1; font-size: 12px; font-weight: 700; color: var(--accent); margin-top: 6px; }
 .pnote a { color: var(--accent); font-weight: 700; text-decoration: none; }
 .chg.k-transfer .ico { background: var(--accent-2); } .chg.k-ghost .ico { background: #6b6680; }
+
+/* « Et si… ? » */
+.chip.wi { opacity: 1; }
+.chip.wi i { background: currentColor !important; }
+.chip.wi[aria-pressed="true"] { text-decoration: line-through; background: var(--surface-2); opacity: .7; }
+.chip.wi[aria-pressed="true"] i { background: transparent !important; }
+.wipre { display: flex; flex-wrap: wrap; gap: 8px; }
+.wilegend { margin-top: 18px; font-size: 13px; color: var(--ink-2); line-height: 2; }
+.wib { display: inline-block; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 2px 7px; border-radius: 99px; vertical-align: middle; line-height: 1.5; }
+.wib.poll { background: color-mix(in srgb, var(--good) 18%, var(--surface)); color: var(--good); }
+.wib.meas { background: color-mix(in srgb, var(--accent) 15%, var(--surface)); color: var(--accent); }
+.wib.est { background: color-mix(in srgb, var(--accent-3) 20%, var(--surface)); color: var(--warn); }
+.wirow { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(80px, 1.6fr) 92px; gap: 10px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--line); }
+.wirow .nm { font-weight: 700; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; min-width: 0; }
+.wirow .nm i { width: 9px; height: 9px; border-radius: 50%; flex: none; }
+.wibar { position: relative; height: 14px; background: var(--surface-2); border-radius: 7px; }
+.wibar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 7px; }
+.wibar i.was { background: var(--line); }
+.wibar .rng { position: absolute; top: -3px; bottom: -3px; border: 1.5px solid var(--ink-2); border-radius: 4px; opacity: .55; }
+.wiv { text-align: right; line-height: 1.15; }
+.wiv b { font: 800 17px/1 var(--display); display: block; }
+.wiv small { display: block; font-size: 11px; font-weight: 700; }
+.wiv small.rgt { color: var(--muted); font-weight: 600; }
+@media (max-width: 600px) { .wirow { grid-template-columns: minmax(0, 1fr) 70px 80px; } }

@@ -65,7 +65,7 @@
     $('#langSel').value = lang;
     const now = Date.now();
     $('#blackout').classList.toggle('on', D.election.blackout.some(b => now >= Date.parse(b.from) && now <= Date.parse(b.to)));
-    $('#method').innerHTML = tr(window.METHOD) + `<p class="meta">a = ${fmt(D.mc.sdParams.a, 2)} · b = ${fmt(D.mc.sdParams.b, 3)} · σ₂ = ${fmt(D.mc.sdParams.sd2)} pt</p>`;
+    $('#method').innerHTML = tr(window.METHOD) + `<p class="meta">a = ${fmt(D.mc.sdParams.a, 2)} · b = ${fmt(D.mc.sdParams.b, 3)} · σ₂ = ${fmt(D.mc.sdParams.sd2)} pt</p>` + (D.whatif ? `<p class="meta">${t('wi.posT')} : ${D.whatif.base.filter(b => D.whatif.pos[b.c] != null).sort((x, y) => D.whatif.pos[x.c] - D.whatif.pos[y.c]).map(b => `${esc(sh(b.c))} ${fmt(D.whatif.pos[b.c])}`).join(' · ')}</p>` : '');
     $('#ftAuthor').textContent = t('ft.author', { a: D.site.author }) + ' ' + t('ft.lcen', { a: D.site.author, c: D.site.contact });
     $('#ftGen').textContent = t('ft.gen', { d: new Date(D.generated).toLocaleString(loc(), { dateStyle: 'long', timeStyle: 'short' }) });
   }
@@ -91,6 +91,84 @@
     })();
     $('#summary').innerHTML = tr(D.summary).map(x => `<li>${esc(x)}</li>`).join('');
     $('#sumMeta').textContent = t('sum.meta', { d: fdate(D.asOf, { day: 'numeric', month: 'long', year: 'numeric' }) });
+  }
+
+  // ---------- « Et si… ? » : simulateur de retraits ----------
+  const wi = { out: new Set() };
+  function whatIf(out) {
+    const W = D.whatif;
+    const v = Object.fromEntries(W.base.map(b => [b.c, b.v]));
+    const meas = Object.fromEntries(W.base.map(b => [b.c, 0])), est = Object.fromEntries(W.base.map(b => [b.c, 0]));
+    const alive = () => W.base.map(b => b.c).filter(c => !out.has(c));
+    const prox = (x, amount) => {
+      // Une part s'abstient (après renormalisation, cela revient à une répartition proportionnelle) ;
+      // le reste va surtout aux candidats proches sur l'axe gauche-droite, pondérés par leur poids électoral.
+      const A = alive(), px = W.pos[x];
+      const tot = A.reduce((a, c) => a + v[c], 0);
+      const wts = A.map(c => px == null || W.pos[c] == null ? 0 : v[c] * Math.exp(-Math.abs(px - W.pos[c]) / W.lambda));
+      const sw = wts.reduce((a, b) => a + b, 0);
+      A.forEach((c, i) => {
+        const g = amount * (W.abst * v[c] / tot + (1 - W.abst) * (sw ? wts[i] / sw : v[c] / tot));
+        v[c] += g; est[c] += g;
+      });
+    };
+    // Retraits dans l'ordre décroissant des scores : les voix déjà reçues suivent en cascade.
+    const order = [...out].filter(c => v[c] != null).sort((a, b) => v[b] - v[a]);
+    for (const x of order) {
+      const amount = v[x]; v[x] = 0;
+      const T = (D.transfers || []).find(t => t.c === x);
+      if (T) {
+        let given = 0;
+        for (const f of T.flows) {
+          if (f.pts <= 0 || out.has(f.c) || v[f.c] == null) continue;
+          const g = amount * f.pts / T.score; v[f.c] += g; meas[f.c] += g; given += g;
+        }
+        if (amount - given > 0) prox(x, amount - given);
+      } else prox(x, amount);
+    }
+    const A = alive(), tot = A.reduce((a, c) => a + v[c], 0);
+    A.forEach(c => { v[c] *= 100 / tot; });
+    // Niveau 1 : une liste réellement testée par les instituts, avec les mêmes candidats principaux.
+    const major = W.base.filter(b => b.v >= 5).map(b => b.c);
+    const keyOf = cs => major.filter(c => cs.includes(c)).sort().join(',');
+    const target = keyOf(A);
+    const match = out.size ? W.tested.filter(tl => keyOf(tl.cs) === target).sort((a, b) => b.surveys - a.surveys)[0] || null : null;
+    const level = {};
+    if (match) {
+      const inL = A.filter(c => match.set[c] != null), minor = A.filter(c => match.set[c] == null);
+      const sMin = minor.reduce((a, c) => a + v[c], 0), sL = inL.reduce((a, c) => a + match.set[c], 0);
+      inL.forEach(c => { v[c] = match.set[c] * (100 - sMin) / sL; level[c] = 'poll'; });
+    }
+    const rows = W.base.filter(b => !out.has(b.c)).map(b => {
+      const gain = v[b.c] - b.v, m = meas[b.c], e = est[b.c];
+      const lv = Math.abs(gain) < 0.3 ? 'same' : level[b.c] || (m >= e ? 'meas' : 'est');
+      const k = lv === 'poll' ? 0.25 : lv === 'meas' ? 0.3 : lv === 'est' ? 0.6 : 0;
+      const half = Math.sqrt(b.band ** 2 + (k * Math.max(gain, 0)) ** 2 + (lv === 'poll' ? 0.06 * v[b.c] : 0));
+      return { c: b.c, before: b.v, after: v[b.c], lo: Math.max(0, v[b.c] - half), hi: v[b.c] + half, lv };
+    }).sort((a, b) => b.after - a.after);
+    return { rows, match };
+  }
+  function renderWhatIf() {
+    const W = D.whatif; if (!W || D.features.whatif === false) return;
+    const ids = W.base.map(b => b.c);
+    const presets = [];
+    for (const tr0 of D.transfers || []) if (ids.includes(tr0.c)) presets.push([tr0.c]);
+    if (ids.includes('GA') && ids.includes('BR')) presets.push(['GA', 'BR']);
+    if (ids.includes('EP') && ids.includes('BR')) presets.push(['EP', 'BR']);
+    $('#wiPresets').innerHTML = presets.map(p => `<button class="pill" data-p="${p.join(',')}">${t('wi.preset', { c: p.map(c => esc(sh(c))).join(' + ') })}</button>`).join('') + `<button class="pill" data-p="">${t('wi.reset')}</button>`;
+    $('#wiPresets').onclick = e => { const b = e.target.closest('button'); if (!b) return; wi.out = new Set(b.dataset.p ? b.dataset.p.split(',') : []); renderWhatIf(); };
+    $('#wiChips').innerHTML = ids.map(c => `<button class="chip wi" aria-pressed="${wi.out.has(c)}" data-c="${c}" style="color:${col(c)}"><i style="background:${col(c)}"></i><span style="color:var(--ink)">${esc(sh(c))}</span></button>`).join('');
+    $('#wiChips').onclick = e => { const b = e.target.closest('.chip'); if (!b) return; const c = b.dataset.c; wi.out.has(c) ? wi.out.delete(c) : wi.out.add(c); renderWhatIf(); };
+    const { rows, match } = whatIf(wi.out), on = wi.out.size > 0;
+    const max = Math.max(...rows.map(r => r.hi), ...W.base.map(b => b.v)) * 1.05;
+    const badge = { poll: t('wi.lvPoll'), meas: t('wi.lvMeas'), est: t('wi.lvEst') };
+    $('#wiRes').innerHTML = (on ? '' : `<p class="note" style="margin:0 0 10px">${t('wi.pick')}</p>`) + rows.map(r => {
+      const d = r.after - r.before, show = on && r.lv !== 'same';
+      return `<div class="wirow"><div class="nm"><i style="background:${col(r.c)}"></i>${esc(sh(r.c))}${show ? ` <span class="wib ${r.lv}">${badge[r.lv]}</span>` : ''}</div>
+        <div class="wibar"><i class="was" style="width:${r.before / max * 100}%"></i><i class="now" style="width:${r.after / max * 100}%;background:${col(r.c)}"></i>${show ? `<b class="rng" style="left:${r.lo / max * 100}%;width:${(r.hi - r.lo) / max * 100}%"></b>` : ''}</div>
+        <div class="wiv num"><b>${fmt(r.after)}${pct}</b>${on && Math.abs(d) >= 0.1 ? `<small class="${d > 0 ? 'up' : 'down'}">${sgn(d)}</small>` : ''}${show ? `<small class="rgt">${fmt(r.lo, 0)}–${fmt(r.hi, 0)}${pct}</small>` : ''}</div></div>`;
+    }).join('');
+    $('#wiNote').innerHTML = !on ? t('wi.base') : match ? t('wi.noteMatch', { n: match.surveys, d: fdate(match.last) }) : t('wi.noteChain');
   }
 
   // ---------- Fiches candidats ----------
@@ -613,6 +691,7 @@
     hide('debats', F.debates === false);
     hide('quiz', F.quiz === false);
     hide('bascule', F.bascule === false);
+    hide('etsi', F.whatif === false);
     const pc = $('#projCard'); if (pc) pc.hidden = F.projection === false;
     const sim = $('#sim'); if (sim) sim.hidden = F.simulator === false;
   }
@@ -621,7 +700,7 @@
   function renderAll() {
     pct = pctOf();
     renderStatic(); renderHero(); renderFiches(); renderChanges(); renderBascule(); drawProj(); renderDecoded(); renderRaceControls(); drawRace(); renderTable(); renderProba(); drawGhosts();
-    renderTransfers(); renderDuels(); renderSim(); renderGap(); renderConcerns(); renderPolls();
+    renderTransfers(); renderWhatIf(); renderDuels(); renderSim(); renderGap(); renderConcerns(); renderPolls();
     renderSupport(); renderQuiz(); renderInstitutes(); renderTimeline(); renderEmbeds(); applyFeatures();
     if (window.Debate) window.Debate.render({ D, lang, t, tr, loc, pct: () => pct, col, nm, sh, fmt, esc, css, tipFor });
   }

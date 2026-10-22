@@ -82,7 +82,7 @@ function page(s, rank, all) {
 <body class="cpage">
 <header class="top"><div class="wrap">
   <a class="brand" href="../../"><svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#5b2cff"/><stop offset=".6" stop-color="#ff3d7f"/><stop offset="1" stop-color="#ff8a00"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#lg)"/><circle cx="16" cy="16" r="3.4" fill="#fff"/><circle cx="16" cy="16" r="8" fill="none" stroke="#fff" stroke-width="2.2" opacity=".85"/><circle cx="16" cy="16" r="12.5" fill="none" stroke="#fff" stroke-width="1.8" opacity=".45"/></svg><span>La <b>Sonde</b></span></a>
-  <nav class="nav"><a href="../../#bascule">Bascule</a><a href="../../#course">La course</a><a href="../../#proba">Probabilités</a><a href="../../#sondages">Sondages</a></nav>
+  <nav class="nav"><a href="../../#bascule">Bascule</a><a href="../../#etsi">Et si… ?</a><a href="../../#course">La course</a><a href="../../#proba">Probabilités</a><a href="../../#sondages">Sondages</a></nav>
   <div class="tools"><a class="pill donate" href="${esc(D.site.donate)}" target="_blank" rel="noopener"><span aria-hidden="true">♥</span> <span>Soutenir</span></a></div>
 </div></header>
 <main class="wrap">

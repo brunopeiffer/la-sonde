@@ -96,7 +96,8 @@
     "quiz": true,
     "bascule": true,
     "projection": true,
-    "bluesky": true
+    "bluesky": true,
+    "whatif": true
   },
   "instituteSites": {
     "IFOP": "https://www.ifop.com",
