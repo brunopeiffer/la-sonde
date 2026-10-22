@@ -543,7 +543,10 @@ function build() {
   // Image d'aperçu des partages : les réseaux sociaux exigent une adresse absolue.
   const idxPath = P('site/index.html'), html = fs.readFileSync(idxPath, 'utf8');
   const fixed = html.replace(/<meta property="og:image" content="[^"]*">/, `<meta property="og:image" content="${cfg.siteUrl.replace(/\/$/, '')}/${fs.existsSync(P('site/share/carte-du-jour.png')) ? 'share/carte-du-jour.png' : 'og.png'}">`);
-  if (fixed !== html) fs.writeFileSync(idxPath, fixed);
+  // Numéro de version sur les fichiers CSS/JS : le navigateur recharge les nouvelles versions au lieu de garder l'ancienne en cache.
+  const ver = Date.now().toString(36);
+  const busted = fixed.replace(/(href|src)="((?:styles\.css|app\.js|debate\.js|i18n(?:-[a-z]+)?\.js))(?:\?v=[^"]*)?"/g, `$1="$2?v=${ver}"`);
+  if (busted !== html) fs.writeFileSync(idxPath, busted);
   fs.mkdirSync(P('site/data'), { recursive: true });
   writeJSON(P('site/data/site.json'), out);
   console.log(`OK — ${out.counts.surveys} enquêtes, ${out.counts.hypotheses} hypothèses, dernier terrain ${out.asOf}`);

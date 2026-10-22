@@ -74,7 +74,7 @@ function page(s, rank, all) {
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235b2cff'/%3E%3Ccircle cx='16' cy='16' r='3.6' fill='white'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='white' stroke-width='2.4'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="../../styles.css?v=${Date.now().toString(36)}">
 <script data-goatcounter="https://lasonde.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'La Sonde', item: BASE + '/' }, { '@type': 'ListItem', position: 2, name: `Sondages ${name}`, item: url }] })}</script>
