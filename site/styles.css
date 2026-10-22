@@ -450,3 +450,28 @@ a.clink:hover b, .prow a.nm:hover span { text-decoration: underline; text-underl
 .wiv small { display: block; font-size: 11px; font-weight: 700; }
 .wiv small.rgt { color: var(--muted); font-weight: 600; }
 @media (max-width: 600px) { .wirow { grid-template-columns: minmax(0, 1fr) 70px 80px; } }
+
+/* Menu « Plus » / menu mobile */
+.navmore { position: relative; flex: none; }
+.navmore > summary { list-style: none; cursor: pointer; font-size: 14px; font-weight: 700; color: var(--ink-2); padding: 7px 12px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); white-space: nowrap; }
+.navmore > summary::-webkit-details-marker { display: none; }
+.navmore > summary::after { content: ' ▾'; font-size: 11px; }
+.navmore[open] > summary { background: var(--surface-2); color: var(--ink); }
+.navmore .lbl-menu { display: none; }
+.navmore .menu { position: absolute; right: 0; top: calc(100% + 8px); z-index: 60; min-width: 220px; max-height: 70vh; overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; box-shadow: var(--shadow); padding: 6px; display: flex; flex-direction: column; }
+.navmore .menu a { text-decoration: none; color: var(--ink); font-size: 14px; font-weight: 600; padding: 9px 12px; border-radius: 10px; }
+.navmore .menu a:hover { background: var(--surface-2); }
+.navmore .menu a.p { display: none; }
+@media (max-width: 860px) {
+  .navmore { margin-left: auto; }
+  .navmore .lbl-more { display: none; } .navmore .lbl-menu { display: inline; }
+  .navmore .menu a.p { display: block; }
+  .navmore .menu { position: fixed; left: 16px; right: 16px; top: 64px; min-width: 0; }
+}
+@media (max-width: 420px) {
+  .top .wrap { gap: 8px; }
+  .top .tools { gap: 6px; }
+  .brand { font-size: 17px; gap: 7px; }
+  .navmore > summary { padding: 6px 10px; }
+  .top .pill { padding: 6px 9px; }
+}

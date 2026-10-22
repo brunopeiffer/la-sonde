@@ -146,3 +146,4 @@ Object.assign(window.I18N.it, {
   'wi.warn': 'Simulazione di La Sonde basata su sondaggi pubblicati, non un sondaggio. I flussi reali dipenderanno dalla campagna, dalle indicazioni di voto e dal contesto del ritiro. I risultati «stimati» si basano su posizioni politiche indicative, pubblicate nel metodo.'
 });
 Object.assign(window.I18N.it, { 'wi.posT': 'Posizioni sinistra (0) – destra (10) usate dal simulatore', 'wi.calT': 'Parametri ricalcolati su {n} flussi misurati: astensione {a}%, raggio di vicinanza {l}, effetto dimensione {s}' });
+Object.assign(window.I18N.it, { 'nav.more': 'Altro', 'nav.menu': 'Menu' });

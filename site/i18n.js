@@ -314,3 +314,5 @@ Object.assign(window.I18N.en, {
 });
 Object.assign(window.I18N.fr, { 'wi.posT': 'Positions gauche (0) – droite (10) utilisées par le simulateur', 'wi.calT': 'Réglages recalculés sur {n} reports mesurés : abstention {a} %, portée de proximité {l}, effet de taille {s}' });
 Object.assign(window.I18N.en, { 'wi.posT': 'Left (0) – right (10) positions used by the simulator', 'wi.calT': 'Settings fitted to {n} measured transfers: abstention {a}%, proximity range {l}, size effect {s}' });
+Object.assign(window.I18N.fr, { 'nav.more': 'Plus', 'nav.menu': 'Menu' });
+Object.assign(window.I18N.en, { 'nav.more': 'More', 'nav.menu': 'Menu' });

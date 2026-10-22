@@ -146,3 +146,4 @@ Object.assign(window.I18N.es, {
   'wi.warn': 'Simulación de La Sonde a partir de encuestas publicadas, no una encuesta. Los trasvases reales dependerán de la campaña, de las consignas y del contexto de la retirada. Los resultados «estimados» se basan en posiciones políticas indicativas, publicadas en el método.'
 });
 Object.assign(window.I18N.es, { 'wi.posT': 'Posiciones izquierda (0) – derecha (10) usadas por el simulador', 'wi.calT': 'Ajustes recalculados sobre {n} trasvases medidos: abstención {a} %, alcance de proximidad {l}, efecto de tamaño {s}' });
+Object.assign(window.I18N.es, { 'nav.more': 'Más', 'nav.menu': 'Menú' });

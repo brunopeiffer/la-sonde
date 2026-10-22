@@ -146,3 +146,4 @@ Object.assign(window.I18N.de, {
   'wi.warn': 'Simulation von La Sonde auf Basis veröffentlichter Umfragen, keine Umfrage. Die tatsächlichen Stimmenübertragungen hängen vom Wahlkampf, von Empfehlungen und den Umständen des Rückzugs ab. „Geschätzte“ Ergebnisse beruhen auf indikativen politischen Positionen, die in der Methode veröffentlicht sind.'
 });
 Object.assign(window.I18N.de, { 'wi.posT': 'Vom Simulator verwendete Positionen links (0) – rechts (10)', 'wi.calT': 'An {n} gemessene Übertragungen angepasste Einstellungen: Enthaltung {a} %, Reichweite der Nähe {l}, Größeneffekt {s}' });
+Object.assign(window.I18N.de, { 'nav.more': 'Mehr', 'nav.menu': 'Menü' });

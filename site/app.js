@@ -686,7 +686,7 @@
   // ---------- V2 : réglages (modules masquables) ----------
   function applyFeatures() {
     const F = D.features || {};
-    const hide = (id, off) => { const s = document.getElementById(id); if (s) s.hidden = off; const a = document.querySelector(`.nav a[href="#${id}"]`); if (a) a.hidden = off; };
+    const hide = (id, off) => { const s = document.getElementById(id); if (s) s.hidden = off; document.querySelectorAll(`header a[href="#${id}"]`).forEach(a => { a.hidden = off; }); };
     hide('proba', F.probabilities === false);
     hide('debats', F.debates === false);
     hide('quiz', F.quiz === false);
@@ -710,5 +710,11 @@
   };
   matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', renderAll);
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { drawRace(); drawProj(); drawGhosts(); renderConcerns(); window.Debate && window.Debate.redraw(); }, 150); });
+  // Menu « Plus » : se referme après un clic sur un lien ou en dehors.
+  const more = $('#navMore');
+  if (more) {
+    more.addEventListener('click', e => { if (e.target.closest('a')) more.open = false; });
+    document.addEventListener('click', e => { if (more.open && !more.contains(e.target)) more.open = false; });
+  }
   renderAll();
 })();
