@@ -52,6 +52,7 @@ log('Modèle utilisé :', MODEL);
 
 // Certains sites (paywall, robots.txt) refusent le robot de recherche d'Anthropic : on les retire et on les mémorise.
 const BLOCKED = new Set(state.blockedDomains || []);
+let FETCH = AG.fetch === false ? false : 'beta';  // 'beta' → 'ga' (sans en-tête) → false
 const searchDomains = () => cfg.trustedDomains.filter(d => !BLOCKED.has(d));
 
 async function ask(prompt, maxSearches = 8) {
@@ -61,16 +62,22 @@ async function ask(prompt, maxSearches = 8) {
   for (let turn = 0; turn < 5; turn++) {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+      headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json', ...(FETCH === 'beta' ? { 'anthropic-beta': 'web-fetch-2025-09-10' } : {}) },
       body: JSON.stringify({
         model: MODEL, max_tokens: 8000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches, allowed_domains: searchDomains() }],
+        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches, allowed_domains: searchDomains() },
+          // Lecture complète d'une page ou d'un PDF (notice de la Commission, rapport d'institut).
+          ...(FETCH ? [{ type: 'web_fetch_20250910', name: 'web_fetch', max_uses: AG.maxFetches || 3, allowed_domains: searchDomains(), max_content_tokens: AG.maxFetchTokens || 30000 }] : [])],
         ...(finalize ? { tool_choice: { type: 'none' } } : {}),
         messages
       })
     });
     if (!r.ok) {
       const err = await r.text();
+      if (FETCH && r.status === 400 && /web.?fetch|anthropic-beta/i.test(err) && !/not accessible/i.test(err)) {
+        if (FETCH === 'beta' && /anthropic-beta/i.test(err)) { FETCH = 'ga'; turn--; continue; }
+        FETCH = false; SUMMARY.push(`ℹ Lecture des PDF indisponible sur ce compte : recherche seule. (${err.slice(0, 120)})`); turn--; continue;
+      }
       if (r.status === 400 && /not accessible to our user agent/i.test(err)) {
         const doms = [...(err.match(/accessible to our user agent:\s*\[([^\]]*)\]/) || ['', ''])[1].matchAll(/'([a-z0-9.-]+)'/gi)].map(m => m[1]);
         const fresh = doms.filter(d => !BLOCKED.has(d));
@@ -146,7 +153,7 @@ function validate(p) {
       ids[id] = +v;
     }
     const s = Object.values(ids).reduce((a, b) => a + b, 0);
-    if (p.round === 1 && (s < 94 || s > 103)) errs.push(`total hypothèse ${s}`);
+    if (p.round === 1 && (s < 85 || s > 103 || Object.keys(ids).length < 5)) errs.push(`total hypothèse ${s}`);
     if (p.round === 2 && (Object.keys(ids).length !== 2 || s < 98 || s > 102)) errs.push(`duel invalide (${s})`);
     h.ids = ids;
   }
@@ -161,7 +168,9 @@ ${[...known.values()].map(s => '- ' + s).join('\n') || '- (aucun)'}
 Pour chaque nouveau sondage, relève EXACTEMENT les chiffres publiés pour CHAQUE hypothèse testée (noms complets des candidats), l'échantillon (nombre d'inscrits interrogés ou, à défaut, de personnes interrogées), les dates de terrain et l'URL de la source primaire.
 Méthode conseillée : une recherche générale (« sondage présidentielle 2027 intentions de vote » + le mois en cours), puis les sites des instituts cités (pages « actualités » ou « publications », souvent avec un PDF) et commission-des-sondages.fr.
 Si tu repères un sondage mais ne peux pas en relever tous les chiffres de façon certaine, mets-le dans "skipped" avec la raison, au lieu de l'ignorer en silence.
-N'invente rien : si un chiffre n'est pas lisible dans une source, n'inclus pas ce sondage.
+Pour chaque sondage repéré, ouvre sa notice PDF sur commission-des-sondages.fr ou le rapport de l'institut avec l'outil web_fetch, et relève les chiffres dans ce document plutôt que dans un article de presse.
+Les petits candidats annoncés « 2 % ou moins » : indique 1 ; « moins de 1 % » : indique 0.5. Si seules certaines hypothèses sont lisibles avec certitude, ne relève que celles-là (il en faut au moins une complète pour les principaux candidats).
+N'invente rien : un chiffre douteux = hypothèse non relevée.
 Réponds uniquement par un bloc <json>…</json> au format ${SCHEMA}. Si rien de nouveau : <json>{"polls":[]}</json>`;
   const res0 = await ask(prompt, AG.maxSearches || 6);
   const found = res0.polls || [];
