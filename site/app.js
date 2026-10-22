@@ -87,10 +87,18 @@
       if (!rest.length) return '';
       return `<div class="pothers"><h3>${t('pod.others')}</h3><div class="pchips">` + rest.map(s =>
         `<a class="pchip" href="${page(s.c)}" title="${esc(nm(s.c))}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num">${fmt(s.v, 0)}${pct}</b>${s.presence < 30 ? '<sup>*</sup>' : ''}</a>`).join('') +
-        `</div>${rest.some(s => s.presence < 30) ? `<p class="pnote">* ${t('pod.few')}</p>` : ''}</div>`;
+        `</div>${rest.some(s => s.presence < 30) ? `<p class="pnote">* ${t('pod.few')}</p>` : ''}<p class="pnote"><a href="#candidats">${t('cf.hint')} →</a></p></div>`;
     })();
     $('#summary').innerHTML = tr(D.summary).map(x => `<li>${esc(x)}</li>`).join('');
     $('#sumMeta').textContent = t('sum.meta', { d: fdate(D.asOf, { day: 'numeric', month: 'long', year: 'numeric' }) });
+  }
+
+  // ---------- Fiches candidats ----------
+  function renderFiches() {
+    $('#cfiches').innerHTML = D.standings.filter(s => D.cands[s.c] && D.cands[s.c].slug).map(s => {
+      const K = D.cands[s.c];
+      return `<a class="cfiche" href="${page(s.c)}" style="--c:${col(s.c)}"><span class="cf-nm"><i></i>${esc(K.name)}</span><span class="cf-pt">${esc(K.party || '')}</span><b class="num">${fmt(s.v, 0)}${pct}</b><span class="cf-go">${t('cf.go')} →</span></a>`;
+    }).join('');
   }
 
   // ---------- V2 : ce qui a changé ----------
@@ -612,7 +620,7 @@
   // ---------- Assemblage ----------
   function renderAll() {
     pct = pctOf();
-    renderStatic(); renderHero(); renderChanges(); renderBascule(); drawProj(); renderDecoded(); renderRaceControls(); drawRace(); renderTable(); renderProba(); drawGhosts();
+    renderStatic(); renderHero(); renderFiches(); renderChanges(); renderBascule(); drawProj(); renderDecoded(); renderRaceControls(); drawRace(); renderTable(); renderProba(); drawGhosts();
     renderTransfers(); renderDuels(); renderSim(); renderGap(); renderConcerns(); renderPolls();
     renderSupport(); renderQuiz(); renderInstitutes(); renderTimeline(); renderEmbeds(); applyFeatures();
     if (window.Debate) window.Debate.render({ D, lang, t, tr, loc, pct: () => pct, col, nm, sh, fmt, esc, css, tipFor });

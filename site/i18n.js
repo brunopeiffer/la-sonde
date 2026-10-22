@@ -282,3 +282,5 @@ Object.assign(window.I18N.en, {
 });
 Object.assign(window.I18N.fr, { 'gh.vote': 'Vote', 'gh.dm': 'J-{d}', 'gh.last': 'Dernier sondage · J-{d}', 'is.missing': ". Thèmes absents d'une vague : non publiés pour cette vague." });
 Object.assign(window.I18N.en, { 'gh.vote': 'Vote', 'gh.dm': 'D-{d}', 'gh.last': 'Latest poll · {d} days out', 'is.missing': '. Themes missing from a wave were not published for that wave.' });
+Object.assign(window.I18N.fr, {"nav.cands": "Candidats", "cf.tag": "Fiches", "cf.title": "Une page par candidat", "cf.desc": "Moyenne, tendance, probabilités, derniers sondages et effets instituts : tout ce qu'il faut savoir sur chaque candidat suivi.", "cf.go": "Voir la fiche", "cf.hint": "Fiches candidats"});
+Object.assign(window.I18N.en, {"nav.cands": "Candidates", "cf.tag": "Profiles", "cf.title": "One page per candidate", "cf.desc": "Average, trend, odds, latest polls and house effects: everything about each candidate we track (pages in French).", "cf.go": "View profile", "cf.hint": "Candidate profiles"});
