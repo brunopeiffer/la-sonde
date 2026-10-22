@@ -121,12 +121,12 @@
     "maxSearches": 5,
     "verifySearches": 1,
     "model": "claude-haiku-5-5",
-    "monthlyBudgetUsd": 4,
+    "monthlyBudgetUsd": 4.5,
     "prices": {
-      "_note": "Tarifs en dollars utilisés pour estimer le coût (à ajuster si Anthropic change ses prix).",
-      "inputPerMTok": 1,
-      "outputPerMTok": 5,
-      "searchPer1000": 10
+      "_note": "Tarifs en dollars utilisés pour estimer le coût. Recalés le 23/10/2026 sur la dépense réelle affichée par la console (0,60 $ réels pour 1,76 $ estimés).",
+      "inputPerMTok": 0.34,
+      "outputPerMTok": 1.7,
+      "searchPer1000": 3.4
     },
     "maxFetches": 2,
     "verifyFetches": 1,
