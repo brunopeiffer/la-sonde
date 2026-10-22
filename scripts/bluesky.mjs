@@ -27,7 +27,7 @@ if (!FORCE && st.asOf === D.asOf && days < 3) exit('aucun nouveau sondage depuis
 
 // Texte : les trois signaux du jour (≤ 300 caractères), puis le lien.
 const url = D.site.url.replace(/\/$/, '');
-const head = D.changes.fr.map(x => x.t).find(t => !t.startsWith('Dernier sondage')) || '';
+const head = (D.changes.fr[0] || {}).t || '';
 const top = D.standings.filter(s => s.presence >= 30).slice(0, 4).map(s => `${D.cands[s.c].short} ${s.v.toFixed(1).replace('.', ',')} %`).join(' · ');
 let text = `📊 Présidentielle 2027, moyenne des sondages :\n${top}\n\n${head}`;
 const link = `\n\n${url.replace(/^https?:\/\//, '')}`;

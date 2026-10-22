@@ -4,7 +4,8 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { readJSON, writeJSON, parseCSV, toDay, fromDay, round1, randn, normCdf, seed } from './lib.mjs';
-import { momentum, crossings, openness, decode, updateHistory, changes } from './v2.mjs';
+import { momentum, crossings, openness, decode, updateHistory } from './v2.mjs';
+import { signals } from './signals.mjs';
 seed(2027); // tirages reproductibles d'une exécution à l'autre
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
@@ -469,7 +470,7 @@ function build() {
   const histPath = P('data/history.json');
   const hist0 = fs.existsSync(histPath) ? readJSON(histPath) : [];
   const today = new Date().toISOString().slice(0, 10);
-  out.changes = changes({ MOM, cross, dec, hist: hist0, today, qualify: mc.qualify, nm, features: cfg.features, fmtDate });
+  out.changes = signals({ MOM, cross, dec, hist: hist0, today, qualify: mc.qualify, nm, features: cfg.features, fmtDate, standings, FR, G: { ...G, daysToR1: R1 - FR.lastPoll }, transfers: T, open });
   const hist = updateHistory(hist0, today, { asOf: out.asOf, open: open.open,
     q: Object.fromEntries(mc.qualify.map(x => [x.c, x.p])), v: Object.fromEntries(standings.map(x => [x.c, x.v])) });
   writeJSON(histPath, hist, true);

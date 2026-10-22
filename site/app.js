@@ -103,7 +103,7 @@
 
   // ---------- V2 : ce qui a changé ----------
   const page = c => (D.cands[c] && D.cands[c].slug) ? `candidat/${D.cands[c].slug}/` : '#course';
-  const ICON = { up: '▲', down: '▼', flat: '●', poll: '◆', proba: '%', swap: '⇅' };
+  const ICON = { up: '▲', down: '▼', flat: '●', poll: '◆', proba: '%', swap: '⇅', transfer: '⇢', ghost: '◷' };
   function renderChanges() {
     const it = D.changes ? (D.changes[lang] || D.changes.en || []) : [];
     $('#changes').innerHTML = it.length ? `<h3>${t('chg.title')}</h3><div class="chg-grid">` + it.map(x =>
