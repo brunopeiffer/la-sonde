@@ -1,5 +1,26 @@
 {
   "lastRun": "2026-10-22",
   "month": "2026-10",
-  "spentUsd": 0
+  "spentUsd": 0.447,
+  "blockedDomains": [
+    "bfmtv.com",
+    "challenges.fr",
+    "francetvinfo.fr",
+    "huffingtonpost.fr",
+    "latribune.fr",
+    "lci.fr",
+    "lefigaro.fr",
+    "lemonde.fr",
+    "leparisien.fr",
+    "lepoint.fr",
+    "lesechos.fr",
+    "lexpress.fr",
+    "liberation.fr",
+    "nouvelobs.com",
+    "ouest-france.fr",
+    "politico.eu",
+    "radioclassique.fr",
+    "rtl.fr",
+    "tf1info.fr"
+  ]
 }
