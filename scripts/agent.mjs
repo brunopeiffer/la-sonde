@@ -12,7 +12,7 @@ const P = (...a) => path.join(ROOT, ...a);
 const cfg = readJSON(P('config.json'));
 const KEY = process.env.ANTHROPIC_API_KEY;
 const AG = cfg.agent || {};
-const MODEL = process.env.CLAUDE_MODEL || AG.model || 'claude-haiku-4-5';
+let MODEL = process.env.CLAUDE_MODEL || AG.model || 'claude-haiku-4-5';
 const TODAY = new Date().toISOString().slice(0, 10);
 const log = (...a) => console.log('[agent]', ...a);
 
@@ -37,6 +37,18 @@ let spent = spend, calls = 0, searches = 0;
 const BUDGET = AG.monthlyBudgetUsd || 4;
 if (spent >= BUDGET) { log(`Budget du mois atteint (${spent.toFixed(2)} $ / ${BUDGET} $) : pause jusqu'au mois prochain.`); process.exit(0); }
 const SUMMARY = [];
+
+// Modèle : on vérifie qu'il existe encore ; sinon on prend le Haiku le plus récent disponible sur le compte.
+try {
+  const r = await fetch('https://api.anthropic.com/v1/models?limit=100', { headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01' } });
+  if (!r.ok) throw new Error(`liste des modèles : ${r.status} ${(await r.text()).slice(0, 200)}`);
+  const ids = ((await r.json()).data || []).map(m => m.id);
+  if (!ids.includes(MODEL)) {
+    const alt = ids.find(id => id.includes('haiku')) || ids[0];
+    if (alt) { SUMMARY.push(`ℹ Modèle ${MODEL} indisponible : utilisation de ${alt}.`); MODEL = alt; }
+  }
+} catch (e) { SUMMARY.push(`⚠ ${e.message}`); }
+log('Modèle utilisé :', MODEL);
 
 async function ask(prompt, maxSearches = 8) {
   if (spent >= BUDGET) throw new Error('budget mensuel atteint');
@@ -190,10 +202,10 @@ Réponds par <json>{"items":[{"name":"Nom Complet","type":"withdrawal","date":"Y
   log(`${n} changement(s) de candidature ajouté(s).`);
 }
 
-try { await pollWatch(); } catch (e) { log('Veille sondages en échec :', e.message); }
-try { await concernsWatch(); } catch (e) { log('Veille préoccupations en échec :', e.message); }
-try { await candidacyWatch(); } catch (e) { log('Veille candidatures en échec :', e.message); }
+try { await pollWatch(); } catch (e) { log('Veille sondages en échec :', e.message); SUMMARY.push(`⚠ Veille sondages en échec : ${e.message}`); }
+try { await concernsWatch(); } catch (e) { log('Veille préoccupations en échec :', e.message); SUMMARY.push(`⚠ Veille préoccupations en échec : ${e.message}`); }
+try { await candidacyWatch(); } catch (e) { log('Veille candidatures en échec :', e.message); SUMMARY.push(`⚠ Veille candidatures en échec : ${e.message}`); }
 writeJSON(STATE_PATH, { ...state, lastRun: TODAY, month: MONTH, spentUsd: Math.round(spent * 1000) / 1000 }, true);
-const recap = `### Agent de veille — ${TODAY}\n\n${SUMMARY.length ? SUMMARY.map(x => '- ' + x).join('\n') : '- Rien de nouveau.'}\n\n${calls} appel(s), ${searches} recherche(s). Coût estimé ce mois-ci : ${spent.toFixed(2)} $ sur ${BUDGET} $.\n`;
+const recap = `### Agent de veille — ${TODAY} (modèle ${MODEL})\n\n${SUMMARY.length ? SUMMARY.map(x => '- ' + x).join('\n') : '- Rien de nouveau.'}\n\n${calls} appel(s), ${searches} recherche(s). Coût estimé ce mois-ci : ${spent.toFixed(2)} $ sur ${BUDGET} $.\n`;
 log(recap.replace(/\n+/g, ' | '));
 if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, recap);
