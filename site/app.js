@@ -65,7 +65,7 @@
     $('#langSel').value = lang;
     const now = Date.now();
     $('#blackout').classList.toggle('on', D.election.blackout.some(b => now >= Date.parse(b.from) && now <= Date.parse(b.to)));
-    $('#method').innerHTML = tr(window.METHOD) + `<p class="meta">a = ${fmt(D.mc.sdParams.a, 2)} · b = ${fmt(D.mc.sdParams.b, 3)} · σ₂ = ${fmt(D.mc.sdParams.sd2)} pt</p>` + (D.whatif ? `<p class="meta">${t('wi.posT')} : ${D.whatif.base.filter(b => D.whatif.pos[b.c] != null).sort((x, y) => D.whatif.pos[x.c] - D.whatif.pos[y.c]).map(b => `${esc(sh(b.c))} ${fmt(D.whatif.pos[b.c])}`).join(' · ')}</p>` : '');
+    $('#method').innerHTML = tr(window.METHOD) + `<p class="meta">a = ${fmt(D.mc.sdParams.a, 2)} · b = ${fmt(D.mc.sdParams.b, 3)} · σ₂ = ${fmt(D.mc.sdParams.sd2)} pt</p>` + (D.whatif ? `<p class="meta">${t('wi.posT')}${lang === 'fr' ? ' : ' : ': '}${D.whatif.base.filter(b => D.whatif.pos[b.c] != null).sort((x, y) => D.whatif.pos[x.c] - D.whatif.pos[y.c]).map(b => `${esc(sh(b.c))} ${fmt(D.whatif.pos[b.c])}`).join(' · ')}</p>${D.whatif.calib ? `<p class="meta">${t('wi.calT', { n: D.whatif.calib.n, a: fmt(D.whatif.abst * 100, 0), l: fmt(D.whatif.lambda), s: fmt(D.whatif.alpha, 2) })}</p>` : ''}` : '');
     $('#ftAuthor').textContent = t('ft.author', { a: D.site.author }) + ' ' + t('ft.lcen', { a: D.site.author, c: D.site.contact });
     $('#ftGen').textContent = t('ft.gen', { d: new Date(D.generated).toLocaleString(loc(), { dateStyle: 'long', timeStyle: 'short' }) });
   }
@@ -105,7 +105,7 @@
       // le reste va surtout aux candidats proches sur l'axe gauche-droite, pondérés par leur poids électoral.
       const A = alive(), px = W.pos[x];
       const tot = A.reduce((a, c) => a + v[c], 0);
-      const wts = A.map(c => px == null || W.pos[c] == null ? 0 : v[c] * Math.exp(-Math.abs(px - W.pos[c]) / W.lambda));
+      const wts = A.map(c => px == null || W.pos[c] == null ? 0 : Math.pow(v[c], W.alpha ?? 1) * Math.exp(-Math.abs(px - W.pos[c]) / W.lambda));
       const sw = wts.reduce((a, b) => a + b, 0);
       A.forEach((c, i) => {
         const g = amount * (W.abst * v[c] / tot + (1 - W.abst) * (sw ? wts[i] / sw : v[c] / tot));

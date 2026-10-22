@@ -494,9 +494,34 @@ function build() {
         return { cs, set, surveys: g.surveys, last: fromDay(Math.max(...g.ps.map(p => p.t))) };
       });
     const POS = readJSON(P('data/positions.json'));
+    const baseW = Object.fromEntries(allScen.set.map(x => [x.c, x.share]));
+    // Calibration : on cherche les réglages (taille, portée de proximité, abstention) qui reproduisent
+    // au mieux les reports réellement mesurés dans les sondages (section « Reports »).
+    let cal = { alpha: POS.alpha ?? 0.75, lambda: POS.lambda, abst: POS.abstention }, calib = null;
+    const meas = T.filter(tr => POS.positions[tr.c] != null && baseW[tr.c] != null);
+    if (meas.length) {
+      let best = null;
+      for (const alpha of [0, 0.25, 0.5, 0.75, 1]) for (const lambda of [0.4, 0.6, 0.8, 1, 1.2, 1.5, 2, 3]) for (const abst of [0, 0.1, 0.2, 0.3, 0.4]) {
+        let err = 0, n = 0;
+        for (const tr of meas) {
+          const A = Object.keys(baseW).filter(c => c !== tr.c && POS.positions[c] != null);
+          const tot = A.reduce((s, c) => s + baseW[c], 0);
+          const w = A.map(c => Math.pow(baseW[c], alpha) * Math.exp(-Math.abs(POS.positions[tr.c] - POS.positions[c]) / lambda));
+          const sw = w.reduce((s, x) => s + x, 0);
+          A.forEach((c, i) => {
+            const pred = abst * baseW[c] / tot + (1 - abst) * w[i] / sw;
+            const m = ((tr.flows.find(f => f.c === c) || { pts: 0 }).pts) / tr.score;
+            err += (pred - m) ** 2; n++;
+          });
+        }
+        if (!best || err < best.err) best = { alpha, lambda, abst, err, n };
+      }
+      cal = { alpha: best.alpha, lambda: best.lambda, abst: best.abst };
+      calib = { n: meas.length, rmse: round1(Math.sqrt(best.err / best.n) * 1000) / 10 };
+    }
     out.whatif = {
       base: allScen.set.map(x => ({ c: x.c, v: round1(x.share), band: (standings.find(s => s.c === x.c) || { band: 1.5 }).band })),
-      tested, pos: POS.positions, lambda: POS.lambda, abst: POS.abstention, source: POS.source
+      tested, pos: POS.positions, ...cal, calib, source: POS.source
     };
   }
   out.momentum = Object.fromEntries(Object.entries(MOM).map(([c, m]) => { const { slope, se, sd30, ...r } = m; return [c, r]; }));
