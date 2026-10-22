@@ -93,7 +93,10 @@
     "probabilities": true,
     "simulator": true,
     "debates": true,
-    "quiz": true
+    "quiz": true,
+    "bascule": true,
+    "projection": true,
+    "bluesky": true
   },
   "instituteSites": {
     "IFOP": "https://www.ifop.com",

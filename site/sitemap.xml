@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://la-sonde.fr/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq></url>
-  <url><loc>https://la-sonde.fr/?lang=en</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq></url>
+  <url><loc>https://la-sonde.fr/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://la-sonde.fr/?lang=en</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://la-sonde.fr/?lang=de</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://la-sonde.fr/?lang=es</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://la-sonde.fr/?lang=it</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/marine-le-pen/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/jean-luc-melenchon/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/edouard-philippe/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/raphael-glucksmann/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/gabriel-attal/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/bruno-retailleau/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/francois-hollande/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/eric-zemmour/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/marine-tondelier/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/david-lisnard/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/francois-ruffin/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/fabien-roussel/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/nicolas-dupont-aignan/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://la-sonde.fr/candidat/nathalie-arthaud/</loc><lastmod>2026-10-08</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
 </urlset>

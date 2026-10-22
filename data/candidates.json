@@ -1,197 +1,197 @@
 {
- "_note": "Couleurs inspirées des codes des partis, ajustées pour rester vives et distinctes. Ajoutez ici tout nouveau candidat (id = identifiant MieuxVoter).",
- "MLP": {
-  "name": "Marine Le Pen",
-  "short": "Le Pen",
-  "party": "RN",
-  "color": "#1f3fbf",
-  "colorDark": "#5470ff"
- },
- "JB": {
-  "name": "Jordan Bardella",
-  "short": "Bardella",
-  "party": "RN",
-  "color": "#4a63e0",
-  "colorDark": "#7088ff"
- },
- "EP": {
-  "name": "Édouard Philippe",
-  "short": "Philippe",
-  "party": "Horizons",
-  "color": "#00979a",
-  "colorDark": "#12a8a8"
- },
- "JLM": {
-  "name": "Jean-Luc Mélenchon",
-  "short": "Mélenchon",
-  "party": "LFI",
-  "color": "#e8174a",
-  "colorDark": "#ff3d68"
- },
- "GA": {
-  "name": "Gabriel Attal",
-  "short": "Attal",
-  "party": "Renaissance",
-  "color": "#d98200",
-  "colorDark": "#cf8509"
- },
- "RG": {
-  "name": "Raphaël Glucksmann",
-  "short": "Glucksmann",
-  "party": "Place publique",
-  "color": "#f0458f",
-  "colorDark": "#e64d92"
- },
- "BR": {
-  "name": "Bruno Retailleau",
-  "short": "Retailleau",
-  "party": "LR",
-  "color": "#1e96dc",
-  "colorDark": "#2f95e0"
- },
- "FH": {
-  "name": "François Hollande",
-  "short": "Hollande",
-  "party": "PS",
-  "color": "#b5126f",
-  "colorDark": "#d63d8c"
- },
- "OF": {
-  "name": "Olivier Faure",
-  "short": "Faure",
-  "party": "PS",
-  "color": "#d6589b",
-  "colorDark": "#e67ab0"
- },
- "BC": {
-  "name": "Bernard Cazeneuve",
-  "short": "Cazeneuve",
-  "party": "PS / div.",
-  "color": "#b5487a"
- },
- "EZ": {
-  "name": "Éric Zemmour",
-  "short": "Zemmour",
-  "party": "Reconquête",
-  "color": "#8f4a17",
-  "colorDark": "#b8692f"
- },
- "SK": {
-  "name": "Sarah Knafo",
-  "short": "Knafo",
-  "party": "Reconquête",
-  "color": "#9a6240",
-  "colorDark": "#c98a5c"
- },
- "MT": {
-  "name": "Marine Tondelier",
-  "short": "Tondelier",
-  "party": "Écologistes",
-  "color": "#22b04b",
-  "colorDark": "#34c262"
- },
- "FRo": {
-  "name": "Fabien Roussel",
-  "short": "Roussel",
-  "party": "PCF",
-  "color": "#a3001b",
-  "colorDark": "#e0354a"
- },
- "FR": {
-  "name": "François Ruffin",
-  "short": "Ruffin",
-  "party": "Debout",
-  "color": "#ff7a1a"
- },
- "NA": {
-  "name": "Nathalie Arthaud",
-  "short": "Arthaud",
-  "party": "LO",
-  "color": "#6d0012",
-  "colorDark": "#c0394f"
- },
- "PP": {
-  "name": "Philippe Poutou",
-  "short": "Poutou",
-  "party": "NPA",
-  "color": "#8c1d40",
-  "colorDark": "#c24a72"
- },
- "NDA": {
-  "name": "Nicolas Dupont-Aignan",
-  "short": "Dupont-Aignan",
-  "party": "DLF",
-  "color": "#5a4fcf",
-  "colorDark": "#8a80ff"
- },
- "DL": {
-  "name": "David Lisnard",
-  "short": "Lisnard",
-  "party": "Nouvelle Énergie",
-  "color": "#7c5cff",
-  "colorDark": "#9d85ff"
- },
- "XB": {
-  "name": "Xavier Bertrand",
-  "short": "Bertrand",
-  "party": "LR",
-  "color": "#5ac8fa"
- },
- "LW": {
-  "name": "Laurent Wauquiez",
-  "short": "Wauquiez",
-  "party": "LR",
-  "color": "#1b7fc4"
- },
- "DV": {
-  "name": "Dominique de Villepin",
-  "short": "Villepin",
-  "party": "Div.",
-  "color": "#8a8f9c"
- },
- "BLM": {
-  "name": "Bruno Le Maire",
-  "short": "Le Maire",
-  "party": "Div.",
-  "color": "#d9a400"
- },
- "GD": {
-  "name": "Gérald Darmanin",
-  "short": "Darmanin",
-  "party": "Div.",
-  "color": "#e09a2b"
- },
- "MM": {
-  "name": "Marion Maréchal",
-  "short": "Maréchal",
-  "party": "Div. droite",
-  "color": "#3b4a8a"
- },
- "SRo": {
-  "name": "Ségolène Royal",
-  "short": "Royal",
-  "party": "Div. gauche",
-  "color": "#e67fb0"
- },
- "EC": {
-  "name": "Éric Ciotti",
-  "short": "Ciotti",
-  "party": "UDR",
-  "color": "#33408a"
- },
- "FB": {
-  "name": "François Bayrou",
-  "short": "Bayrou",
-  "party": "MoDem",
-  "color": "#ff9a3d"
- },
- "CA": {
-  "name": "Clémentine Autain",
-  "short": "Autain",
-  "party": "L'Après",
-  "color": "#ff4d6d"
- },
- "_default": {
-  "color": "#9aa0ad"
- }
+  "_note": "Couleurs inspirées des codes des partis, ajustées pour rester vives et distinctes. Ajoutez ici tout nouveau candidat (id = identifiant MieuxVoter).",
+  "MLP": {
+    "name": "Marine Le Pen",
+    "short": "Le Pen",
+    "party": "RN",
+    "color": "#1f3fbf",
+    "colorDark": "#5470ff"
+  },
+  "JB": {
+    "name": "Jordan Bardella",
+    "short": "Bardella",
+    "party": "RN",
+    "color": "#4a63e0",
+    "colorDark": "#7088ff"
+  },
+  "EP": {
+    "name": "Édouard Philippe",
+    "short": "Philippe",
+    "party": "Horizons",
+    "color": "#00979a",
+    "colorDark": "#12a8a8"
+  },
+  "JLM": {
+    "name": "Jean-Luc Mélenchon",
+    "short": "Mélenchon",
+    "party": "LFI",
+    "color": "#e8174a",
+    "colorDark": "#ff3d68"
+  },
+  "GA": {
+    "name": "Gabriel Attal",
+    "short": "Attal",
+    "party": "Renaissance",
+    "color": "#d98200",
+    "colorDark": "#cf8509"
+  },
+  "RG": {
+    "name": "Raphaël Glucksmann",
+    "short": "Glucksmann",
+    "party": "Place publique",
+    "color": "#f0458f",
+    "colorDark": "#e64d92"
+  },
+  "BR": {
+    "name": "Bruno Retailleau",
+    "short": "Retailleau",
+    "party": "LR",
+    "color": "#1e96dc",
+    "colorDark": "#2f95e0"
+  },
+  "FH": {
+    "name": "François Hollande",
+    "short": "Hollande",
+    "party": "PS",
+    "color": "#b5126f",
+    "colorDark": "#d63d8c"
+  },
+  "OF": {
+    "name": "Olivier Faure",
+    "short": "Faure",
+    "party": "PS",
+    "color": "#d6589b",
+    "colorDark": "#e67ab0"
+  },
+  "BC": {
+    "name": "Bernard Cazeneuve",
+    "short": "Cazeneuve",
+    "party": "PS / div.",
+    "color": "#b5487a"
+  },
+  "EZ": {
+    "name": "Éric Zemmour",
+    "short": "Zemmour",
+    "party": "Reconquête",
+    "color": "#8f4a17",
+    "colorDark": "#b8692f"
+  },
+  "SK": {
+    "name": "Sarah Knafo",
+    "short": "Knafo",
+    "party": "Reconquête",
+    "color": "#9a6240",
+    "colorDark": "#c98a5c"
+  },
+  "MT": {
+    "name": "Marine Tondelier",
+    "short": "Tondelier",
+    "party": "Écologistes",
+    "color": "#22b04b",
+    "colorDark": "#34c262"
+  },
+  "FRo": {
+    "name": "Fabien Roussel",
+    "short": "Roussel",
+    "party": "PCF",
+    "color": "#a3001b",
+    "colorDark": "#e0354a"
+  },
+  "FR": {
+    "name": "François Ruffin",
+    "short": "Ruffin",
+    "party": "Debout",
+    "color": "#ff7a1a"
+  },
+  "NA": {
+    "name": "Nathalie Arthaud",
+    "short": "Arthaud",
+    "party": "LO",
+    "color": "#6d0012",
+    "colorDark": "#c0394f"
+  },
+  "PP": {
+    "name": "Philippe Poutou",
+    "short": "Poutou",
+    "party": "NPA",
+    "color": "#8c1d40",
+    "colorDark": "#c24a72"
+  },
+  "NDA": {
+    "name": "Nicolas Dupont-Aignan",
+    "short": "Dupont-Aignan",
+    "party": "DLF",
+    "color": "#5a4fcf",
+    "colorDark": "#8a80ff"
+  },
+  "DL": {
+    "name": "David Lisnard",
+    "short": "Lisnard",
+    "party": "Nouvelle Énergie",
+    "color": "#7f9a1c",
+    "colorDark": "#a8c43a"
+  },
+  "XB": {
+    "name": "Xavier Bertrand",
+    "short": "Bertrand",
+    "party": "LR",
+    "color": "#5ac8fa"
+  },
+  "LW": {
+    "name": "Laurent Wauquiez",
+    "short": "Wauquiez",
+    "party": "LR",
+    "color": "#1b7fc4"
+  },
+  "DV": {
+    "name": "Dominique de Villepin",
+    "short": "Villepin",
+    "party": "Div.",
+    "color": "#8a8f9c"
+  },
+  "BLM": {
+    "name": "Bruno Le Maire",
+    "short": "Le Maire",
+    "party": "Div.",
+    "color": "#d9a400"
+  },
+  "GD": {
+    "name": "Gérald Darmanin",
+    "short": "Darmanin",
+    "party": "Div.",
+    "color": "#e09a2b"
+  },
+  "MM": {
+    "name": "Marion Maréchal",
+    "short": "Maréchal",
+    "party": "Div. droite",
+    "color": "#3b4a8a"
+  },
+  "SRo": {
+    "name": "Ségolène Royal",
+    "short": "Royal",
+    "party": "Div. gauche",
+    "color": "#e67fb0"
+  },
+  "EC": {
+    "name": "Éric Ciotti",
+    "short": "Ciotti",
+    "party": "UDR",
+    "color": "#33408a"
+  },
+  "FB": {
+    "name": "François Bayrou",
+    "short": "Bayrou",
+    "party": "MoDem",
+    "color": "#ff9a3d"
+  },
+  "CA": {
+    "name": "Clémentine Autain",
+    "short": "Autain",
+    "party": "L'Après",
+    "color": "#ff4d6d"
+  },
+  "_default": {
+    "color": "#9aa0ad"
+  }
 }

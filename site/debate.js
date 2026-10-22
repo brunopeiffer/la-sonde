@@ -138,7 +138,7 @@ window.Debate = (function () {
   // En démonstration, candidats fictifs : jamais de faux chiffres associés à de vrais noms.
   function wrap(ctx, demoDef) {
     if (!demoDef) return ctx;
-    const n = c => demoDef.names && demoDef.names[c] ? demoDef.names[c][ctx.lang] : ctx.nm(c);
+    const n = c => demoDef.names && demoDef.names[c] ? ctx.tr(demoDef.names[c]) : ctx.nm(c);
     return { ...ctx, nm: n, sh: n, col: c => (demoDef.colors && demoDef.colors[c]) || ctx.col(c) };
   }
   function render(ctx) {
@@ -153,11 +153,11 @@ window.Debate = (function () {
     if (S.demo) { if (!S.data || !S.data.demoNow) S.data = demoData(S.key); }
     else if (!S.data || S.data.demoNow) S.data = { buckets: {}, verdict: {}, byIntent: {}, voters: 0, reactors: 0 };
     const d = S.key, ph = phase(d), L = C.lang;
-    const when = new Date(d.start).toLocaleString(L === 'fr' ? 'fr-FR' : 'en-GB', { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
+    const when = new Date(d.start).toLocaleString(C.loc(), { weekday: 'long', day: 'numeric', month: 'long', hour: '2-digit', minute: '2-digit' });
     const statusTxt = { live: C.t('deb.live'), upcoming: C.t('deb.upcoming'), verdict: C.t('deb.verdict'), closed: C.t('deb.closed') }[ph];
     host.innerHTML = `
       ${!real && C.D.site.api ? `<p class="note" style="margin-top:0">${C.t('deb.none_scheduled')}</p>` : ''}
-      <div class="debate-head"><div><h3>${C.esc(d.title[L])}</h3><div class="note" style="margin:4px 0 0">${C.esc(typeof d.channel === 'object' ? d.channel[L] : d.channel)}${S.demo ? '' : ' · ' + C.esc(when)}</div></div>
+      <div class="debate-head"><div><h3>${C.esc(C.tr(d.title))}</h3><div class="note" style="margin:4px 0 0">${C.esc(typeof d.channel === 'object' ? C.tr(d.channel) : d.channel)}${S.demo ? '' : ' · ' + C.esc(when)}</div></div>
         <div style="display:grid;gap:6px;justify-items:end"><span class="status ${ph === 'live' ? 'on' : ''}">${ph === 'live' ? '<span class="live"></span>' : ''}${statusTxt}</span><span class="note num" style="margin:0" id="debCount"></span></div></div>
       <div class="disclaimer ${S.demo ? 'demo-flag' : ''}"><span aria-hidden="true">ⓘ</span><span>${S.demo ? C.t('deb.demo') + ' ' : ''}${C.t('deb.notpoll')}</span></div>
       ${silence() ? `<p class="disclaimer">${C.t('deb.silence')}</p>` : ''}
@@ -181,7 +181,7 @@ window.Debate = (function () {
   }
   function counters() {
     const el = document.getElementById('debCount'); if (!el) return;
-    el.textContent = C.t('deb.people', { r: S.data.reactors.toLocaleString(C.lang === 'fr' ? 'fr-FR' : 'en-GB'), v: S.data.voters.toLocaleString(C.lang === 'fr' ? 'fr-FR' : 'en-GB') });
+    el.textContent = C.t('deb.people', { r: S.data.reactors.toLocaleString(C.loc()), v: S.data.voters.toLocaleString(C.loc()) });
     const { out } = curves();
     for (const c of S.key.candidates) {
       const tag = document.querySelector(`[data-net="${c}"]`); if (!tag) continue;
@@ -202,7 +202,7 @@ window.Debate = (function () {
     segs.forEach((s, i) => {
       const x0 = x(s.min), x1 = x(segs[i + 1] ? segs[i + 1].min : dur);
       if (i % 2 === 0) svg.append('rect').attr('x', x0).attr('y', m.t).attr('width', x1 - x0).attr('height', H - m.t - m.b).attr('fill', C.css('--surface-2')).attr('opacity', .7);
-      svg.append('text').attr('x', x0 + 6).attr('y', m.t - 8).attr('fill', C.css('--muted')).attr('font-size', 11).attr('font-weight', 700).text(s[C.lang]);
+      svg.append('text').attr('x', x0 + 6).attr('y', m.t - 8).attr('fill', C.css('--muted')).attr('font-size', 11).attr('font-weight', 700).text(C.tr(s));
     });
     svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(mobile ? 4 : 8).tickFormat(v => v + ' ' + C.t('deb.min')));
     svg.append('g').attr('class', 'axis').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).tickValues([-100, -50, 0, 50, 100]).tickSize(0).tickFormat(v => (v > 0 ? '+' : '') + v)).select('.domain').remove();
@@ -224,7 +224,7 @@ window.Debate = (function () {
         const [px, py] = d3.pointer(ev), mm = Math.max(0, Math.min(last, Math.round(x.invert(px))));
         cross.attr('x1', x(mm)).attr('x2', x(mm)).attr('opacity', .4);
         const seg = [...segs].reverse().find(s => s.min <= mm);
-        tip.show(`<h4>${mm} ${C.t('deb.min')}${seg ? ' · ' + C.esc(seg[C.lang]) : ''}</h4>` + d.candidates.map(c => { const p = out[c][mm]; return `<div class="r"><span><i style="background:${C.col(c)}"></i>${C.esc(C.sh(c))}</span><b class="num">${p && p.v != null ? (p.v > 0 ? '+' : '') + Math.round(p.v) : '–'}</b></div>`; }).join(''), x(mm), py);
+        tip.show(`<h4>${mm} ${C.t('deb.min')}${seg ? ' · ' + C.esc(C.tr(seg)) : ''}</h4>` + d.candidates.map(c => { const p = out[c][mm]; return `<div class="r"><span><i style="background:${C.col(c)}"></i>${C.esc(C.sh(c))}</span><b class="num">${p && p.v != null ? (p.v > 0 ? '+' : '') + Math.round(p.v) : '–'}</b></div>`; }).join(''), x(mm), py);
       }).on('pointerleave', () => { tip.hide(); cross.attr('opacity', 0); });
   }
   function drawVote() {
@@ -257,9 +257,9 @@ window.Debate = (function () {
     const rows = Object.entries(S.data.byIntent || {});
     el.innerHTML = `<h4 style="margin:0 0 8px">${C.t('deb.results')}</h4>` + opts.map(c => {
       const p = (v[c] || 0) / tot * 100;
-      return `<div class="prob"><div class="nm"><i style="background:${c === 'none' ? 'var(--muted)' : C.col(c)}"></i>${C.esc(lbl(c))}</div><div class="track"><i style="width:${p}%;background:${c === 'none' ? 'var(--muted)' : C.col(c)}"></i></div><b class="num">${C.fmt(p, 0)}${C.lang === 'fr' ? ' %' : '%'}</b></div>`;
+      return `<div class="prob"><div class="nm"><i style="background:${c === 'none' ? 'var(--muted)' : C.col(c)}"></i>${C.esc(lbl(c))}</div><div class="track"><i style="width:${p}%;background:${c === 'none' ? 'var(--muted)' : C.col(c)}"></i></div><b class="num">${C.fmt(p, 0)}${C.pct()}</b></div>`;
     }).join('') + (rows.length ? `<h4 style="margin:16px 0 4px">${C.t('deb.byIntent')}</h4><div class="scroll"><table class="tbl seg-table"><thead><tr><th></th>${opts.map(c => `<th class="c">${C.esc(c === 'none' ? C.t('deb.none') : C.sh(c))}</th>`).join('')}<th class="c">n</th></tr></thead><tbody>
-      ${rows.map(([k, r]) => { const n = Object.values(r).reduce((a, b) => a + b, 0); return `<tr><td><b>${C.esc(intentLbl(k))}</b></td>${opts.map(c => `<td class="c num">${C.fmt((r[c] || 0) / n * 100, 0)}</td>`).join('')}<td class="c num">${n.toLocaleString(C.lang === 'fr' ? 'fr-FR' : 'en-GB')}</td></tr>`; }).join('')}</tbody></table></div><p class="note">${C.t('deb.byIntentNote')}</p>` : '');
+      ${rows.map(([k, r]) => { const n = Object.values(r).reduce((a, b) => a + b, 0); return `<tr><td><b>${C.esc(intentLbl(k))}</b></td>${opts.map(c => `<td class="c num">${C.fmt((r[c] || 0) / n * 100, 0)}</td>`).join('')}<td class="c num">${n.toLocaleString(C.loc())}</td></tr>`; }).join('')}</tbody></table></div><p class="note">${C.t('deb.byIntentNote')}</p>` : '');
   }
   function liveDebate(D) { const now = Date.now(); return D.debates.find(d => !d.demo && D.site.api && now >= Date.parse(d.start) && now <= Date.parse(d.end)); }
   return { render, liveDebate, redraw: () => { if (S.key) drawCurve(); } };

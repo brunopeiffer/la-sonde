@@ -10,13 +10,19 @@
 
   // ---------- Langue, thème, formats ----------
   const qs = new URLSearchParams(location.search);
-  let lang = qs.get('lang') || store.get('lang') || ((navigator.language || 'fr').startsWith('fr') ? 'fr' : 'en');
-  if (!window.I18N[lang]) lang = 'fr';
-  const t = (k, v = {}) => (window.I18N[lang][k] ?? k).replace(/\{(\w+)\}/g, (_, x) => v[x] ?? '');
-  const fmt = (x, d = 1) => x == null ? '–' : x.toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-GB', { minimumFractionDigits: d, maximumFractionDigits: d });
+  const LANGS = { fr: 'fr-FR', en: 'en-GB', de: 'de-DE', es: 'es-ES', it: 'it-IT' };
+  const nav0 = (navigator.language || 'fr').slice(0, 2).toLowerCase();
+  let lang = qs.get('lang') || store.get('lang') || (LANGS[nav0] ? nav0 : 'en');
+  if (!window.I18N[lang] || !LANGS[lang]) lang = 'fr';
+  const loc = () => LANGS[lang];
+  // Textes des données : { fr, en, de… } → langue courante, sinon anglais, sinon français.
+  const tr = o => o == null ? '' : typeof o === 'string' ? o : (o[lang] ?? o.en ?? o.fr ?? '');
+  const t = (k, v = {}) => (window.I18N[lang][k] ?? window.I18N.en[k] ?? window.I18N.fr[k] ?? k).replace(/\{(\w+)\}/g, (_, x) => v[x] ?? '');
+  const fmt = (x, d = 1) => x == null ? '–' : x.toLocaleString(loc(), { minimumFractionDigits: d, maximumFractionDigits: d });
   const sgn = (x, d = 1) => x == null ? '' : (x > 0 ? '+' : x < 0 ? '−' : '±') + fmt(Math.abs(x), d);
-  const fdate = (s, o = { day: 'numeric', month: 'short', year: 'numeric' }) => new Date(s + 'T12:00:00Z').toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-GB', o);
-  let pct = lang === 'fr' ? ' %' : '%';
+  const fdate = (s, o = { day: 'numeric', month: 'short', year: 'numeric' }) => new Date(s + 'T12:00:00Z').toLocaleDateString(loc(), o);
+  const pctOf = () => ['fr', 'de', 'es'].includes(lang) ? ' %' : '%';
+  let pct = pctOf();
   const pf = p => (p >= 99.5 ? '>99' : p < 0.5 ? '<1' : fmt(p, 0)) + pct;
   const savedTheme = store.get('theme'); if (savedTheme) document.documentElement.dataset.theme = savedTheme;
   const isDark = () => document.documentElement.dataset.theme === 'dark' || (document.documentElement.dataset.theme !== 'light' && matchMedia('(prefers-color-scheme: dark)').matches);
@@ -56,12 +62,12 @@
   function renderStatic() {
     document.documentElement.lang = lang;
     document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t(el.dataset.i18n); });
-    $('#langBtn').textContent = lang === 'fr' ? 'EN' : 'FR';
+    $('#langSel').value = lang;
     const now = Date.now();
     $('#blackout').classList.toggle('on', D.election.blackout.some(b => now >= Date.parse(b.from) && now <= Date.parse(b.to)));
-    $('#method').innerHTML = window.METHOD[lang] + `<p class="meta">a = ${fmt(D.mc.sdParams.a, 2)} · b = ${fmt(D.mc.sdParams.b, 3)} · σ₂ = ${fmt(D.mc.sdParams.sd2)} pt</p>`;
+    $('#method').innerHTML = tr(window.METHOD) + `<p class="meta">a = ${fmt(D.mc.sdParams.a, 2)} · b = ${fmt(D.mc.sdParams.b, 3)} · σ₂ = ${fmt(D.mc.sdParams.sd2)} pt</p>`;
     $('#ftAuthor').textContent = t('ft.author', { a: D.site.author }) + ' ' + t('ft.lcen', { a: D.site.author, c: D.site.contact });
-    $('#ftGen').textContent = t('ft.gen', { d: new Date(D.generated).toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-GB', { dateStyle: 'long', timeStyle: 'short' }) });
+    $('#ftGen').textContent = t('ft.gen', { d: new Date(D.generated).toLocaleString(loc(), { dateStyle: 'long', timeStyle: 'short' }) });
   }
 
   // ---------- Héros ----------
@@ -72,12 +78,138 @@
     const top = D.standings.slice(0, 6), max = Math.max(...top.map(s => s.v)) * 1.08;
     $('#podium').innerHTML = `<h2><span>${t('pod.title')}</span><span>${t('pod.d30')}</span></h2>` + top.map(s => {
       const cls = s.d30 > 0.4 ? 'up' : s.d30 < -0.4 ? 'down' : 'flat', ar = s.d30 > 0.4 ? '▲' : s.d30 < -0.4 ? '▼' : '•';
-      return `<div class="prow"><div class="nm"><i style="background:${col(s.c)}"></i><span>${esc(nm(s.c))}</span></div>
-        <div class="v num">${fmt(s.v)}<small style="font-size:12px">${pct}</small></div><div class="delta ${cls} num">${ar} ${sgn(s.d30)}</div>
+      return `<div class="prow"><a class="nm" href="${page(s.c)}"><i style="background:${col(s.c)}"></i><span>${esc(nm(s.c))}</span></a>
+        <div class="v num">${fmt(s.v, 0)}<small style="font-size:12px">${pct}</small></div><div class="delta ${cls} num">${ar} ${sgn(s.d30)}</div>
         <div class="bar"><i style="width:${s.v / max * 100}%;background:${col(s.c)}"></i></div></div>`;
-    }).join('');
-    $('#summary').innerHTML = D.summary[lang].map(x => `<li>${esc(x)}</li>`).join('');
+    }).join('') + (() => {
+      const shown = new Set(top.map(s => s.c));
+      const rest = D.standings.filter(s => s.declared && !shown.has(s.c));
+      if (!rest.length) return '';
+      return `<div class="pothers"><h3>${t('pod.others')}</h3><div class="pchips">` + rest.map(s =>
+        `<a class="pchip" href="${page(s.c)}" title="${esc(nm(s.c))}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num">${fmt(s.v, 0)}${pct}</b>${s.presence < 30 ? '<sup>*</sup>' : ''}</a>`).join('') +
+        `</div>${rest.some(s => s.presence < 30) ? `<p class="pnote">* ${t('pod.few')}</p>` : ''}</div>`;
+    })();
+    $('#summary').innerHTML = tr(D.summary).map(x => `<li>${esc(x)}</li>`).join('');
     $('#sumMeta').textContent = t('sum.meta', { d: fdate(D.asOf, { day: 'numeric', month: 'long', year: 'numeric' }) });
+  }
+
+  // ---------- V2 : ce qui a changé ----------
+  const page = c => (D.cands[c] && D.cands[c].slug) ? `candidat/${D.cands[c].slug}/` : '#course';
+  const ICON = { up: '▲', down: '▼', flat: '●', poll: '◆', proba: '%', swap: '⇅' };
+  function renderChanges() {
+    const it = D.changes ? (D.changes[lang] || D.changes.en || []) : [];
+    $('#changes').innerHTML = it.length ? `<h3>${t('chg.title')}</h3><div class="chg-grid">` + it.map(x =>
+      `<div class="chg k-${x.k}"><span class="ico" aria-hidden="true">${ICON[x.k] || '•'}</span><p>${esc(x.t)}</p></div>`).join('') + `</div><a class="sharelink" href="share/carte-du-jour.png" target="_blank" rel="noopener">↗ ${t('chg.card')}</a>` : '';
+  }
+
+  // ---------- V2 : détecteur de bascule ----------
+  const proj = { on: null };
+  function renderBascule() {
+    const MOM = D.momentum || {};
+    const rows = D.standings.filter(s => MOM[s.c]);
+    const maxD = Math.max(1.5, ...rows.map(s => Math.abs(MOM[s.c].d14 || 0)));
+    $('#momList').innerHTML = rows.map(s => {
+      const m = MOM[s.c], st = m.state;
+      const conf = st === 'nd' ? t('bas.nd') : st === 'flat' ? t('bas.flat') : t('bas.conf', { p: st === 'up' ? m.pUp : 100 - m.pUp });
+      const w = st === 'nd' ? 0 : Math.abs(m.d14) / maxD * 50;
+      const bar = st === 'nd' ? '' : `<i class="${m.d14 >= 0 ? 'pos' : 'neg'} ${st === 'flat' ? 'weak' : ''}" style="width:${w}%;${m.d14 >= 0 ? 'left:50%' : `left:${50 - w}%`}"></i>`;
+      return `<button class="mrow s-${st}" data-c="${s.c}" aria-pressed="${proj.on ? proj.on.has(s.c) : false}">
+        <span class="st" title="${t('bas.st.' + st)}">${ICON[st] || '·'}</span>
+        <span class="nm"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))}</span>
+        <span class="mbar"><b></b>${bar}</span>
+        <span class="d num">${st === 'nd' ? '–' : sgn(m.d14)}</span>
+        <span class="cf">${conf}</span></button>`;
+    }).join('');
+    $('#momList').onclick = e => { const b = e.target.closest('.mrow'); if (!b || !proj.on) return; const c = b.dataset.c; if (!(MOM[c] && MOM[c].proj)) return; proj.on.has(c) ? proj.on.delete(c) : proj.on.add(c); renderBascule(); drawProj(); };
+    // Baromètre d'incertitude
+    const O = D.openness;
+    if (O && D.features.probabilities !== false) {
+      const h = (O.hist || []).filter(x => x[1] != null);
+      let spark = '';
+      if (h.length >= 3) {
+        const W = 220, H = 40, xs = i => i / (h.length - 1) * W, ys = v => H - v / 100 * H;
+        spark = `<svg class="spark" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path d="${h.map((p, i) => `${i ? 'L' : 'M'}${xs(i).toFixed(1)},${ys(p[1]).toFixed(1)}`).join('')}" fill="none" stroke="currentColor" stroke-width="2"/></svg>`;
+      }
+      $('#baro').hidden = false;
+      $('#baro').innerHTML = `<h3>${t('baro.title')}</h3>
+        <div class="baro-n"><b class="num">${O.open}${pct}</b><span>${t(O.open >= 60 ? 'baro.very' : O.open >= 35 ? 'baro.open' : 'baro.closed')}</span></div>
+        <div class="gauge"><i style="left:${O.open}%"></i></div><div class="gauge-l"><span>${t('baro.lo')}</span><span>${t('baro.hi')}</span></div>
+        <p class="note">${t('baro.desc', { a: esc(nm(O.duo[0])), b: esc(nm(O.duo[1])), p: fmt(O.pDuo, 0) })}</p>${spark}`;
+    } else $('#baro').hidden = true;
+    // Alertes de bascule
+    const X = D.crossings || [];
+    $('#alerts').innerHTML = `<h3>${t('alt.title')}</h3>` + (X.length ? X.map(x =>
+      `<div class="alert"><div class="pair"><span><i style="background:${col(x.a)}"></i>${esc(sh(x.a))}</span><span class="sw">⇅</span><span><i style="background:${col(x.b)}"></i>${esc(sh(x.b))}</span></div>
+       <div class="ameta">${t('alt.rank', { r: x.rank, r2: x.rank + 1 })} · ${t('alt.gap', { g: fmt(x.gap) })}${x.converging ? ' · ' + t('alt.conv') : ''}</div>
+       <div class="ap"><b class="num">${x.p}${pct}</b><span>${t('alt.p')}</span></div></div>`).join('') : `<p class="note">${t('alt.none')}</p>`);
+  }
+  function renderProjChips() {
+    const MOM = D.momentum || {};
+    const ids = D.standings.filter(s => MOM[s.c] && MOM[s.c].proj).map(s => s.c);
+    if (!proj.on) proj.on = new Set(D.standings.filter(s => s.presence >= 30 && MOM[s.c] && MOM[s.c].proj).slice(0, 5).map(s => s.c));
+    $('#projChips').innerHTML = ids.map(c => `<button class="chip" aria-pressed="${proj.on.has(c)}" data-c="${c}" style="color:${col(c)}"><i style="background:${col(c)}"></i><span style="color:var(--ink)">${esc(sh(c))}</span></button>`).join('');
+    $('#projChips').onclick = e => { const b = e.target.closest('.chip'); if (!b) return; const c = b.dataset.c; proj.on.has(c) ? proj.on.delete(c) : proj.on.add(c); renderProjChips(); renderBascule(); drawProj(); };
+  }
+  function drawProj() {
+    const host = $('#projChart'); if (!host || D.features.projection === false) return;
+    host.querySelectorAll('svg').forEach(n => n.remove());
+    renderProjChips();
+    const MOM = D.momentum || {};
+    const W = host.clientWidth, mobile = W < 600, H = mobile ? 300 : 360;
+    const m = { t: 14, r: mobile ? 100 : 120, b: 40, l: 34 };
+    const last = new Date(D.days[D.days.length - 1] + 'T12:00:00Z');
+    const x0 = new Date(+last - 75 * DAY), x1 = new Date(+last + 30 * DAY);
+    const days = D.days.map(d => new Date(d + 'T12:00:00Z'));
+    const vis = D.standings.map(s => s.c).filter(c => proj.on.has(c) && MOM[c] && MOM[c].proj && D.series[c]);
+    let ymax = 5, ymin = 100;
+    for (const c of vis) {
+      D.series[c].v.forEach((v, i) => { if (v != null && days[i] >= x0) { ymax = Math.max(ymax, v); ymin = Math.min(ymin, v); } });
+      MOM[c].proj.forEach(p => { ymax = Math.max(ymax, p.hi); ymin = Math.min(ymin, p.lo); });
+    }
+    if (!vis.length) ymin = 0;
+    const x = d3.scaleTime().domain([x0, x1]).range([m.l, W - m.r]);
+    const y = d3.scaleLinear().domain([Math.max(0, Math.floor((ymin - 1) / 5) * 5), Math.ceil((ymax + 1) / 5) * 5]).range([H - m.b, m.t]);
+    const svg = d3.select(host).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', t('bas.proj'));
+    svg.append('g').attr('class', 'gridl').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(-(W - m.l - m.r)).tickFormat(''));
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(mobile ? 3 : 6).tickSizeOuter(0)
+      .tickFormat(d => d.toLocaleDateString(loc(), { day: 'numeric', month: 'short' })));
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(0).tickFormat(d => d + (pct === '%' ? '%' : ''))).select('.domain').remove();
+    // Zone « futur »
+    svg.append('rect').attr('x', x(last)).attr('y', m.t).attr('width', x(x1) - x(last)).attr('height', H - m.b - m.t).attr('fill', css('--surface-2')).attr('opacity', .55);
+    svg.append('line').attr('x1', x(last)).attr('x2', x(last)).attr('y1', m.t).attr('y2', H - m.b).attr('stroke', css('--ink-2')).attr('stroke-dasharray', '3 3');
+    svg.append('text').attr('class', 'lbl').attr('x', x(last) + 6).attr('y', m.t + 12).attr('fill', css('--muted')).style('font-size', '11px').text(t('bas.future'));
+    const g = svg.append('g');
+    const ends = [];
+    for (const c of vis) {
+      const S = D.series[c], pts = days.map((d, i) => ({ d, v: S.v[i] })).filter(p => p.d >= x0 && p.v != null);
+      const P = MOM[c].proj.map(p => ({ d: new Date(+last + p.k * DAY), ...p }));
+      g.append('path').datum(P).attr('fill', col(c)).attr('opacity', .13)
+        .attr('d', d3.area().x(p => x(p.d)).y0(p => y(p.lo)).y1(p => y(p.hi)).curve(d3.curveMonotoneX));
+      g.append('path').datum(pts).attr('fill', 'none').attr('stroke', col(c)).attr('stroke-width', 2.25)
+        .attr('d', d3.line().x(p => x(p.d)).y(p => y(p.v)).curve(d3.curveMonotoneX));
+      g.append('path').datum(P).attr('fill', 'none').attr('stroke', col(c)).attr('stroke-width', 2).attr('stroke-dasharray', '5 4')
+        .attr('d', d3.line().x(p => x(p.d)).y(p => y(p.v)).curve(d3.curveMonotoneX));
+      ends.push({ c, v: P[P.length - 1].v, y: y(P[P.length - 1].v) });
+    }
+    const li = declutter(ends, 15, m.t + 6, H - m.b);
+    li.forEach(l => {
+      svg.append('text').attr('class', 'lbl v').attr('x', x(x1) + 8).attr('y', l.y + 4).text(fmt(l.v));
+      svg.append('text').attr('class', 'lbl').attr('x', x(x1) + (mobile ? 40 : 44)).attr('y', l.y + 4).text(sh(l.c));
+    });
+  }
+
+  // ---------- V2 : le dernier sondage décrypté ----------
+  function renderDecoded() {
+    const X = D.decoded, el = $('#decoded'); if (!X) { el.hidden = true; return; }
+    const verdict = !X.sameList ? t('dec.newList') : X.outlier ? t('dec.out', { c: esc(nm(X.outlier.c)), d: sgn(X.outlier.diff), dir: t(X.outlier.diff > 0 ? 'dec.above' : 'dec.below') }) : t('dec.ok');
+    el.innerHTML = `<div class="dec-head"><div><div class="tag" style="margin:0 0 6px">${t('dec.tag')}</div><h3 style="margin:0">${esc(X.inst)} <span class="note" style="margin:0;font-weight:600">${t('dec.for')} ${esc(X.sponsor)}</span></h3>
+      <p class="note" style="margin:4px 0 0">${t('dec.meta', { d: fdate(X.end), n: X.n.toLocaleString(loc()), h: X.hyps })}</p></div>
+      <div class="verdict ${X.outlier ? 'warn' : 'ok'}">${verdict}</div></div>
+      <div class="scroll"><table class="tbl"><thead><tr><th>${t('tab.cand')}</th><th class="c">${t('dec.raw')}</th><th class="c">${t('dec.he')}</th><th class="c">${t('dec.corr')}</th><th class="c">${t(X.sameList ? 'dec.avgList' : 'dec.avg')}</th><th class="c">${t('dec.diff')}</th></tr></thead><tbody>`
+      + X.rows.map(r => `<tr><td><span style="display:inline-flex;gap:8px;align-items:center"><i style="width:10px;height:10px;border-radius:50%;background:${col(r.c)};display:inline-block"></i><b>${esc(sh(r.c))}</b></span></td>
+        <td class="c num">${fmt(r.raw, 0)}</td><td class="c num">${r.he ? sgn(r.he) : '0'}</td><td class="c num"><b>${fmt(r.corr)}</b></td><td class="c num">${fmt(r.avg)}</td>
+        <td class="c num"><span class="dpill ${Math.abs(r.diff) > 1.5 ? (r.diff > 0 ? 'hi' : 'lo') : ''}">${sgn(r.diff)}</span></td></tr>`).join('')
+      + `</tbody></table></div><p class="note">${t('dec.note')}</p>`;
   }
 
   // ---------- La course ----------
@@ -109,8 +241,8 @@
     const svg = d3.select(host).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', t('race.title'));
     svg.append('g').attr('class', 'gridl').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(6).tickSize(-(W - m.l - m.r)).tickFormat(''));
     svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(mobile ? 4 : 7).tickSizeOuter(0)
-      .tickFormat(d => d.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-GB', { month: 'short', year: span > 200 ? '2-digit' : undefined })));
-    svg.append('g').attr('class', 'axis').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(6).tickSize(0).tickFormat(d => d + (lang === 'fr' ? '' : '%'))).select('.domain').remove();
+      .tickFormat(d => d.toLocaleDateString(loc(), { month: 'short', year: span > 200 ? '2-digit' : undefined })));
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(6).tickSize(0).tickFormat(d => d + (pct === '%' ? '%' : ''))).select('.domain').remove();
     const clip = 'clip' + Math.random().toString(36).slice(2);
     svg.append('clipPath').attr('id', clip).append('rect').attr('x', m.l).attr('y', 0).attr('width', W - m.l - m.r).attr('height', H);
     const g = svg.append('g').attr('clip-path', `url(#${clip})`);
@@ -123,7 +255,7 @@
         eg.append('line').attr('x1', ex).attr('x2', ex).attr('y1', m.t).attr('y2', H - m.b).attr('stroke', css('--line')).attr('stroke-dasharray', '2 4');
         eg.append('path').attr('d', d3.symbol(d3.symbolDiamond, 64)()).attr('transform', `translate(${ex},${H - m.b - 8})`)
           .attr('fill', e.c ? col(e.c) : css('--ink')).attr('stroke', css('--surface')).attr('stroke-width', 2).style('cursor', 'pointer')
-          .on('pointerenter', ev => tip.show(`<h4>${fdate(e.date)}</h4>${esc(e[lang])}`, ex, H - m.b - 70)).on('pointerleave', () => tip.hide());
+          .on('pointerenter', ev => tip.show(`<h4>${fdate(e.date)}</h4>${esc(tr(e))}`, ex, H - m.b - 70)).on('pointerleave', () => tip.hide());
       });
     }
     // Points de sondage
@@ -167,7 +299,7 @@
 
   function renderTable() {
     $('#allTable').innerHTML = `<table class="tbl"><thead><tr><th>${t('tab.cand')}</th><th class="c">${t('tab.avg')}</th><th class="c">${t('tab.d30')}</th><th class="c">${t('tab.pres')}</th><th class="c">${t('tab.last')}</th></tr></thead><tbody>`
-      + D.standings.map(s => `<tr><td><span style="display:inline-flex;gap:8px;align-items:center"><i style="width:10px;height:10px;border-radius:50%;background:${col(s.c)};display:inline-block"></i><b>${esc(nm(s.c))}</b></span> <span class="note" style="margin:0">${esc((D.cands[s.c] || {}).party || '')}</span>${s.presence < 30 ? ` <span class="badge">${t('tab.low')}</span>` : ''}</td>
+      + D.standings.map(s => `<tr><td><span style="display:inline-flex;gap:8px;align-items:center"><i style="width:10px;height:10px;border-radius:50%;background:${col(s.c)};display:inline-block"></i><a class="clink" href="${page(s.c)}"><b>${esc(nm(s.c))}</b></a></span> <span class="note" style="margin:0">${esc((D.cands[s.c] || {}).party || '')}</span>${s.presence < 30 ? ` <span class="badge">${t('tab.low')}</span>` : ''}</td>
         <td class="c num"><b>${fmt(s.v)}${pct}</b></td><td class="c num">${s.d30 == null ? '–' : sgn(s.d30)}</td><td class="c num">${fmt(s.presence, 0)}${pct}</td><td class="c">${s.lastTest ? fdate(s.lastTest, { day: 'numeric', month: 'short' }) : '–'}</td></tr>`).join('')
       + `</tbody></table><p class="note">${t('tab.note')}</p>`;
   }
@@ -177,7 +309,7 @@
   function renderProba() {
     const S = D.scenarios;
     const label = s => {
-      if (s.label) return s.label[lang];
+      if (s.label) return tr(s.label);
       const w = s.with.map(sh).join(' + '), wo = s.without.map(sh).join(', ');
       return [w && `${t('proba.with')} ${w}`, wo && `${t('proba.without')} ${wo}`].filter(Boolean).join(' · ');
     };
@@ -196,6 +328,14 @@
   }
 
   // ---------- Fantômes 2022 ----------
+  // Candidats affichés : les 6 premiers + tout candidat déclaré à 3 % ou plus ; les autres en un clic.
+  const ghost = { on: null };
+  function renderGhostChips() {
+    if (!ghost.on) ghost.on = new Set(D.standings.filter((s, i) => (i < 6 || (s.declared && s.v >= 3)) && D.series[s.c]).map(s => s.c));
+    const ids = D.standings.map(s => s.c).filter(c => D.series[c]);
+    $('#ghostChips').innerHTML = ids.map(c => `<button class="chip" aria-pressed="${ghost.on.has(c)}" data-c="${c}" style="color:${col(c)}"><i style="background:${col(c)}"></i><span style="color:var(--ink)">${esc(sh(c))}</span></button>`).join('');
+    $('#ghostChips').onclick = e => { const b = e.target.closest('.chip'); if (!b) return; const c = b.dataset.c; ghost.on.has(c) ? ghost.on.delete(c) : ghost.on.add(c); drawGhosts(); };
+  }
   function drawGhosts() {
     const host = $('#ghostChart'); host.querySelectorAll('svg').forEach(n => n.remove());
     const W = host.clientWidth, mobile = W < 600, H = mobile ? 420 : 420, m = { t: 14, r: mobile ? 86 : 150, b: 44, l: 28 };
@@ -205,12 +345,12 @@
     const y = d3.scaleLinear().domain([0, 40]).range([H - m.b, m.t]);
     const svg = d3.select(host).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', t('ghost.title'));
     svg.append('g').attr('class', 'gridl').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(-(W - m.l - m.r)).tickFormat(''));
-    svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(mobile ? 4 : 8).tickFormat(d => d === 0 ? (lang === 'fr' ? 'Vote' : 'Vote') : 'J-' + d));
+    svg.append('g').attr('class', 'axis').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(mobile ? 4 : 8).tickFormat(d => d === 0 ? t('gh.vote') : t('gh.dm', { d })));
     svg.append('g').attr('class', 'axis').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(5).tickSize(0)).select('.domain').remove();
     svg.append('text').attr('class', 'axis').attr('x', W - m.r).attr('y', H - 6).attr('text-anchor', 'end').attr('fill', css('--muted')).attr('font-size', 12).text(t('ghost.days'));
     // Aujourd'hui
     svg.append('line').attr('x1', x(dNow)).attr('x2', x(dNow)).attr('y1', m.t).attr('y2', H - m.b).attr('stroke', css('--accent')).attr('stroke-width', 1.5).attr('stroke-dasharray', '4 3');
-    svg.append('text').attr('class', 'lbl').attr('x', x(dNow) + 6).attr('y', m.t + 12).attr('fill', css('--accent')).text(lang === 'fr' ? `Dernier sondage · J-${dNow}` : `Latest poll · ${dNow} days out`);
+    svg.append('text').attr('class', 'lbl').attr('x', x(dNow) + 6).attr('y', m.t + 12).attr('fill', css('--accent')).text(t('gh.last', { d: dNow }));
     const line = d3.line().defined(p => p[1] != null).x(p => x(p[0])).y(p => y(p[1])).curve(d3.curveMonotoneX);
     const tip = tipFor(host);
     // 2022 (pointillés)
@@ -222,12 +362,13 @@
     }
     declutter(labels22, 14, m.t + 6, H - m.b).forEach(l => svg.append('text').attr('class', 'lbl').attr('x', x(0) + 10).attr('y', l.y + 4).text(mobile ? `${l.name} ${fmt(l.v)}` : `${l.name} ${fmt(l.v)} (2022)`));
     // 2027 (traits pleins)
-    const top = D.standings.slice(0, 6).map(s => s.c);
+    renderGhostChips();
+    const top = D.standings.map(s => s.c).filter(c => ghost.on.has(c) && D.series[c]);
     const lab27 = [];
     for (const c of top) {
       const pts = D.days.map((d, i) => [Math.round((R1 - Date.parse(d + 'T12:00:00Z')) / DAY), D.series[c].v[i]]).filter(p => p[0] <= 420 && p[0] >= 0);
       svg.append('path').datum(pts).attr('fill', 'none').attr('stroke', col(c)).attr('stroke-width', 2.75).attr('stroke-linecap', 'round').attr('d', line);
-      const lp = pts[pts.length - 1]; if (lp && lp[1] != null) lab27.push({ c, v: lp[1], y: y(lp[1]) });
+      const lp = [...pts].reverse().find(p => p[1] != null); if (lp && lp[1] != null) lab27.push({ c, v: lp[1], y: y(lp[1]) });
     }
     declutter(lab27, 14, m.t + 20, H - m.b).forEach(l => svg.append('text').attr('class', 'lbl v').attr('x', x(dNow) - 8).attr('y', l.y + 4).attr('text-anchor', 'end').text(sh(l.c)));
     // Survol
@@ -307,14 +448,14 @@
     $('#gapA').innerHTML = opts(a0); $('#gapB').innerHTML = opts(b0);
     const upd = () => {
       const A = D.standings.find(s => s.c === $('#gapA').value), B = D.standings.find(s => s.c === $('#gapB').value), n = +$('#gapN').value;
-      $('#gapNv').textContent = n.toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-GB');
+      $('#gapNv').textContent = n.toLocaleString(loc());
       const p1 = A.v / 100, p2 = B.v / 100, gap = Math.abs(A.v - B.v);
       const v = p1 + p2 - (p1 - p2) ** 2, moe = 196 * Math.sqrt(v / n), ok = gap > moe;
       const need = gap > 0 ? Math.ceil(1.96 ** 2 * v / (gap / 100) ** 2 / 100) * 100 : null;
       $('#gapOut').innerHTML = `<div class="big num">${fmt(A.v)} <small style="font-size:18px">vs</small> ${fmt(B.v)}</div>
         <p style="margin:6px 0 0">${t('gap.res', { g: fmt(gap), m: fmt(moe) })}</p>
         <span class="verdict ${ok ? 'yes' : 'no'}">${ok ? '✓ ' + t('gap.yes') : '≈ ' + t('gap.no')}</span>
-        ${!ok && need ? `<p class="note">${t('gap.need', { n: need.toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-GB') })}</p>` : ''}<p class="note">${t('gap.note')}</p>`;
+        ${!ok && need ? `<p class="note">${t('gap.need', { n: need.toLocaleString(loc()) })}</p>` : ''}<p class="note">${t('gap.note')}</p>`;
     };
     $('#gapA').onchange = upd; $('#gapB').onchange = upd; $('#gapN').oninput = upd; upd();
   }
@@ -323,7 +464,7 @@
   function renderConcerns() {
     const C = D.concerns, S = C.series[0], th = C.themes;
     const waves = S.waves.slice().sort((a, b) => a.date.localeCompare(b.date)), first = waves[0], last = waves[waves.length - 1];
-    $('#baroDesc').innerHTML = `${esc(S.institute)} · ${esc(S.sponsor)} · ${esc(S.question[lang])}`;
+    $('#baroDesc').innerHTML = `${esc(S.institute)} · ${esc(S.sponsor)} · ${esc(tr(S.question))}`;
     const keys = [...new Set(waves.flatMap(w => Object.keys(w.values)))].sort((a, b) => (last.values[b] ?? -1) - (last.values[a] ?? -1));
     const host = $('#concernChart'); host.querySelectorAll('svg').forEach(n => n.remove());
     const W = host.clientWidth, narrow = W < 500, rowH = narrow ? 54 : 40, m = { t: 34, r: 40, b: 10, l: narrow ? 8 : 170 }, H = m.t + keys.length * rowH + m.b;
@@ -334,7 +475,7 @@
     const acc = css('--accent'), mut = css('--muted');
     keys.forEach((k, i) => {
       const a = first.values[k], b = last.values[k], cy = m.t + i * rowH + rowH / 2 + (narrow ? 9 : 0);
-      svg.append('text').attr('x', narrow ? 0 : m.l - 12).attr('y', narrow ? cy - 15 : cy + 4).attr('text-anchor', narrow ? 'start' : 'end').attr('fill', css('--ink')).attr('font-size', 13).attr('font-weight', 700).text(`${th[k].icon} ${th[k][lang]}`);
+      svg.append('text').attr('x', narrow ? 0 : m.l - 12).attr('y', narrow ? cy - 15 : cy + 4).attr('text-anchor', narrow ? 'start' : 'end').attr('fill', css('--ink')).attr('font-size', 13).attr('font-weight', 700).text(`${th[k].icon} ${tr(th[k])}`);
       if (a != null && b != null && first !== last) svg.append('line').attr('x1', x(a)).attr('x2', x(b)).attr('y1', cy).attr('y2', cy).attr('stroke', css('--line')).attr('stroke-width', 4).attr('stroke-linecap', 'round');
       if (a != null && first !== last) svg.append('circle').attr('cx', x(a)).attr('cy', cy).attr('r', 6).attr('fill', css('--surface')).attr('stroke', mut).attr('stroke-width', 2);
       if (b != null) {
@@ -343,13 +484,13 @@
       } else svg.append('text').attr('class', 'lbl').attr('x', x(a) + 12).attr('y', cy + 4).attr('fill', mut).text(`${a}${pct} (${fdate(first.date, { month: 'short', year: 'numeric' })})`);
     });
     $('#baroSrc').innerHTML = `<span style="display:inline-flex;gap:6px;align-items:center"><i style="width:10px;height:10px;border-radius:50%;border:2px solid var(--muted);display:inline-block"></i>${fdate(first.date, { month: 'long', year: 'numeric' })}</span> &nbsp; <span style="display:inline-flex;gap:6px;align-items:center"><i style="width:12px;height:12px;border-radius:50%;background:var(--accent);display:inline-block"></i>${fdate(last.date, { month: 'long', year: 'numeric' })}</span><br>`
-      + waves.map(w => `<a href="${esc(w.source)}" rel="noopener" target="_blank">${esc(w.field)}</a> (n = ${w.n.toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-GB')})`).join(' · ')
-      + (lang === 'fr' ? '. Thèmes absents d\'une vague : non publiés pour cette vague.' : '. Themes missing from a wave were not published for that wave.');
+      + waves.map(w => `<a href="${esc(w.source)}" rel="noopener" target="_blank">${esc(w.field)}</a> (n = ${w.n.toLocaleString(loc())})`).join(' · ')
+      + t('is.missing');
     const st = C.stakes;
-    $('#stakesDesc').innerHTML = `<a href="${esc(st.source)}" rel="noopener" target="_blank">${esc(st.label[lang])}</a>`;
-    $('#stakes').innerHTML = st.ranking.map(r => `<div class="stake"><span class="rk" style="background:${th[r.theme].color}">${r.rank}</span><div><b>${th[r.theme].icon} ${esc(th[r.theme][lang])}</b><div class="note" style="margin:0">${lang === 'fr' ? (r.rank === 1 ? '1er enjeu cité' : r.rank + 'e enjeu cité') : 'Ranked #' + r.rank}</div></div></div>`).join('')
-      + `<ul style="margin:12px 0 0;padding-left:18px;font-size:14px;color:var(--ink-2)">${st.facts[lang].map(f => `<li>${esc(f)}</li>`).join('')}</ul>`;
-    $('#byElec').innerHTML = `<ul>${st.byElectorate.map(e => `<li><b>${esc(e.who[lang])}</b> : ${esc(e.themes[lang])}</li>`).join('')}</ul><p class="meta">${esc(st.label[lang])}</p>`;
+    $('#stakesDesc').innerHTML = `<a href="${esc(st.source)}" rel="noopener" target="_blank">${esc(tr(st.label))}</a>`;
+    $('#stakes').innerHTML = st.ranking.map(r => `<div class="stake"><span class="rk" style="background:${th[r.theme].color}">${r.rank}</span><div><b>${th[r.theme].icon} ${esc(tr(th[r.theme]))}</b><div class="note" style="margin:0">${lang === 'fr' ? (r.rank === 1 ? '1er enjeu cité' : r.rank + 'e enjeu cité') : 'Ranked #' + r.rank}</div></div></div>`).join('')
+      + `<ul style="margin:12px 0 0;padding-left:18px;font-size:14px;color:var(--ink-2)">${tr(st.facts).map(f => `<li>${esc(f)}</li>`).join('')}</ul>`;
+    $('#byElec').innerHTML = `<ul>${st.byElectorate.map(e => `<li><b>${esc(tr(e.who))}</b> : ${esc(tr(e.themes))}</li>`).join('')}</ul><p class="meta">${esc(tr(st.label))}</p>`;
   }
 
   // ---------- Liste des sondages + effets instituts ----------
@@ -360,7 +501,7 @@
       const r1 = s.hyps.filter(h => h.round === 1), r2 = s.hyps.filter(h => h.round === 2);
       const first = r1[0] ? Object.entries(r1[0].r).sort((a, b) => b[1] - a[1]).slice(0, 7) : [];
       return `<div class="poll"><div class="who"><b>${esc(s.inst)}</b><span>${esc(s.sponsor)}</span><span class="num">${fdate(s.start, { day: 'numeric', month: 'short' })} → ${fdate(s.end)}</span>
-        <span>${t('po.sample', { n: s.n.toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-GB') })} · ${t('po.hyp', { n: s.hyps.length })}</span>
+        <span>${t('po.sample', { n: s.n.toLocaleString(loc()) })} · ${t('po.hyp', { n: s.hyps.length })}</span>
         ${s.provisional ? `<span class="badge">${t('po.prov')}</span>` : ''}
         <span>${s.source ? `<a href="${esc(s.source)}" target="_blank" rel="noopener">${t('po.source')}</a>` : s.file ? `<a href="https://www.commission-des-sondages.fr/" target="_blank" rel="noopener" title="${esc(s.file)}">${t('po.notice')} n° ${esc((s.file.match(/^\d+/) || [''])[0])}</a>` : ''}</span></div>
         <div>${first.length ? `<div class="mini">${first.map(([c, v]) => `<span><i style="background:${col(c)}"></i>${esc(sh(c))} <b class="num">${fmt(v, v % 1 ? 1 : 0)}</b></span>`).join('')}</div>` : ''}
@@ -376,7 +517,7 @@
 
   // ---------- V2 : soutien, liens ----------
   function renderSupport() {
-    ['#donateTop', '#donateBtn'].forEach(sel => { const a = $(sel); if (a) a.href = D.site.donate; });
+    ['#donateTop', '#donateBtn', '#donateHero'].forEach(sel => { const a = $(sel); if (a) a.href = D.site.donate; });
     $('#contactMail').textContent = D.site.contact;
     const live = window.Debate && window.Debate.liveDebate(D), bar = $('#liveBar');
     bar.hidden = !live; if (live) bar.innerHTML = `<span class="live"></span>${t('live.bar')}`;
@@ -386,7 +527,7 @@
   const quiz = new Set();
   function renderQuiz() {
     const Q = D.quiz;
-    $('#qzThemes').innerHTML = Object.entries(Q.themes).map(([k, v]) => `<button class="chip theme" aria-pressed="${quiz.has(k)}" data-k="${k}">${esc(v[lang])}</button>`).join('');
+    $('#qzThemes').innerHTML = Object.entries(Q.themes).map(([k, v]) => `<button class="chip theme" aria-pressed="${quiz.has(k)}" data-k="${k}">${esc(tr(v))}</button>`).join('');
     $('#qzThemes').onclick = e => {
       const b = e.target.closest('.chip'); if (!b) return; const k = b.dataset.k;
       if (quiz.has(k)) quiz.delete(k); else if (quiz.size < Q.max) quiz.add(k);
@@ -398,7 +539,7 @@
       const common = p.themes.filter(x => quiz.has(x));
       return { p, common, score: common.length / Math.sqrt(p.themes.length * quiz.size) * 100 };
     }).sort((a, b) => b.score - a.score);
-    $('#qzRes').innerHTML = res.map(r => `<div class="qz-row"><div><b>${esc(r.p.label[lang])}</b><small>${t('qz.common', { n: r.common.length })}${r.common.length ? ' : ' + r.common.map(k => esc(Q.themes[k][lang])).join(', ') : ''}</small>${r.p.note ? `<small>${esc(r.p.note[lang])}</small>` : ''}</div>
+    $('#qzRes').innerHTML = res.map(r => `<div class="qz-row"><div><b>${esc(tr(r.p.label))}</b><small>${t('qz.common', { n: r.common.length })}${r.common.length ? ' : ' + r.common.map(k => esc(tr(Q.themes[k]))).join(', ') : ''}</small>${r.p.note ? `<small>${esc(tr(r.p.note))}</small>` : ''}</div>
       <div class="track"><i style="width:${r.score}%;background:${r.p.color}"></i></div><b class="num" style="text-align:right">${fmt(r.score, 0)}${pct}</b></div>`).join('')
       + `<p class="note">${t('qz.national')}</p><p class="note"><a href="${esc(Q.source)}" target="_blank" rel="noopener">${t('qz.src')}</a></p>`;
   }
@@ -413,7 +554,7 @@
       return `<article class="inst"><h4><span>${esc(p.inst)}</span>${p.site ? `<a href="${esc(p.site)}" target="_blank" rel="noopener">${t('ins.site')} ↗</a>` : ''}</h4>
         <dl><dt>${t('ins.surveys')}</dt><dd class="num">${p.surveys} · ${t('po.hyp', { n: p.hyps })}</dd>
         <dt>${t('ins.period')}</dt><dd>${fdate(p.first, { month: 'short', year: 'numeric' })} → ${fdate(p.last, { day: 'numeric', month: 'short' })}</dd>
-        <dt>${t('ins.median')}</dt><dd class="num">${p.medianN.toLocaleString(lang === 'fr' ? 'fr-FR' : 'en-GB')}</dd>
+        <dt>${t('ins.median')}</dt><dd class="num">${p.medianN.toLocaleString(loc())}</dd>
         <dt>${t('ins.sponsors')}</dt><dd>${p.sponsors.slice(0, 3).map(s => esc(s.k)).join(' · ')}</dd></dl>
         ${bars ? `<div class="note" style="margin:4px 0 0">${t('ins.he')}</div><div class="he-bars">${bars}</div>` : ''}</article>`;
     }).join('');
@@ -421,8 +562,8 @@
 
   // ---------- V2 : frise ----------
   function renderTimeline() {
-    const items = D.events.map(e => ({ date: e.date, text: e[lang], c: e.c, future: false, src: e.source }));
-    for (const d of D.debates.filter(x => !x.demo)) items.push({ date: d.start.slice(0, 10), text: t('tl.debate', { t: d.title[lang], c: d.channel }), future: Date.parse(d.start) > Date.now() });
+    const items = D.events.map(e => ({ date: e.date, text: tr(e), c: e.c, future: false, src: e.source }));
+    for (const d of D.debates.filter(x => !x.demo)) items.push({ date: d.start.slice(0, 10), text: t('tl.debate', { t: tr(d.title), c: d.channel }), future: Date.parse(d.start) > Date.now() });
     items.push({ date: D.election.round1, text: t('tl.r1'), future: true }, { date: D.election.round2, text: t('tl.r2'), future: true });
     items.sort((a, b) => a.date.localeCompare(b.date));
     let month = '', html = '';
@@ -463,22 +604,24 @@
     hide('proba', F.probabilities === false);
     hide('debats', F.debates === false);
     hide('quiz', F.quiz === false);
+    hide('bascule', F.bascule === false);
+    const pc = $('#projCard'); if (pc) pc.hidden = F.projection === false;
     const sim = $('#sim'); if (sim) sim.hidden = F.simulator === false;
   }
 
   // ---------- Assemblage ----------
   function renderAll() {
-    pct = lang === 'fr' ? ' %' : '%';
-    renderStatic(); renderHero(); renderRaceControls(); drawRace(); renderTable(); renderProba(); drawGhosts();
+    pct = pctOf();
+    renderStatic(); renderHero(); renderChanges(); renderBascule(); drawProj(); renderDecoded(); renderRaceControls(); drawRace(); renderTable(); renderProba(); drawGhosts();
     renderTransfers(); renderDuels(); renderSim(); renderGap(); renderConcerns(); renderPolls();
     renderSupport(); renderQuiz(); renderInstitutes(); renderTimeline(); renderEmbeds(); applyFeatures();
-    if (window.Debate) window.Debate.render({ D, lang, t, col, nm, sh, fmt, esc, css, tipFor });
+    if (window.Debate) window.Debate.render({ D, lang, t, tr, loc, pct: () => pct, col, nm, sh, fmt, esc, css, tipFor });
   }
-  $('#langBtn').onclick = () => { lang = lang === 'fr' ? 'en' : 'fr'; store.set('lang', lang); renderAll(); };
+  $('#langSel').onchange = e => { lang = e.target.value; store.set('lang', lang); const u = new URL(location.href); u.searchParams.delete('lang'); history.replaceState(null, '', u); renderAll(); };
   $('#themeBtn').onclick = () => {
     const next = isDark() ? 'light' : 'dark'; document.documentElement.dataset.theme = next; store.set('theme', next); renderAll();
   };
   matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', renderAll);
-  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { drawRace(); drawGhosts(); renderConcerns(); window.Debate && window.Debate.redraw(); }, 150); });
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { drawRace(); drawProj(); drawGhosts(); renderConcerns(); window.Debate && window.Debate.redraw(); }, 150); });
   renderAll();
 })();

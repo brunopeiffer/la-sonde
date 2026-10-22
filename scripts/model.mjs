@@ -4,6 +4,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { readJSON, writeJSON, parseCSV, toDay, fromDay, round1, randn, normCdf, seed } from './lib.mjs';
+import { momentum, crossings, openness, decode, updateHistory, changes } from './v2.mjs';
 seed(2027); // tirages reproductibles d'une exécution à l'autre
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
@@ -276,8 +277,10 @@ function transfers(FR) {
 }
 
 // ---------- 7. Résumé factuel automatique (FR / EN) ----------
-const fmtDate = (s, lang) => new Date(s + 'T12:00:00Z').toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+const LOC = { fr: 'fr-FR', en: 'en-GB', de: 'de-DE', es: 'es-ES', it: 'it-IT' };
+const fmtDate = (s, lang) => new Date(s + 'T12:00:00Z').toLocaleDateString(LOC[lang] || 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 const nm = c => (CANDS[c] || { name: c }).name;
+const slugify = s => s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 function summary(stand, mc, polls, FR) {
   const [a, b, c] = stand;
   const sig = (x, y) => (x.v - y.v) > 1.96 * Math.sqrt(x.band ** 2 + y.band ** 2);
@@ -293,15 +296,36 @@ function summary(stand, mc, polls, FR) {
       `${nm(a.c)} reste en tête de la moyenne des sondages avec ${fr(a.v)} % (${sg(a.d30 ?? 0)} pt en 30 jours).`,
       `Pour la deuxième place, ${nm(b.c)} (${fr(b.v)} %) devance ${nm(c.c)} (${fr(c.v)} %) : un écart de ${fr(b.v - c.v)} pt, ${sig(b, c) ? 'statistiquement net' : 'trop faible pour être significatif'}.`,
       mover ? `Mouvement le plus marqué sur un mois : ${nm(mover.c)} (${sg(mover.d30)} pt).` : '',
-      cfg.features.probabilities ? `Probabilité de qualification au second tour estimée par le modèle : ${q.slice(0, 3).map(x => `${nm(x.c)} ${fr(x.p)} %`).join(', ')}.` : '',
+      cfg.features.probabilities ? `Probabilité de qualification au second tour estimée par le modèle, si les candidats testés se présentent : ${q.slice(0, 3).map(x => `${nm(x.c)} ${fr(x.p)} %`).join(', ')}.` : '',
       `${last7} enquête${last7 > 1 ? 's' : ''} publiée${last7 > 1 ? 's' : ''} sur les 7 derniers jours. Dernière : ${lastP.institute} pour ${lastP.sponsor} (terrain achevé le ${fmtDate(lastP.end, 'fr')}).`
     ].filter(Boolean),
     en: [
       `${nm(a.c)} still leads the polling average at ${a.v.toFixed(1)}% (${sgEn(a.d30 ?? 0)} pts over 30 days).`,
       `In the race for second place, ${nm(b.c)} (${b.v.toFixed(1)}%) is ahead of ${nm(c.c)} (${c.v.toFixed(1)}%): a ${(b.v - c.v).toFixed(1)}-point gap, ${sig(b, c) ? 'statistically clear' : 'too small to be significant'}.`,
       mover ? `Biggest move this month: ${nm(mover.c)} (${sgEn(mover.d30)} pts).` : '',
-      cfg.features.probabilities ? `Model probability of reaching the run-off: ${q.slice(0, 3).map(x => `${nm(x.c)} ${x.p.toFixed(1)}%`).join(', ')}.` : '',
+      cfg.features.probabilities ? `Model probability of reaching the run-off, if all tested candidates run: ${q.slice(0, 3).map(x => `${nm(x.c)} ${x.p.toFixed(1)}%`).join(', ')}.` : '',
       `${last7} survey${last7 > 1 ? 's' : ''} released in the last 7 days. Latest: ${lastP.institute} for ${lastP.sponsor} (fieldwork ended ${fmtDate(lastP.end, 'en')}).`
+    ].filter(Boolean),
+    de: [
+      `${nm(a.c)} führt den Umfragedurchschnitt weiter mit ${fr(a.v)} % an (${sg(a.d30 ?? 0)} Pkt. in 30 Tagen).`,
+      `Im Rennen um Platz zwei liegt ${nm(b.c)} (${fr(b.v)} %) vor ${nm(c.c)} (${fr(c.v)} %): ein Abstand von ${fr(b.v - c.v)} Pkt., ${sig(b, c) ? 'statistisch eindeutig' : 'zu gering, um signifikant zu sein'}.`,
+      mover ? `Stärkste Bewegung im Monat: ${nm(mover.c)} (${sg(mover.d30)} Pkt.).` : '',
+      cfg.features.probabilities ? `Vom Modell geschätzte Chance auf die Stichwahl, sofern alle getesteten Kandidaten antreten: ${q.slice(0, 3).map(x => `${nm(x.c)} ${fr(x.p)} %`).join(', ')}.` : '',
+      `${last7} ${last7 === 1 ? 'Umfrage' : 'Umfragen'} in den letzten 7 Tagen veröffentlicht. Zuletzt: ${lastP.institute} für ${lastP.sponsor} (Feldarbeit beendet am ${fmtDate(lastP.end, 'de')}).`
+    ].filter(Boolean),
+    es: [
+      `${nm(a.c)} sigue en cabeza de la media de encuestas con un ${fr(a.v)} % (${sg(a.d30 ?? 0)} pts en 30 días).`,
+      `En la carrera por el segundo puesto, ${nm(b.c)} (${fr(b.v)} %) aventaja a ${nm(c.c)} (${fr(c.v)} %): una diferencia de ${fr(b.v - c.v)} pts, ${sig(b, c) ? 'estadísticamente clara' : 'demasiado pequeña para ser significativa'}.`,
+      mover ? `Mayor movimiento del mes: ${nm(mover.c)} (${sg(mover.d30)} pts).` : '',
+      cfg.features.probabilities ? `Probabilidad de pasar a la segunda vuelta según el modelo, si todos los candidatos evaluados se presentan: ${q.slice(0, 3).map(x => `${nm(x.c)} ${fr(x.p)} %`).join(', ')}.` : '',
+      `${last7} ${last7 === 1 ? 'encuesta publicada' : 'encuestas publicadas'} en los últimos 7 días. La última: ${lastP.institute} para ${lastP.sponsor} (trabajo de campo terminado el ${fmtDate(lastP.end, 'es')}).`
+    ].filter(Boolean),
+    it: [
+      `${nm(a.c)} resta in testa alla media dei sondaggi con il ${fr(a.v)}% (${sg(a.d30 ?? 0)} punti in 30 giorni).`,
+      `Nella corsa al secondo posto, ${nm(b.c)} (${fr(b.v)}%) precede ${nm(c.c)} (${fr(c.v)}%): uno scarto di ${fr(b.v - c.v)} punti, ${sig(b, c) ? 'statisticamente netto' : 'troppo piccolo per essere significativo'}.`,
+      mover ? `Movimento più marcato del mese: ${nm(mover.c)} (${sg(mover.d30)} punti).` : '',
+      cfg.features.probabilities ? `Probabilità di arrivare al ballottaggio stimata dal modello, se tutti i candidati testati si presentano: ${q.slice(0, 3).map(x => `${nm(x.c)} ${fr(x.p)}%`).join(', ')}.` : '',
+      `${last7} ${last7 === 1 ? 'sondaggio pubblicato' : 'sondaggi pubblicati'} negli ultimi 7 giorni. L'ultimo: ${lastP.institute} per ${lastP.sponsor} (fine rilevazione: ${fmtDate(lastP.end, 'it')}).`
     ].filter(Boolean)
   };
 }
@@ -370,7 +394,7 @@ function build() {
   const base = [...SC].sort((a, b) => b.set.filter(x => decl.some(d => d.c === x.c)).length - a.set.filter(x => decl.some(d => d.c === x.c)).length || b.surveys - a.surveys)[0];
   const added = decl.filter(d => !base.set.some(x => x.c === d.c));
   const addSum = added.reduce((a, x) => a + x.v, 0);
-  const allScen = { key: 'all', label: { fr: 'Tous les candidats déclarés', en: 'All declared candidates' }, model: true,
+  const allScen = { key: 'all', label: { fr: 'Tous les candidats déclarés', en: 'All declared candidates', de: 'Alle erklärten Kandidaten', es: 'Todos los candidatos declarados', it: 'Tutti i candidati dichiarati' }, model: true,
     surveys: base.surveys, last: base.last, with: [], without: [], added: added.map(x => x.c),
     set: [...base.set.map(x => ({ c: x.c, share: x.share * (100 - addSum) / 100, k: 1 })),
           ...added.map(x => ({ c: x.c, share: x.v, k: 1 + 0.6 * (1 - Math.min(x.presence, 100) / 100) }))].sort((a, b) => b.share - a.share) };
@@ -412,7 +436,7 @@ function build() {
   const cands = {};
   for (const c of new Set([...Object.keys(series), ...D.flatMap(d => [d.a, d.b])])) {
     const k = CANDS[c] || { name: c, short: c, party: '' };
-    cands[c] = { name: k.name, short: k.short || k.name, party: k.party || '', color: color(c), colorDark: k.colorDark || color(c), n: FR.ids[c] || 0 };
+    cands[c] = { name: k.name, short: k.short || k.name, party: k.party || '', color: color(c), colorDark: k.colorDark || color(c), n: FR.ids[c] || 0, slug: slugify(k.name) };
   }
 
   const out = {
@@ -436,13 +460,38 @@ function build() {
     summary: null
   };
   out.summary = summary(standings, mc, polls, FR);
+
+  // ---------- V2 : détecteur de bascule, baromètre, sondage décrypté, ce qui a changé ----------
+  const MOM = momentum(FR, standings);
+  const cross = crossings(standings, MOM);
+  const open = openness(SC, standings);
+  const dec = decode(FR, standings, SC);
+  const histPath = P('data/history.json');
+  const hist0 = fs.existsSync(histPath) ? readJSON(histPath) : [];
+  const today = new Date().toISOString().slice(0, 10);
+  out.changes = changes({ MOM, cross, dec, hist: hist0, today, qualify: mc.qualify, nm, features: cfg.features, fmtDate });
+  const hist = updateHistory(hist0, today, { asOf: out.asOf, open: open.open,
+    q: Object.fromEntries(mc.qualify.map(x => [x.c, x.p])), v: Object.fromEntries(standings.map(x => [x.c, x.v])) });
+  writeJSON(histPath, hist, true);
+  out.momentum = Object.fromEntries(Object.entries(MOM).map(([c, m]) => { const { slope, se, sd30, ...r } = m; return [c, r]; }));
+  out.crossings = cross; out.openness = { ...open, hist: hist.map(h => [h.d, h.open]) }; out.decoded = dec;
+  // Effets instituts pour chaque candidat (pages candidats).
+  out.houseAll = Object.fromEntries(standings.map(s => [s.c, Object.fromEntries(Object.entries(FR.house[s.c] || {}).map(([i, v]) => [i, round1(v)]))]));
+  out.recentPolls = Object.fromEntries(standings.map(s => {
+    const by = new Map();
+    for (const p of FR.r1.filter(p => s.c in p.results)) {
+      const e = by.get(p.survey) || { inst: p.institute, sponsor: p.sponsor, end: p.end, lo: 99, hi: 0, h: 0 };
+      e.lo = Math.min(e.lo, p.results[s.c]); e.hi = Math.max(e.hi, p.results[s.c]); e.h++; by.set(p.survey, e);
+    }
+    return [s.c, [...by.values()].sort((a, b) => b.end.localeCompare(a.end)).slice(0, 10)];
+  }));
   // Plan du site et robots.txt pour Google.
   const siteBase = cfg.siteUrl.replace(/\/$/, '');
   fs.writeFileSync(P('site/sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${siteBase}/</loc><lastmod>${out.asOf}</lastmod><changefreq>daily</changefreq></url>\n  <url><loc>${siteBase}/?lang=en</loc><lastmod>${out.asOf}</lastmod><changefreq>daily</changefreq></url>\n</urlset>\n`);
   fs.writeFileSync(P('site/robots.txt'), `User-agent: *\nAllow: /\nSitemap: ${siteBase}/sitemap.xml\n`);
   // Image d'aperçu des partages : les réseaux sociaux exigent une adresse absolue.
   const idxPath = P('site/index.html'), html = fs.readFileSync(idxPath, 'utf8');
-  const fixed = html.replace(/<meta property="og:image" content="[^"]*">/, `<meta property="og:image" content="${cfg.siteUrl.replace(/\/$/, '')}/og.png">`);
+  const fixed = html.replace(/<meta property="og:image" content="[^"]*">/, `<meta property="og:image" content="${cfg.siteUrl.replace(/\/$/, '')}/${fs.existsSync(P('site/share/carte-du-jour.png')) ? 'share/carte-du-jour.png' : 'og.png'}">`);
   if (fixed !== html) fs.writeFileSync(idxPath, fixed);
   fs.mkdirSync(P('site/data'), { recursive: true });
   writeJSON(P('site/data/site.json'), out);

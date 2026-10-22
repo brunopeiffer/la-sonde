@@ -7,7 +7,7 @@
 <meta name="description" content="Moyenne des sondages, probabilités, reports de voix, scénarios et préoccupations des Français pour la présidentielle 2027. Mis à jour automatiquement.">
 <meta property="og:title" content="La Sonde — la présidentielle 2027 en courbes">
 <meta property="og:description" content="Moyenne des sondages corrigée des effets instituts, probabilités de qualification, reports de voix et comparaison avec 2022.">
-<meta property="og:image" content="https://la-sonde.fr/og.png">
+<meta property="og:image" content="https://la-sonde.fr/share/carte-du-jour.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%235b2cff'/%3E%3Ccircle cx='16' cy='16' r='3.6' fill='white'/%3E%3Ccircle cx='16' cy='16' r='9' fill='none' stroke='white' stroke-width='2.4'/%3E%3C/svg%3E">
@@ -15,6 +15,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<link rel="alternate" hreflang="fr" href="https://la-sonde.fr/">
+<link rel="alternate" hreflang="en" href="https://la-sonde.fr/?lang=en">
+<link rel="alternate" hreflang="de" href="https://la-sonde.fr/?lang=de">
+<link rel="alternate" hreflang="es" href="https://la-sonde.fr/?lang=es">
+<link rel="alternate" hreflang="it" href="https://la-sonde.fr/?lang=it">
+<link rel="alternate" hreflang="x-default" href="https://la-sonde.fr/">
 <!-- Mesure d'audience sans cookie (GoatCounter) : sur la ligne suivante, remplacez VOTRECODE et retirez les marques de commentaire. -->
 <script data-goatcounter="https://lasonde.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </head>
@@ -29,11 +35,12 @@
       <span>La <b>Sonde</b></span>
     </a>
     <nav class="nav" aria-label="Sections">
+      <a href="#bascule" data-i18n="nav.bascule"></a>
       <a href="#course" data-i18n="nav.race"></a>
+      <a href="#second" data-i18n="nav.round2"></a>
       <a href="#proba" data-i18n="nav.proba"></a>
       <a href="#fantomes" data-i18n="nav.ghosts"></a>
       <a href="#reports" data-i18n="nav.transfers"></a>
-      <a href="#second" data-i18n="nav.round2"></a>
       <a href="#debats" data-i18n="nav.debates"></a>
       <a href="#enjeux" data-i18n="nav.issues"></a>
       <a href="#quiz" data-i18n="nav.quiz"></a>
@@ -43,7 +50,7 @@
     </nav>
     <div class="tools">
       <a class="pill donate" id="donateTop" target="_blank" rel="noopener"><span aria-hidden="true">♥</span> <span data-i18n="don.short"></span></a>
-      <button class="pill" id="langBtn" aria-label="Language">EN</button>
+      <select class="pill langsel" id="langSel" aria-label="Langue / Language"><option value="fr">FR</option><option value="en">EN</option><option value="de">DE</option><option value="es">ES</option><option value="it">IT</option></select>
       <button class="pill" id="themeBtn" aria-label="Mode clair / sombre"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="display:block"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button>
     </div>
   </div>
@@ -56,6 +63,7 @@
       <h1 data-i18n="hero.title"></h1>
       <p class="lead" data-i18n="hero.lead"></p>
       <div class="countdown" id="countdown"></div>
+      <a class="btn-hero-don" id="donateHero" target="_blank" rel="noopener"><span aria-hidden="true">♥</span> <span data-i18n="don.hero"></span></a>
       <a class="livebar" id="liveBar" href="#debats" hidden></a>
     </div>
     <div class="podium" id="podium"></div>
@@ -64,11 +72,30 @@
 
 <main class="wrap">
   <section id="resume" style="padding-top:28px">
-    <div class="read">
-      <h3 data-i18n="sum.title"></h3>
+    <div class="changes" id="changes"></div>
+    <details class="read sumd">
+      <summary><span data-i18n="sum.title"></span></summary>
       <ul id="summary"></ul>
       <div class="meta" id="sumMeta"></div>
+    </details>
+  </section>
+
+  <section id="bascule">
+    <div class="sh"><div><div class="tag" data-i18n="bas.tag"></div><h2 data-i18n="bas.title"></h2><p data-i18n="bas.desc"></p></div></div>
+    <div class="grid2">
+      <div class="card"><h3 style="margin:0 0 4px" data-i18n="bas.mom"></h3><p class="note" style="margin:0 0 12px" data-i18n="bas.momDesc"></p><div class="mom" id="momList"></div></div>
+      <div class="bstack">
+        <div class="card baro" id="baro"></div>
+        <div class="card" id="alerts"></div>
+      </div>
     </div>
+    <div class="card" id="projCard" style="margin-top:18px">
+      <h3 style="margin:0 0 4px" data-i18n="bas.proj"></h3><p class="note" style="margin:0 0 10px" data-i18n="bas.projDesc"></p>
+      <div class="chips" id="projChips"></div>
+      <div class="chart" id="projChart"></div>
+      <div class="legend"><span><i></i><span data-i18n="bas.lgObs"></span></span><span><i class="dash"></i><span data-i18n="bas.lgProj"></span></span><span><i style="border:0;height:10px;width:18px;background:var(--surface-2);border-radius:3px"></i><span data-i18n="bas.lgCone"></span></span></div>
+    </div>
+    <div class="warnbox"><strong>⚠︎</strong><span data-i18n="bas.warn"></span></div>
   </section>
 
   <section id="course">
@@ -88,32 +115,6 @@
     </div>
   </section>
 
-  <section id="proba">
-    <div class="sh"><div><div class="tag" data-i18n="proba.tag"></div><h2 data-i18n="proba.title"></h2><p data-i18n="proba.desc"></p></div></div>
-    <div class="controls"><div class="seg" id="scenSeg"></div></div>
-    <div class="grid2">
-      <div class="card"><h3 style="margin:0 0 4px" data-i18n="proba.qualif"></h3><p class="note" style="margin:0 0 10px" id="scenDesc"></p><div id="qualif"></div></div>
-      <div class="card"><h3 style="margin:0 0 4px" data-i18n="proba.win"></h3><p class="note" style="margin:0 0 10px" data-i18n="proba.winDesc"></p><div id="winp"></div><h4 style="margin:18px 0 4px" data-i18n="proba.duels"></h4><div id="duelp"></div></div>
-    </div>
-    <div class="warnbox"><strong>⚠︎</strong><span data-i18n="proba.warn"></span></div>
-    <div class="embed-tool" data-embed="proba"></div>
-  </section>
-
-  <section id="fantomes">
-    <div class="sh"><div><div class="tag" data-i18n="ghost.tag"></div><h2 data-i18n="ghost.title"></h2><p data-i18n="ghost.desc"></p></div></div>
-    <div class="card">
-      <div class="chart" id="ghostChart"></div>
-      <div class="legend"><span><i></i><span data-i18n="ghost.lg27"></span></span><span><i class="dash"></i><span data-i18n="ghost.lg22"></span></span><span><i style="border:0;width:9px;height:9px;border-radius:50%;background:var(--ink-2)"></i><span data-i18n="ghost.lgRes"></span></span></div>
-      <p class="note" id="ghostNote"></p>
-      <div class="embed-tool" data-embed="fantomes"></div>
-    </div>
-  </section>
-
-  <section id="reports">
-    <div class="sh"><div><div class="tag" data-i18n="tr.tag"></div><h2 data-i18n="tr.title"></h2><p data-i18n="tr.desc"></p></div></div>
-    <div class="card" id="transfers"></div>
-  </section>
-
   <section id="second">
     <div class="sh"><div><div class="tag" data-i18n="r2.tag"></div><h2 data-i18n="r2.title"></h2><p data-i18n="r2.desc"></p></div></div>
     <div class="grid2">
@@ -128,6 +129,35 @@
       </div>
     </div>
   </section>
+
+  <section id="proba">
+    <div class="sh"><div><div class="tag" data-i18n="proba.tag"></div><h2 data-i18n="proba.title"></h2><p data-i18n="proba.desc"></p></div></div>
+    <div class="controls"><div class="seg" id="scenSeg"></div></div>
+    <p class="condnote"><strong>ⓘ</strong> <span data-i18n="proba.cond"></span></p>
+    <div class="grid2">
+      <div class="card"><h3 style="margin:0 0 4px" data-i18n="proba.qualif"></h3><p class="note" style="margin:0 0 10px" id="scenDesc"></p><div id="qualif"></div></div>
+      <div class="card"><h3 style="margin:0 0 4px" data-i18n="proba.win"></h3><p class="note" style="margin:0 0 10px" data-i18n="proba.winDesc"></p><div id="winp"></div><h4 style="margin:18px 0 4px" data-i18n="proba.duels"></h4><div id="duelp"></div></div>
+    </div>
+    <div class="warnbox"><strong>⚠︎</strong><span data-i18n="proba.warn"></span></div>
+    <div class="embed-tool" data-embed="proba"></div>
+  </section>
+
+  <section id="fantomes">
+    <div class="sh"><div><div class="tag" data-i18n="ghost.tag"></div><h2 data-i18n="ghost.title"></h2><p data-i18n="ghost.desc"></p></div></div>
+    <div class="card">
+      <div class="chips" id="ghostChips"></div>
+      <div class="chart" id="ghostChart"></div>
+      <div class="legend"><span><i></i><span data-i18n="ghost.lg27"></span></span><span><i class="dash"></i><span data-i18n="ghost.lg22"></span></span><span><i style="border:0;width:9px;height:9px;border-radius:50%;background:var(--ink-2)"></i><span data-i18n="ghost.lgRes"></span></span></div>
+      <p class="note" id="ghostNote"></p>
+      <div class="embed-tool" data-embed="fantomes"></div>
+    </div>
+  </section>
+
+  <section id="reports">
+    <div class="sh"><div><div class="tag" data-i18n="tr.tag"></div><h2 data-i18n="tr.title"></h2><p data-i18n="tr.desc"></p></div></div>
+    <div class="card" id="transfers"></div>
+  </section>
+
 
 
   <section id="debats">
@@ -167,7 +197,8 @@
 
   <section id="sondages">
     <div class="sh"><div><div class="tag" data-i18n="po.tag"></div><h2 data-i18n="po.title"></h2><p data-i18n="po.desc"></p></div></div>
-    <div class="card"><div class="polls" id="pollList"></div></div>
+    <div class="card decoded" id="decoded"></div>
+    <div class="card" style="margin-top:18px"><div class="polls" id="pollList"></div></div>
     <h3 style="margin:28px 0 12px;font:800 24px var(--display)" data-i18n="ins.title"></h3><div class="inst-grid" id="insts"></div>
     <div class="card" style="margin-top:18px"><h3 style="margin:0 0 4px" data-i18n="po.house"></h3><p class="note" style="margin:0 0 10px" data-i18n="po.houseDesc"></p><div class="scroll" id="house"></div></div>
   </section>
@@ -201,6 +232,9 @@
 
 <script src="vendor/d3.min.js"></script>
 <script src="i18n.js"></script>
+<script src="i18n-de.js"></script>
+<script src="i18n-es.js"></script>
+<script src="i18n-it.js"></script>
 <script src="debate.js"></script>
 <script src="app.js"></script>
 </body>

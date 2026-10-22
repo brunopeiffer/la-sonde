@@ -5,49 +5,243 @@
       "id": "ipsos-tribune",
       "institute": "Ipsos bva-CESI",
       "sponsor": "La Tribune Dimanche",
-      "question": { "fr": "Principales préoccupations (3 réponses possibles)", "en": "Main concerns (up to 3 answers)" },
+      "question": {
+        "fr": "Principales préoccupations (3 réponses possibles)",
+        "en": "Main concerns (up to 3 answers)",
+        "de": "Größte Sorgen (bis zu 3 Antworten)",
+        "es": "Principales preocupaciones (hasta 3 respuestas)",
+        "it": "Principali preoccupazioni (fino a 3 risposte)"
+      },
       "waves": [
         {
-          "date": "2026-02-12", "field": "11-12 février 2026", "n": 1000,
+          "date": "2026-02-12",
+          "field": "11-12 février 2026",
+          "n": 1000,
           "source": "https://www.breizh-info.com/2026/02/16/256831/barometre-ipsos-cesi-fevrier-2026-pouvoir-dachat-en-tete-immigration-et-insecurite-au-plus-haut-macron-au-plus-bas/",
-          "values": { "pouvoir_achat": 43, "systeme_social": 38, "delinquance": 33, "immigration": 28, "dette": 26 }
+          "values": {
+            "pouvoir_achat": 43,
+            "systeme_social": 38,
+            "delinquance": 33,
+            "immigration": 28,
+            "dette": 26
+          }
         },
         {
-          "date": "2026-10-08", "field": "7-8 octobre 2026", "n": 1000,
+          "date": "2026-10-08",
+          "field": "7-8 octobre 2026",
+          "n": 1000,
           "source": "https://www.ipsos.com/fr-fr/barometre-politique-ipsos-bva-la-tribune-dimanche",
-          "values": { "pouvoir_achat": 54, "systeme_social": 44, "dette": 33, "delinquance": 29, "environnement": 27 }
+          "values": {
+            "pouvoir_achat": 54,
+            "systeme_social": 44,
+            "dette": 33,
+            "delinquance": 29,
+            "environnement": 27
+          }
         }
       ]
     }
   ],
   "themes": {
-    "pouvoir_achat": { "fr": "Pouvoir d'achat", "en": "Cost of living", "icon": "€", "color": "#ff5a36" },
-    "systeme_social": { "fr": "Avenir du système social", "en": "Future of social security", "icon": "✚", "color": "#ff9f1c" },
-    "delinquance": { "fr": "Délinquance / sécurité", "en": "Crime / security", "icon": "⚑", "color": "#3a57e8" },
-    "immigration": { "fr": "Immigration", "en": "Immigration", "icon": "⇄", "color": "#8a5cf6" },
-    "dette": { "fr": "Dette et déficits", "en": "Debt and deficits", "icon": "↘", "color": "#00a6a6" },
-    "environnement": { "fr": "Environnement", "en": "Environment", "icon": "❦", "color": "#22b04b" },
-    "sante": { "fr": "Santé", "en": "Health", "icon": "♥", "color": "#e8174a" }
+    "pouvoir_achat": {
+      "fr": "Pouvoir d'achat",
+      "en": "Cost of living",
+      "icon": "€",
+      "color": "#ff5a36",
+      "de": "Kaufkraft",
+      "es": "Poder adquisitivo",
+      "it": "Potere d'acquisto"
+    },
+    "systeme_social": {
+      "fr": "Avenir du système social",
+      "en": "Future of social security",
+      "icon": "✚",
+      "color": "#ff9f1c",
+      "de": "Zukunft des Sozialsystems",
+      "es": "Futuro del sistema social",
+      "it": "Futuro dello stato sociale"
+    },
+    "delinquance": {
+      "fr": "Délinquance / sécurité",
+      "en": "Crime / security",
+      "icon": "⚑",
+      "color": "#3a57e8",
+      "de": "Kriminalität / Sicherheit",
+      "es": "Delincuencia / seguridad",
+      "it": "Criminalità / sicurezza"
+    },
+    "immigration": {
+      "fr": "Immigration",
+      "en": "Immigration",
+      "icon": "⇄",
+      "color": "#8a5cf6",
+      "de": "Einwanderung",
+      "es": "Inmigración",
+      "it": "Immigrazione"
+    },
+    "dette": {
+      "fr": "Dette et déficits",
+      "en": "Debt and deficits",
+      "icon": "↘",
+      "color": "#00a6a6",
+      "de": "Schulden und Defizite",
+      "es": "Deuda y déficit",
+      "it": "Debito e deficit"
+    },
+    "environnement": {
+      "fr": "Environnement",
+      "en": "Environment",
+      "icon": "❦",
+      "color": "#22b04b",
+      "de": "Umwelt",
+      "es": "Medio ambiente",
+      "it": "Ambiente"
+    },
+    "sante": {
+      "fr": "Santé",
+      "en": "Health",
+      "icon": "♥",
+      "color": "#e8174a",
+      "de": "Gesundheit",
+      "es": "Sanidad",
+      "it": "Sanità"
+    }
   },
   "stakes": {
     "source": "https://www.ipsos.com/fr-fr/presidentielle-2027-le-retour-du-vote-sur-enjeux",
-    "label": { "fr": "Enquête électorale Ipsos bva-CESI pour le CEVIPOF, la Fondation Jean-Jaurès et Le Monde, 2-9 avril 2026, 10 962 inscrits", "en": "Ipsos bva-CESI electoral survey for CEVIPOF, Fondation Jean-Jaurès and Le Monde, 2-9 April 2026, 10,962 registered voters" },
+    "label": {
+      "fr": "Enquête électorale Ipsos bva-CESI pour le CEVIPOF, la Fondation Jean-Jaurès et Le Monde, 2-9 avril 2026, 10 962 inscrits",
+      "en": "Ipsos bva-CESI electoral survey for CEVIPOF, Fondation Jean-Jaurès and Le Monde, 2-9 April 2026, 10,962 registered voters",
+      "de": "Wahlstudie Ipsos bva-CESI für CEVIPOF, Fondation Jean-Jaurès und Le Monde, 2.–9. April 2026, 10 962 Wahlberechtigte",
+      "es": "Encuesta electoral Ipsos bva-CESI para el CEVIPOF, la Fondation Jean-Jaurès y Le Monde, 2-9 de abril de 2026, 10 962 electores inscritos",
+      "it": "Indagine elettorale Ipsos bva-CESI per il CEVIPOF, la Fondation Jean-Jaurès e Le Monde, 2-9 aprile 2026, 10.962 elettori iscritti"
+    },
     "ranking": [
-      { "rank": 1, "theme": "sante" },
-      { "rank": 2, "theme": "pouvoir_achat" },
-      { "rank": 5, "theme": "delinquance" },
-      { "rank": 8, "theme": "immigration" }
+      {
+        "rank": 1,
+        "theme": "sante"
+      },
+      {
+        "rank": 2,
+        "theme": "pouvoir_achat"
+      },
+      {
+        "rank": 5,
+        "theme": "delinquance"
+      },
+      {
+        "rank": 8,
+        "theme": "immigration"
+      }
     ],
     "facts": {
-      "fr": ["7 enjeux jugés déterminants par plus de 50 % des inscrits, 11 par plus de 40 %", "9 des 11 premiers enjeux sont économiques ou sociaux", "Un nouveau recul de l'âge de la retraite figure parmi les enjeux les moins cités"],
-      "en": ["7 issues seen as decisive by more than 50% of registered voters, 11 by more than 40%", "9 of the top 11 issues are economic or social", "Raising the retirement age again ranks among the least cited issues"]
+      "fr": [
+        "7 enjeux jugés déterminants par plus de 50 % des inscrits, 11 par plus de 40 %",
+        "9 des 11 premiers enjeux sont économiques ou sociaux",
+        "Un nouveau recul de l'âge de la retraite figure parmi les enjeux les moins cités"
+      ],
+      "en": [
+        "7 issues seen as decisive by more than 50% of registered voters, 11 by more than 40%",
+        "9 of the top 11 issues are economic or social",
+        "Raising the retirement age again ranks among the least cited issues"
+      ],
+      "de": [
+        "7 Themen gelten für mehr als 50 % der Wahlberechtigten als entscheidend, 11 für mehr als 40 %",
+        "9 der 11 wichtigsten Themen sind wirtschaftlich oder sozial",
+        "Eine erneute Anhebung des Rentenalters gehört zu den am seltensten genannten Themen"
+      ],
+      "es": [
+        "7 temas se consideran decisivos para más del 50 % de los electores, 11 para más del 40 %",
+        "9 de los 11 primeros temas son económicos o sociales",
+        "Un nuevo retraso de la edad de jubilación figura entre los temas menos citados"
+      ],
+      "it": [
+        "7 temi sono decisivi per oltre il 50% degli elettori, 11 per oltre il 40%",
+        "9 dei primi 11 temi sono economici o sociali",
+        "Un nuovo innalzamento dell'età pensionabile è tra i temi meno citati"
+      ]
     },
     "byElectorate": [
-      { "who": { "fr": "LFI, Écologistes, PS", "en": "LFI, Greens, PS" }, "themes": { "fr": "Santé, pouvoir d'achat, éducation, inégalités (+ environnement chez les Écologistes)", "en": "Health, cost of living, education, inequality (+ environment for Greens)" } },
-      { "who": { "fr": "Renaissance, Horizons", "en": "Renaissance, Horizons" }, "themes": { "fr": "Santé, déficits, attractivité économique, place de la France dans le monde, éducation, travail", "en": "Health, deficits, economic attractiveness, France's place in the world, education, work" } },
-      { "who": { "fr": "LR", "en": "LR" }, "themes": { "fr": "Partagés entre économie et régalien (immigration, sécurité)", "en": "Split between economy and law-and-order (immigration, security)" } },
-      { "who": { "fr": "RN", "en": "RN" }, "themes": { "fr": "Immigration, sécurité, pouvoir d'achat, santé, travail", "en": "Immigration, security, cost of living, health, work" } },
-      { "who": { "fr": "Reconquête", "en": "Reconquête" }, "themes": { "fr": "Immigration, sécurité, impôts et taxes, déficits", "en": "Immigration, security, taxes, deficits" } }
+      {
+        "who": {
+          "fr": "LFI, Écologistes, PS",
+          "en": "LFI, Greens, PS",
+          "de": "LFI, Grüne, PS",
+          "es": "LFI, Ecologistas, PS",
+          "it": "LFI, Ecologisti, PS"
+        },
+        "themes": {
+          "fr": "Santé, pouvoir d'achat, éducation, inégalités (+ environnement chez les Écologistes)",
+          "en": "Health, cost of living, education, inequality (+ environment for Greens)",
+          "de": "Gesundheit, Kaufkraft, Bildung, Ungleichheit (+ Umwelt bei den Grünen)",
+          "es": "Sanidad, poder adquisitivo, educación, desigualdades (+ medio ambiente entre los ecologistas)",
+          "it": "Sanità, potere d'acquisto, istruzione, disuguaglianze (+ ambiente per gli ecologisti)"
+        }
+      },
+      {
+        "who": {
+          "fr": "Renaissance, Horizons",
+          "en": "Renaissance, Horizons",
+          "de": "Renaissance, Horizons",
+          "es": "Renaissance, Horizons",
+          "it": "Renaissance, Horizons"
+        },
+        "themes": {
+          "fr": "Santé, déficits, attractivité économique, place de la France dans le monde, éducation, travail",
+          "en": "Health, deficits, economic attractiveness, France's place in the world, education, work",
+          "de": "Gesundheit, Defizite, wirtschaftliche Attraktivität, Frankreichs Rolle in der Welt, Bildung, Arbeit",
+          "es": "Sanidad, déficit, atractivo económico, papel de Francia en el mundo, educación, trabajo",
+          "it": "Sanità, deficit, attrattività economica, ruolo della Francia nel mondo, istruzione, lavoro"
+        }
+      },
+      {
+        "who": {
+          "fr": "LR",
+          "en": "LR",
+          "de": "LR",
+          "es": "LR",
+          "it": "LR"
+        },
+        "themes": {
+          "fr": "Partagés entre économie et régalien (immigration, sécurité)",
+          "en": "Split between economy and law-and-order (immigration, security)",
+          "de": "Geteilt zwischen Wirtschaft und innerer Sicherheit (Einwanderung, Sicherheit)",
+          "es": "Divididos entre economía y orden público (inmigración, seguridad)",
+          "it": "Divisi tra economia e ordine pubblico (immigrazione, sicurezza)"
+        }
+      },
+      {
+        "who": {
+          "fr": "RN",
+          "en": "RN",
+          "de": "RN",
+          "es": "RN",
+          "it": "RN"
+        },
+        "themes": {
+          "fr": "Immigration, sécurité, pouvoir d'achat, santé, travail",
+          "en": "Immigration, security, cost of living, health, work",
+          "de": "Einwanderung, Sicherheit, Kaufkraft, Gesundheit, Arbeit",
+          "es": "Inmigración, seguridad, poder adquisitivo, sanidad, trabajo",
+          "it": "Immigrazione, sicurezza, potere d'acquisto, sanità, lavoro"
+        }
+      },
+      {
+        "who": {
+          "fr": "Reconquête",
+          "en": "Reconquête",
+          "de": "Reconquête",
+          "es": "Reconquête",
+          "it": "Reconquête"
+        },
+        "themes": {
+          "fr": "Immigration, sécurité, impôts et taxes, déficits",
+          "en": "Immigration, security, taxes, deficits",
+          "de": "Einwanderung, Sicherheit, Steuern, Defizite",
+          "es": "Inmigración, seguridad, impuestos, déficit",
+          "it": "Immigrazione, sicurezza, tasse, deficit"
+        }
+      }
     ]
   }
 }

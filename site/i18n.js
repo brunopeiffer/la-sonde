@@ -8,8 +8,8 @@ window.I18N = {
     'hero.title': 'Le pouls de la présidentielle 2027',
     'hero.lead': "Tous les sondages des grands instituts, agrégés, corrigés et mis en perspective. Pour voir ce qui bouge vraiment, et ce qui n'est que du bruit.",
     'cd.r1': 'jours avant le 1er tour', 'cd.r2': 'jours avant le 2nd tour', 'cd.polls': 'enquêtes analysées',
-    'pod.title': 'Moyenne des sondages', 'pod.d30': '30 j',
-    'sum.title': "Ce qui a bougé",
+    'pod.title': 'Moyenne des sondages', 'pod.d30': '30 j', 'pod.others': 'Autres candidats déclarés', 'pod.few': 'testé dans moins d’un tiers des enquêtes',
+    'sum.title': "Le résumé détaillé", 'proba.cond': "Ces probabilités supposent que tous les candidats testés se présentent. L'entrée ou le retrait d'un seul candidat peut tout changer : choisissez le scénario de candidatures qui vous semble le plus plausible.",
     'sum.meta': 'Résumé factuel généré automatiquement à partir des données, sans intervention éditoriale. Dernier terrain pris en compte : {d}.',
     'race.tag': '1er tour', 'race.title': 'La course, jour après jour',
     'race.desc': "La moyenne lissée de tous les sondages, corrigée des écarts systématiques de chaque institut. La bande colorée montre l'incertitude de la moyenne.",
@@ -76,8 +76,8 @@ window.I18N = {
     'hero.title': "The pulse of France's 2027 election",
     'hero.lead': "Every poll from the major French pollsters, aggregated, adjusted and put in context. See what is really moving, and what is just noise.",
     'cd.r1': 'days to round 1', 'cd.r2': 'days to the run-off', 'cd.polls': 'surveys analysed',
-    'pod.title': 'Polling average', 'pod.d30': '30 d',
-    'sum.title': 'What moved',
+    'pod.title': 'Polling average', 'pod.d30': '30 d', 'pod.others': 'Other declared candidates', 'pod.few': 'included in fewer than a third of surveys',
+    'sum.title': 'Full summary', 'proba.cond': 'These odds assume every tested candidate actually runs. One candidate entering or dropping out can change everything: pick the line-up you find most plausible.',
     'sum.meta': 'Factual summary generated automatically from the data, with no editorial input. Latest fieldwork included: {d}.',
     'race.tag': 'Round 1', 'race.title': 'The race, day by day',
     'race.desc': "A smoothed average of every poll, adjusted for each pollster's systematic lean. The shaded band shows the uncertainty of the average.",
@@ -145,6 +145,7 @@ window.METHOD = {
 <p><b>Effets instituts.</b> Chaque institut a des écarts réguliers (méthode, panel, redressement). Nous mesurons l'écart moyen de chaque institut pour chaque candidat sur 8 mois, le rapprochons de zéro quand il repose sur peu d'enquêtes, puis le retirons avant de calculer la moyenne.</p>
 <p><b>Scénarios et probabilités.</b> Les scores dépendent de la liste testée : nous modélisons séparément les listes les plus testées sur 60 jours. Pour chacune, 20 000 élections sont simulées. L'incertitude de chaque candidat est calibrée sur l'écart réel entre les sondages et le résultat de 2022 (écart-type = √score × (a + b·√jours restants)). La victoire combine la probabilité de chaque duel avec la moyenne des sondages de second tour de ce duel.</p>
 <p><b>Reports de voix.</b> Dans une même enquête, deux hypothèses qui ne diffèrent que d'un candidat montrent où vont ses électeurs. Nous faisons la moyenne de ces écarts sur 5 mois. Les arrondis des instituts rendent chaque comparaison imprécise ; seule la moyenne a du sens.</p>
+<p><b>Détecteur de bascule.</b> Pour chaque candidat, nous calculons la pente des sondages des cinq dernières semaines, corrigés des effets instituts, avec sa marge d'erreur (les hypothèses d'une même enquête ne sont pas comptées comme indépendantes). Une flèche n'apparaît que si la hausse ou la baisse est établie à 90 % au moins. La projection à 30 jours prolonge cette pente en l'amortissant de 3 % par jour ; sa fourchette à 80 % combine l'incertitude de la pente, celle de la moyenne et une dérive aléatoire. Le baromètre d'incertitude est la probabilité, tirée des 20 000 simulations, que le duel final ne soit pas le duel actuellement en tête.</p>
 <p><b>Limites.</b> Un sondage mesure une intention à un instant donné. Les marges d'erreur sont indicatives (méthode des quotas). Les probabilités dépendent d'hypothèses simples et d'une seule élection de référence ; elles seront affinées.</p>
 <p><b>Code ouvert.</b> Tout le calcul est public et reproductible sur GitHub.</p>`,
   en: `
@@ -153,6 +154,7 @@ window.METHOD = {
 <p><b>House effects.</b> Each pollster leans in consistent ways (method, panel, weighting). We measure each pollster's average gap for each candidate over 8 months, shrink it toward zero when based on few surveys, and remove it before averaging.</p>
 <p><b>Scenarios and odds.</b> Scores depend on the line-up, so we model the most-tested line-ups of the last 60 days separately, simulating 20,000 elections for each. Each candidate's uncertainty is calibrated on the actual gap between polls and the 2022 result (sd = √score × (a + b·√days left)). Win odds combine the chance of each pairing with the run-off poll average for that pairing.</p>
 <p><b>Vote flows.</b> Within one survey, two scenarios differing by a single candidate show where that candidate's voters go. We average those gaps over 5 months. Pollster rounding makes each comparison noisy; only the average is meaningful.</p>
+<p><b>Momentum detector.</b> For each candidate we estimate the slope of house-adjusted polls over the last five weeks, with its margin of error (scenarios from the same survey are not treated as independent). An arrow appears only when a rise or fall is established with at least 90% confidence. The 30-day projection extends that slope, damped by 3% a day; its 80% range combines slope uncertainty, average uncertainty and random drift. The uncertainty gauge is the probability, from the 20,000 simulations, that the run-off will not be the pairing currently in the lead.</p>
 <p><b>Limits.</b> A poll measures intention at a point in time. Margins of error are indicative (quota sampling). Odds rest on simple assumptions and a single reference election; they will be refined.</p>
 <p><b>Open code.</b> All calculations are public and reproducible on GitHub.</p>`
 };
@@ -161,7 +163,7 @@ window.METHOD = {
 Object.assign(window.I18N.fr, {
   'tab.title': 'Tous les candidats', 'tab.cand': 'Candidat', 'tab.avg': 'Moyenne', 'tab.d30': '30 jours', 'tab.pres': 'Testé dans', 'tab.last': 'Dernier test', 'tab.low': 'peu testé', 'tab.note': "« Testé dans » : part des hypothèses des 45 derniers jours qui incluent le candidat. Un candidat peu testé a une moyenne moins fiable, calculée sur les seuls sondages où il figure.",
   'nav.debates': 'Débats', 'nav.quiz': 'Quiz', 'nav.timeline': 'Frise',
-  'don.short': 'Soutenir', 'don.title': 'Un site indépendant, sans publicité', 'don.cta': 'Soutenir sur Ko-fi',
+  'don.short': 'Soutenir', 'don.hero': 'Soutenir La Sonde', 'don.title': 'Un site indépendant, sans publicité', 'don.cta': 'Soutenir sur Ko-fi',
   'don.text': "La Sonde n'affiche aucune publicité et ne dépose aucun cookie. Les serveurs, le nom de domaine et l'agent de veille ont un coût : si le site vous est utile, un café fait la différence.",
   'media.title': 'Médias et sites', 'media.text': "Les graphiques sont intégrables gratuitement sur votre site (bouton « Intégrer » sous chaque graphique), avec mention de la source. Pour une version personnalisée, une soirée électorale ou les données, écrivez-nous.",
   'media.contact': 'Contact :',
@@ -197,7 +199,7 @@ Object.assign(window.I18N.fr, {
 Object.assign(window.I18N.en, {
   'tab.title': 'All candidates', 'tab.cand': 'Candidate', 'tab.avg': 'Average', 'tab.d30': '30 days', 'tab.pres': 'Tested in', 'tab.last': 'Last tested', 'tab.low': 'rarely tested', 'tab.note': '“Tested in”: share of scenarios from the last 45 days that include the candidate. A rarely tested candidate has a less reliable average, based only on the polls that include them.',
   'nav.debates': 'Debates', 'nav.quiz': 'Quiz', 'nav.timeline': 'Timeline',
-  'don.short': 'Support', 'don.title': 'An independent, ad-free site', 'don.cta': 'Support on Ko-fi',
+  'don.short': 'Support', 'don.hero': 'Support La Sonde', 'don.title': 'An independent, ad-free site', 'don.cta': 'Support on Ko-fi',
   'don.text': 'La Sonde shows no ads and sets no cookies. Servers, the domain and the monitoring agent cost money: if the site is useful to you, a coffee makes a difference.',
   'media.title': 'Media and websites', 'media.text': 'Charts can be embedded on your site for free (“Embed” button under each chart), with credit. For a custom version, an election-night package or the data, get in touch.',
   'media.contact': 'Contact:',
@@ -230,3 +232,53 @@ Object.assign(window.I18N.en, {
   'tl.tag': 'Timeline', 'tl.title': 'The campaign in dates', 'tl.desc': 'Declarations, withdrawals, rulings and debates, up to the run-off.',
   'tl.r1': 'Presidential election, round 1', 'tl.r2': 'Presidential election, run-off', 'tl.debate': 'Debate: {t} ({c})'
 });
+
+// ---------- V2 : bascule, baromètre, sondage décrypté ----------
+Object.assign(window.I18N.fr, {
+  'nav.bascule': 'Bascule',
+  'chg.title': 'Les 3 signaux du jour', 'chg.card': 'Image du jour à partager',
+  'bas.tag': 'Détecteur de bascule', 'bas.title': 'Qui bouge vraiment ?',
+  'bas.desc': "Une flèche n'apparaît que si la tendance des cinq dernières semaines sort du bruit statistique (certitude d'au moins 90 %). Tout le reste est stable, même si les chiffres semblent bouger.",
+  'bas.mom': 'Tendance sur 14 jours', 'bas.momDesc': 'Pente des sondages corrigés des effets instituts. Cliquez sur un nom pour l’ajouter à la projection.',
+  'bas.st.up': 'En hausse nette', 'bas.st.down': 'En baisse nette', 'bas.st.flat': 'Stable', 'bas.st.nd': 'Trop peu de sondages',
+  'bas.conf': 'certitude {p} %', 'bas.flat': 'stable', 'bas.nd': 'trop peu testé',
+  'bas.proj': 'Si la tendance continue : projection à 30 jours',
+  'bas.projDesc': "La ligne pointillée prolonge la tendance actuelle, en la freinant peu à peu. La zone colorée contient 8 chances sur 10 du résultat si rien ne change dans la dynamique. Ce n'est pas une prévision.",
+  'bas.lgObs': 'Moyenne observée', 'bas.lgProj': 'Tendance prolongée', 'bas.lgCone': 'Fourchette à 80 %', 'bas.future': 'Projection',
+  'bas.warn': "Projection et probabilités sont des calculs de La Sonde à partir des sondages publiés, pas des sondages. Une campagne change souvent de dynamique : un événement suffit à casser une tendance.",
+  'baro.title': "Baromètre d'incertitude", 'baro.very': 'course très ouverte', 'baro.open': 'course ouverte', 'baro.closed': 'course resserrée',
+  'baro.lo': 'Duel joué d’avance', 'baro.hi': 'Tout est possible',
+  'baro.desc': 'Probabilité que le second tour ne soit <b>pas</b> le duel actuellement en tête des sondages ({a} – {b}, {p} % de chances selon le modèle), si les candidats testés se présentent tous.',
+  'alt.title': 'Bascules possibles', 'alt.rank': '{r}e et {r2}e places', 'alt.gap': 'écart {g} pt', 'alt.conv': 'les courbes se rapprochent',
+  'alt.p': "de chances d'inversion d'ici un mois", 'alt.none': 'Aucune inversion de classement probable dans le mois parmi les candidats régulièrement testés.',
+  'dec.tag': 'Le dernier sondage, décrypté', 'dec.for': 'pour', 'dec.meta': 'Terrain achevé le {d} · {n} personnes · {h} hypothèses testées',
+  'dec.raw': 'Score publié', 'dec.he': 'Effet institut', 'dec.corr': 'Corrigé', 'dec.avg': 'Moyenne', 'dec.avgList': 'Moyenne (même liste)', 'dec.diff': 'Écart',
+  'dec.ok': 'Conforme à la moyenne une fois corrigé', 'dec.out': '{c} {dir} de la moyenne ({d} pt)', 'dec.above': 'au-dessus', 'dec.below': 'en dessous',
+  'dec.newList': 'Liste de candidats inédite : comparaison indicative',
+  'dec.note': "Effet institut : écart habituel de cet institut pour ce candidat, mesuré sur 8 mois. On compare l'hypothèse publiée à la moyenne des sondages qui testent exactement la même liste de candidats. Un écart de plus de 1,5 pt est signalé."
+});
+Object.assign(window.I18N.en, {
+  'nav.bascule': 'Momentum',
+  'chg.title': "Today's 3 signals", 'chg.card': 'Shareable daily card',
+  'bas.tag': 'Momentum detector', 'bas.title': 'Who is really moving?',
+  'bas.desc': 'An arrow appears only when the five-week trend rises above statistical noise (at least 90% confidence). Everything else is stable, even if the numbers seem to move.',
+  'bas.mom': '14-day trend', 'bas.momDesc': 'Slope of polls adjusted for house effects. Click a name to add it to the projection.',
+  'bas.st.up': 'Clearly rising', 'bas.st.down': 'Clearly falling', 'bas.st.flat': 'Stable', 'bas.st.nd': 'Too few polls',
+  'bas.conf': '{p}% confidence', 'bas.flat': 'stable', 'bas.nd': 'rarely polled',
+  'bas.proj': 'If trends continue: 30-day projection',
+  'bas.projDesc': 'The dotted line extends the current trend, slowing it gradually. The shaded area holds 8 in 10 outcomes if the dynamics do not change. This is not a forecast.',
+  'bas.lgObs': 'Observed average', 'bas.lgProj': 'Extended trend', 'bas.lgCone': '80% range', 'bas.future': 'Projection',
+  'bas.warn': 'Projections and odds are La Sonde calculations based on published polls, not polls. Campaigns often change course: one event can break a trend.',
+  'baro.title': 'Uncertainty gauge', 'baro.very': 'wide open race', 'baro.open': 'open race', 'baro.closed': 'tight race',
+  'baro.lo': 'Run-off settled', 'baro.hi': 'Anything can happen',
+  'baro.desc': 'Probability that the run-off will <b>not</b> be the pairing currently leading the polls ({a} – {b}, {p}% chance according to the model), assuming every tested candidate runs.',
+  'alt.title': 'Possible swaps', 'alt.rank': '#{r} and #{r2}', 'alt.gap': '{g}-pt gap', 'alt.conv': 'lines converging',
+  'alt.p': 'chance of trading places within a month', 'alt.none': 'No likely ranking swap within a month among regularly polled candidates.',
+  'dec.tag': 'Latest poll, decoded', 'dec.for': 'for', 'dec.meta': 'Fieldwork ended {d} · {n} respondents · {h} scenarios tested',
+  'dec.raw': 'Published', 'dec.he': 'House effect', 'dec.corr': 'Adjusted', 'dec.avg': 'Average', 'dec.avgList': 'Average (same line-up)', 'dec.diff': 'Gap',
+  'dec.ok': 'In line with the average once adjusted', 'dec.out': '{c} {dir} the average ({d} pts)', 'dec.above': 'above', 'dec.below': 'below',
+  'dec.newList': 'New line-up: comparison is indicative only',
+  'dec.note': "House effect: this pollster's usual gap for this candidate, measured over 8 months. The published scenario is compared with the average of polls testing exactly the same line-up. Gaps above 1.5 pts are flagged."
+});
+Object.assign(window.I18N.fr, { 'gh.vote': 'Vote', 'gh.dm': 'J-{d}', 'gh.last': 'Dernier sondage · J-{d}', 'is.missing': ". Thèmes absents d'une vague : non publiés pour cette vague." });
+Object.assign(window.I18N.en, { 'gh.vote': 'Vote', 'gh.dm': 'D-{d}', 'gh.last': 'Latest poll · {d} days out', 'is.missing': '. Themes missing from a wave were not published for that wave.' });
