@@ -27,19 +27,42 @@ if (cfg.election.blackout.some(b => Date.now() >= Date.parse(b.from) && Date.now
   log('Période de réserve électorale : aucune collecte.'); process.exit(0);
 }
 
+// ---------- Garde-fou budgétaire ----------
+// Coût estimé à partir de l'usage renvoyé par l'API (tarifs dans config.json → agent.prices, en dollars).
+// Au-delà du budget mensuel (agent.monthlyBudgetUsd), l'agent s'arrête jusqu'au mois suivant.
+const PRICES = AG.prices || { inputPerMTok: 1, outputPerMTok: 5, searchPer1000: 10 };
+const MONTH = TODAY.slice(0, 7);
+const spend = state.month === MONTH ? (state.spentUsd || 0) : 0;
+let spent = spend, calls = 0, searches = 0;
+const BUDGET = AG.monthlyBudgetUsd || 4;
+if (spent >= BUDGET) { log(`Budget du mois atteint (${spent.toFixed(2)} $ / ${BUDGET} $) : pause jusqu'au mois prochain.`); process.exit(0); }
+const SUMMARY = [];
+
 async function ask(prompt, maxSearches = 8) {
-  const r = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
-    body: JSON.stringify({
-      model: MODEL, max_tokens: 6000,
-      tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches, allowed_domains: cfg.trustedDomains }],
-      messages: [{ role: 'user', content: prompt }]
-    })
-  });
-  if (!r.ok) throw new Error(`API ${r.status}: ${(await r.text()).slice(0, 300)}`);
-  const j = await r.json();
-  const text = j.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
+  if (spent >= BUDGET) throw new Error('budget mensuel atteint');
+  const messages = [{ role: 'user', content: prompt }];
+  let text = '';
+  for (let turn = 0; turn < 4; turn++) {
+    const r = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json' },
+      body: JSON.stringify({
+        model: MODEL, max_tokens: 6000,
+        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches, allowed_domains: cfg.trustedDomains }],
+        messages
+      })
+    });
+    if (!r.ok) throw new Error(`API ${r.status}: ${(await r.text()).slice(0, 300)}`);
+    const j = await r.json();
+    const u = j.usage || {}, ns = (u.server_tool_use || {}).web_search_requests || 0;
+    calls++; searches += ns;
+    spent += ((u.input_tokens || 0) + (u.cache_creation_input_tokens || 0) + (u.cache_read_input_tokens || 0)) / 1e6 * PRICES.inputPerMTok
+      + (u.output_tokens || 0) / 1e6 * PRICES.outputPerMTok + ns / 1000 * PRICES.searchPer1000;
+    text += j.content.filter(b => b.type === 'text').map(b => b.text).join('\n');
+    // Recherche longue : l'API rend la main (« pause_turn ») ; on la laisse continuer.
+    if (j.stop_reason !== 'pause_turn') break;
+    messages.push({ role: 'assistant', content: j.content });
+  }
   const m = text.match(/<json>([\s\S]*?)<\/json>/);
   if (!m) throw new Error('réponse sans bloc <json>');
   return JSON.parse(m[1]);
@@ -92,7 +115,7 @@ function validate(p) {
 
 async function pollWatch() {
   const prompt = `Tu es analyste pour un agrégateur de sondages. Aujourd'hui : ${TODAY}.
-Cherche les sondages d'INTENTIONS DE VOTE pour l'élection présidentielle française de 2027 (1er ou 2nd tour) dont le terrain s'est terminé dans les 14 derniers jours, réalisés par des instituts reconnus (${cfg.institutes.join(', ')}) et publiés par des médias nationaux (TV, radio, presse).
+Cherche les sondages d'INTENTIONS DE VOTE pour l'élection présidentielle française de 2027 (1er ou 2nd tour) dont le terrain s'est terminé dans les 21 derniers jours, réalisés par des instituts reconnus (${cfg.institutes.join(', ')}) et publiés par des médias nationaux (TV, radio, presse).
 Ignore les sondages commandés par un parti ou un candidat, les sondages « souhait de victoire » et les sondages déjà connus ci-dessous :
 ${[...known.values()].map(s => '- ' + s).join('\n') || '- (aucun)'}
 Pour chaque nouveau sondage, relève EXACTEMENT les chiffres publiés pour CHAQUE hypothèse testée (noms complets des candidats), l'échantillon (nombre d'inscrits interrogés ou, à défaut, de personnes interrogées), les dates de terrain et l'URL de la source primaire.
@@ -103,21 +126,21 @@ Réponds uniquement par un bloc <json>…</json> au format ${SCHEMA}. Si rien de
   let added = 0;
   for (const p of found) {
     const errs = validate(p);
-    if (errs.length) { log('✗ rejeté', p.institute, p.end, errs.join('; ')); continue; }
+    if (errs.length) { log('✗ rejeté', p.institute, p.end, errs.join('; ')); SUMMARY.push(`✗ Rejeté : ${p.institute} ${p.end} (${errs.join('; ')})`); continue; }
     // Double contrôle indépendant.
     const check = await ask(`Vérifie ce relevé de sondage contre sa source (${p.source}) ou la notice de la Commission des sondages. Relevé : ${JSON.stringify(p)}
 Réponds par <json>{"confirmed":true|false,"reason":"…","hypotheses":[{"results":{"Nom Complet":valeur}}]}</json> avec les chiffres tels que publiés.`, AG.verifySearches || 3);
-    if (!check.confirmed) { log('✗ non confirmé', p.institute, p.end, check.reason); continue; }
-    const mismatch = p.hypotheses.some((h, i) => Object.entries(h.results).some(([n, v]) => {
-      const w = check.hypotheses?.[i]?.results?.[n]; return w === undefined || Math.abs(w - v) > 0.5;
-    }));
-    if (mismatch) { log('✗ chiffres divergents entre les deux passages', p.institute, p.end); continue; }
+    if (!check.confirmed) { log('✗ non confirmé', p.institute, p.end, check.reason); SUMMARY.push(`✗ Non confirmé : ${p.institute} ${p.end}`); continue; }
+    // Comparaison par candidat (identifiant), en cherchant pour chaque hypothèse la plus proche dans la vérification.
+    const ver = (check.hypotheses || []).map(h => Object.fromEntries(Object.entries(h.results || {}).map(([n, v]) => [idOf(n), +v]).filter(([id]) => id)));
+    const mismatch = p.hypotheses.some(h => !ver.some(w => Object.entries(h.ids).every(([id, v]) => w[id] !== undefined && Math.abs(w[id] - v) <= 0.5)));
+    if (mismatch) { log('✗ chiffres divergents entre les deux passages', p.institute, p.end); SUMMARY.push(`✗ Chiffres divergents à la vérification : ${p.institute} ${p.end}`); continue; }
     const code = norm(p.institute).slice(0, 2);
     const survey = `${p.start.replace(/-/g, '')}_${p.end.slice(5).replace('-', '')}_${code}_ag${p.round}`;
     if (store.polls.some(x => x.survey === survey)) continue;
     store.polls.push({ survey, institute: p.institute, sponsor: p.sponsor, start: p.start, end: p.end, n: p.n, round: p.round, source: p.source,
       foundAt: TODAY, hypotheses: p.hypotheses.map(h => ({ label: h.label || '', results: h.ids })) });
-    added++; log('✔ ajouté', survey);
+    added++; log('✔ ajouté', survey); SUMMARY.push(`✔ Sondage ajouté : ${p.institute} pour ${p.sponsor}, terrain ${p.start} → ${p.end} (${p.hypotheses.length} hypothèse(s))`);
   }
   // On purge les entrées de plus de 60 jours (la base MieuxVoter a pris le relais).
   store.polls = store.polls.filter(p => toDay(TODAY) - toDay(p.end) <= 60);
@@ -139,7 +162,7 @@ Réponds par <json>{"found":true|false,"date":"YYYY-MM-DD (fin de terrain)","fie
   if (Object.keys(vals).length < 3) { log('Vague incomplète, ignorée.'); return; }
   s.waves.push({ date: res.date, field: res.field, n: res.n, source: res.source, values: vals, agent: true });
   writeJSON(P('data/concerns.json'), C, true);
-  log('✔ nouvelle vague préoccupations', res.date);
+  log('✔ nouvelle vague préoccupations', res.date); SUMMARY.push(`✔ Préoccupations : nouvelle vague du ${res.date}`);
 }
 
 
@@ -160,7 +183,7 @@ Réponds par <json>{"items":[{"name":"Nom Complet","type":"withdrawal","date":"Y
     const chk = await ask(`Vérifie ce fait avec sa source (${it.source}) : ${JSON.stringify(it)}. Réponds par <json>{"confirmed":true|false}</json>.`, 3);
     if (!chk.confirmed) { log('✗ non confirmé', it.name); continue; }
     list.push({ id, date: it.date, fr: it.fr, en: it.en, source: it.source, agent: true }); n++;
-    log('✔ candidature', it.type, it.name, it.date);
+    log('✔ candidature', it.type, it.name, it.date); SUMMARY.push(`✔ Candidature (${it.type}) : ${it.name}, ${it.date}`);
   }
   O.lastCheck = TODAY;
   writeJSON(P('data/overrides.json'), O, true);
@@ -170,4 +193,7 @@ Réponds par <json>{"items":[{"name":"Nom Complet","type":"withdrawal","date":"Y
 try { await pollWatch(); } catch (e) { log('Veille sondages en échec :', e.message); }
 try { await concernsWatch(); } catch (e) { log('Veille préoccupations en échec :', e.message); }
 try { await candidacyWatch(); } catch (e) { log('Veille candidatures en échec :', e.message); }
-writeJSON(STATE_PATH, { ...state, lastRun: TODAY }, true);
+writeJSON(STATE_PATH, { ...state, lastRun: TODAY, month: MONTH, spentUsd: Math.round(spent * 1000) / 1000 }, true);
+const recap = `### Agent de veille — ${TODAY}\n\n${SUMMARY.length ? SUMMARY.map(x => '- ' + x).join('\n') : '- Rien de nouveau.'}\n\n${calls} appel(s), ${searches} recherche(s). Coût estimé ce mois-ci : ${spent.toFixed(2)} $ sur ${BUDGET} $.\n`;
+log(recap.replace(/\n+/g, ' | '));
+if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, recap);
