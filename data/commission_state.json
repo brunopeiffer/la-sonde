@@ -274,7 +274,7 @@
       "pub": "2026-10-18",
       "inst": "YouGov",
       "tries": 1,
-      "status": "pending",
+      "status": "relevée (1 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10323-pres-iv-yougov-le-huffpost-18-octobre.pdf"
     },
     "10324": {
@@ -292,7 +292,7 @@
       "pub": "2026-10-18",
       "inst": "Cluster17",
       "tries": 0,
-      "status": "pending",
+      "status": "relevée (1 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10325-pres-focus-droite-et-centre-cluster17-le-point-18-octobre.pdf"
     },
     "10326": {
@@ -309,7 +309,7 @@
       "pub": "2026-10-20",
       "inst": "IFOP",
       "tries": 0,
-      "status": "pending",
+      "status": "relevée (2 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10327-pres-barometre-election-v7-ifop-20-octobre.pdf"
     },
     "10328": {
@@ -350,7 +350,7 @@
       "pub": "2026-10-23",
       "inst": "Toluna Harris Interactive",
       "tries": 0,
-      "status": "pending",
+      "status": "relevée (2 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10332-pres-iv-toluna-harris-interactive-23-octobre.pdf"
     },
     "10333": {
@@ -359,9 +359,9 @@
       "pub": "2026-10-22",
       "inst": "OpinionWay",
       "tries": 0,
-      "status": "pending",
+      "status": "relevée (2 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10333-pres-iv-opinionway-cnews-22-octobre.pdf"
     }
   },
-  "checked": "2026-10-23T11:32:47.078Z"
+  "checked": "2026-10-23T11:45:32.098Z"
 }

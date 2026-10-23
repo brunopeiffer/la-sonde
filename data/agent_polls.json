@@ -262,6 +262,561 @@
           }
         }
       ]
+    },
+    {
+      "survey": "20261012_1015_yo_ag1",
+      "institute": "YouGov",
+      "sponsor": "Le HuffPost",
+      "start": "2026-10-12",
+      "end": "2026-10-15",
+      "n": 976,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10323-pres-iv-yougov-le-huffpost-18-octobre.pdf",
+      "foundAt": "2026-10-23",
+      "hypotheses": [
+        {
+          "label": "Hypothèse 1",
+          "results": {
+            "BR": 6,
+            "EP": 10,
+            "EZ": 3,
+            "FRo": 3,
+            "GA": 6,
+            "JLM": 15,
+            "MLP": 36,
+            "MT": 6,
+            "NA": 0.5,
+            "NDA": 3,
+            "RG": 12
+          }
+        },
+        {
+          "label": "Hypothèse 2",
+          "results": {
+            "BR": 9,
+            "EZ": 4,
+            "FRo": 3,
+            "GA": 10,
+            "JLM": 15,
+            "MLP": 37,
+            "MT": 6,
+            "NA": 0.5,
+            "NDA": 3,
+            "RG": 14
+          }
+        },
+        {
+          "label": "Hypothèse 3",
+          "results": {
+            "BR": 7,
+            "EZ": 3,
+            "FRo": 3,
+            "EP": 13,
+            "JLM": 15,
+            "MLP": 36,
+            "MT": 6,
+            "NA": 0.5,
+            "NDA": 3,
+            "RG": 13
+          }
+        },
+        {
+          "label": "Hypothèse 4",
+          "results": {
+            "BR": 7,
+            "EP": 15,
+            "EZ": 4,
+            "FRo": 3,
+            "FH": 9,
+            "JLM": 16,
+            "MLP": 37,
+            "MT": 6,
+            "NA": 1,
+            "NDA": 3
+          }
+        },
+        {
+          "label": "Hypothèse 5",
+          "results": {
+            "BR": 5,
+            "EP": 8,
+            "EZ": 4,
+            "FRo": 2,
+            "GA": 6,
+            "JLM": 13,
+            "MLP": 35,
+            "MT": 5,
+            "NA": 0.5,
+            "NDA": 2,
+            "RG": 12,
+            "DL": 4,
+            "DV": 1,
+            "FR": 2
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261014_1015_cl_ag1",
+      "institute": "Cluster17",
+      "sponsor": "Le Point",
+      "start": "2026-10-14",
+      "end": "2026-10-15",
+      "n": 1187,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10325-pres-focus-droite-et-centre-cluster17-le-point-18-octobre.pdf",
+      "foundAt": "2026-10-23",
+      "hypotheses": [
+        {
+          "label": "Hypothèse 1",
+          "results": {
+            "NA": 0.5,
+            "JLM": 18,
+            "FRo": 1.5,
+            "MT": 2,
+            "RG": 11,
+            "EP": 17,
+            "DL": 7,
+            "BR": 7,
+            "NDA": 2,
+            "MLP": 31,
+            "EZ": 3
+          }
+        },
+        {
+          "label": "Hypothèse 2",
+          "results": {
+            "NA": 0.5,
+            "JLM": 20,
+            "FRo": 2,
+            "MT": 2,
+            "RG": 12,
+            "EP": 20,
+            "NDA": 3,
+            "MLP": 35.5,
+            "EZ": 5
+          }
+        },
+        {
+          "label": "Hypothèse 3",
+          "results": {
+            "NA": 1,
+            "JLM": 20,
+            "FRo": 2,
+            "MT": 2,
+            "RG": 16,
+            "BR": 17.5,
+            "NDA": 3,
+            "MLP": 34.5,
+            "EZ": 4
+          }
+        },
+        {
+          "label": "Hypothèse 4",
+          "results": {
+            "NA": 1,
+            "JLM": 20.5,
+            "FRo": 2,
+            "MT": 2,
+            "RG": 16,
+            "DL": 17,
+            "NDA": 2,
+            "MLP": 35.5,
+            "EZ": 4
+          }
+        },
+        {
+          "label": "Hypothèse 5",
+          "results": {
+            "NA": 1,
+            "JLM": 20,
+            "FRo": 2,
+            "MT": 2,
+            "RG": 13.5,
+            "GA": 17,
+            "NDA": 3.5,
+            "MLP": 35.5,
+            "EZ": 5.5
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261017_1019_if_ag1",
+      "institute": "Ifop-Fiducial",
+      "sponsor": "LCI, Le Figaro, Sud Radio",
+      "start": "2026-10-17",
+      "end": "2026-10-19",
+      "n": 1928,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10327-pres-barometre-election-v7-ifop-20-octobre.pdf",
+      "foundAt": "2026-10-23",
+      "hypotheses": [
+        {
+          "label": "Hypothèse avec Edouard Philippe et Gabriel Attal candidats",
+          "results": {
+            "NA": 0.5,
+            "JLM": 16.5,
+            "FRo": 3,
+            "MT": 3,
+            "RG": 13.5,
+            "GA": 5,
+            "EP": 12,
+            "BR": 5,
+            "NDA": 2,
+            "MLP": 36,
+            "EZ": 3.5
+          }
+        },
+        {
+          "label": "Hypothèse avec Edouard Philippe candidat du bloc central",
+          "results": {
+            "NA": 0.5,
+            "JLM": 16.5,
+            "FRo": 2.5,
+            "MT": 3,
+            "RG": 14,
+            "EP": 15,
+            "BR": 7.5,
+            "NDA": 1.5,
+            "MLP": 36,
+            "EZ": 3.5
+          }
+        },
+        {
+          "label": "Hypothèse avec Gabriel Attal candidat du bloc central",
+          "results": {
+            "NA": 0.5,
+            "JLM": 16,
+            "FRo": 2,
+            "MT": 3,
+            "RG": 16,
+            "GA": 13,
+            "BR": 7,
+            "NDA": 1.5,
+            "MLP": 38,
+            "EZ": 3
+          }
+        },
+        {
+          "label": "Hypothèse avec Jean-Luc Mélenchon et Raphaël Glucksmann seuls candidats de gauche",
+          "results": {
+            "NA": 0.5,
+            "JLM": 18,
+            "RG": 16,
+            "EP": 16,
+            "BR": 6.5,
+            "NDA": 2.5,
+            "MLP": 37,
+            "EZ": 3.5
+          }
+        },
+        {
+          "label": "Hypothèse avec Jean-Luc Mélenchon et François Hollande seuls candidats de gauche",
+          "results": {
+            "NA": 0.5,
+            "JLM": 20,
+            "FH": 10,
+            "GA": 6.5,
+            "EP": 14,
+            "BR": 6,
+            "NDA": 2,
+            "MLP": 38,
+            "EZ": 3
+          }
+        },
+        {
+          "label": "Hypothèse avec François Ruffin, Dominique de Villepin et David Lisnard candidats",
+          "results": {
+            "JLM": 15,
+            "FRo": 2,
+            "FR": 1.5,
+            "MT": 2.5,
+            "RG": 12,
+            "GA": 4,
+            "EP": 12,
+            "DV": 1.5,
+            "BR": 5.5,
+            "DL": 5.5,
+            "NDA": 1.5,
+            "MLP": 34,
+            "EZ": 3
+          }
+        },
+        {
+          "label": "Hypothèse avec David Lisnard seul candidat de droite",
+          "results": {
+            "NA": 0.5,
+            "JLM": 15.5,
+            "FRo": 2,
+            "MT": 3,
+            "RG": 13,
+            "GA": 5,
+            "EP": 13,
+            "DL": 7,
+            "NDA": 2,
+            "MLP": 36,
+            "EZ": 3
+          }
+        },
+        {
+          "label": "Hypothèse avec François Ruffin et Natacha Polony candidats",
+          "results": {
+            "NA": 0.5,
+            "JLM": 15,
+            "FRo": 2,
+            "FR": 2,
+            "MT": 3,
+            "RG": 12,
+            "GA": 6,
+            "EP": 12,
+            "BR": 6,
+            "NDA": 2,
+            "MLP": 35,
+            "EZ": 3.5
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261017_1019_if_ag2",
+      "institute": "Ifop-Fiducial",
+      "sponsor": "LCI, Le Figaro, Sud Radio",
+      "start": "2026-10-17",
+      "end": "2026-10-19",
+      "n": 1928,
+      "round": 2,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10327-pres-barometre-election-v7-ifop-20-octobre.pdf",
+      "foundAt": "2026-10-23",
+      "hypotheses": [
+        {
+          "label": "Hypothèse Jean-Luc Mélenchon vs Marine Le Pen",
+          "results": {
+            "JLM": 32,
+            "MLP": 68
+          }
+        },
+        {
+          "label": "Hypothèse Raphaël Glucksmann vs Marine Le Pen",
+          "results": {
+            "RG": 43,
+            "MLP": 57
+          }
+        },
+        {
+          "label": "Hypothèse François Hollande vs Marine Le Pen",
+          "results": {
+            "FH": 41,
+            "MLP": 59
+          }
+        },
+        {
+          "label": "Hypothèse Gabriel Attal vs Marine Le Pen",
+          "results": {
+            "GA": 42,
+            "MLP": 58
+          }
+        },
+        {
+          "label": "Hypothèse Edouard Philippe vs Marine Le Pen",
+          "results": {
+            "EP": 44,
+            "MLP": 56
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261021_1022_op_ag1",
+      "institute": "OpinionWay",
+      "sponsor": "CNews",
+      "start": "2026-10-21",
+      "end": "2026-10-22",
+      "n": 973,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10333-pres-iv-opinionway-cnews-22-octobre.pdf",
+      "foundAt": "2026-10-23",
+      "hypotheses": [
+        {
+          "label": "Hypothèse de base",
+          "results": {
+            "NA": 0.5,
+            "JLM": 16,
+            "FRo": 1,
+            "MT": 1,
+            "RG": 13,
+            "KB": 0.5,
+            "GA": 4,
+            "EP": 12,
+            "BR": 6,
+            "DL": 6,
+            "NDA": 1,
+            "EZ": 4,
+            "MLP": 36
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261021_1022_op_ag2",
+      "institute": "OpinionWay",
+      "sponsor": "CNews",
+      "start": "2026-10-21",
+      "end": "2026-10-22",
+      "n": 973,
+      "round": 2,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10333-pres-iv-opinionway-cnews-22-octobre.pdf",
+      "foundAt": "2026-10-23",
+      "hypotheses": [
+        {
+          "label": "Hypothèse 1 : Jean-Luc Mélenchon contre Marine Le Pen",
+          "results": {
+            "JLM": 31,
+            "MLP": 69
+          }
+        },
+        {
+          "label": "Hypothèse 2 : Édouard Philippe contre Marine Le Pen",
+          "results": {
+            "EP": 44,
+            "MLP": 56
+          }
+        },
+        {
+          "label": "Hypothèse 3 : Raphaël Glucksmann contre Marine Le Pen",
+          "results": {
+            "RG": 44,
+            "MLP": 56
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261019_1021_to_ag1",
+      "institute": "Toluna Harris Interactive",
+      "sponsor": "M6, RTL",
+      "start": "2026-10-19",
+      "end": "2026-10-21",
+      "n": 2094,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10332-pres-iv-toluna-harris-interactive-23-octobre.pdf",
+      "foundAt": "2026-10-23",
+      "hypotheses": [
+        {
+          "label": "Hypothèse Édouard Philippe, Dominique de Villepin et David Lisnard",
+          "results": {
+            "NA": 1,
+            "JLM": 17,
+            "FRo": 2,
+            "MT": 2,
+            "RG": 12,
+            "EP": 15,
+            "DV": 1,
+            "DL": 7,
+            "BR": 4,
+            "NDA": 1,
+            "MLP": 33,
+            "EZ": 5
+          }
+        },
+        {
+          "label": "Hypothèse Gabriel Attal, Dominique de Villepin et David Lisnard",
+          "results": {
+            "NA": 1,
+            "JLM": 17,
+            "FRo": 2,
+            "MT": 2,
+            "RG": 14,
+            "GA": 10,
+            "DV": 2,
+            "DL": 8,
+            "BR": 5,
+            "NDA": 1,
+            "MLP": 33,
+            "EZ": 5
+          }
+        },
+        {
+          "label": "Hypothèse Gabriel Attal et Édouard Philippe",
+          "results": {
+            "NA": 1,
+            "JLM": 17,
+            "FRo": 1,
+            "MT": 2,
+            "RG": 12,
+            "GA": 5,
+            "EP": 13,
+            "BR": 6,
+            "NDA": 2,
+            "MLP": 35,
+            "EZ": 6
+          }
+        },
+        {
+          "label": "Hypothèse Édouard Philippe candidat unique du centre",
+          "results": {
+            "NA": 1,
+            "JLM": 17,
+            "FRo": 2,
+            "MT": 2,
+            "RG": 13,
+            "EP": 16,
+            "BR": 7,
+            "NDA": 2,
+            "MLP": 35,
+            "EZ": 5
+          }
+        },
+        {
+          "label": "Hypothèse Gabriel Attal candidat unique du centre",
+          "results": {
+            "NA": 1,
+            "JLM": 19,
+            "FRo": 2,
+            "MT": 2,
+            "RG": 13,
+            "GA": 11,
+            "BR": 9,
+            "NDA": 2,
+            "MLP": 35,
+            "EZ": 6
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261019_1021_to_ag2",
+      "institute": "Toluna Harris Interactive",
+      "sponsor": "M6, RTL",
+      "start": "2026-10-19",
+      "end": "2026-10-21",
+      "n": 2094,
+      "round": 2,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10332-pres-iv-toluna-harris-interactive-23-octobre.pdf",
+      "foundAt": "2026-10-23",
+      "hypotheses": [
+        {
+          "label": "Hypothèse Jean-Luc Mélenchon",
+          "results": {
+            "JLM": 30,
+            "MLP": 70
+          }
+        },
+        {
+          "label": "Hypothèse Raphaël Glucksmann",
+          "results": {
+            "RG": 41,
+            "MLP": 59
+          }
+        },
+        {
+          "label": "Hypothèse Édouard Philippe",
+          "results": {
+            "EP": 43,
+            "MLP": 57
+          }
+        }
+      ]
     }
   ]
 }
