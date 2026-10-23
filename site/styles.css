@@ -506,3 +506,16 @@ a.clink:hover b, .prow a.nm:hover span { text-decoration: underline; text-underl
 .cdbar u{position:absolute;left:50%;top:0;bottom:0;border-left:2px dashed rgba(0,0,0,.45)}
 .cev{margin:8px 0 0;padding-left:18px;font-size:14px;line-height:1.6}
 .cpage .sharerow{margin:0 0 18px}
+
+/* Solidité du vote */
+.so-key{font-size:15px;margin:0 0 16px;color:var(--ink-2)}
+.so-row{display:grid;grid-template-columns:130px 1fr 150px;gap:12px;align-items:center;padding:7px 0;border-bottom:1px dashed var(--line)}
+.so-n{font-weight:700;font-size:14px;display:flex;align-items:center;gap:7px}.so-n i{width:9px;height:9px;border-radius:50%}
+.so-bar{display:flex;height:20px;align-items:stretch}
+.so-bar b{border-radius:6px 0 0 6px}
+.so-bar s{border-radius:0 6px 6px 0;background:repeating-linear-gradient(135deg,var(--c) 0 3px,transparent 3px 7px);opacity:.55;outline:1.5px solid color-mix(in srgb,var(--c) 45%,transparent);outline-offset:-1.5px}
+.so-v{font-size:13px;text-align:right}.so-v b{font-size:15px}.so-v small{display:block;color:var(--muted);font-size:12px}
+.so-lg{display:flex;gap:18px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin:12px 0 4px}
+.so-lg span{display:inline-flex;gap:6px;align-items:center}.so-lg i{width:18px;height:10px;border-radius:3px;display:inline-block}
+.so-lg i.a{background:var(--ink-2)}.so-lg i.b{background:repeating-linear-gradient(135deg,var(--ink-2) 0 3px,transparent 3px 7px);opacity:.6}
+@media (max-width:640px){.so-row{grid-template-columns:92px 1fr 96px;gap:8px}.so-v small{font-size:11px}}

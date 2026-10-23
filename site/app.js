@@ -606,6 +606,21 @@
     $('#byElec').innerHTML = `<ul>${st.byElectorate.map(e => `<li><b>${esc(tr(e.who))}</b> : ${esc(tr(e.themes))}</li>`).join('')}</ul><p class="meta">${esc(tr(st.label))}</p>`;
   }
 
+  // ---------- Solidité du vote : part des électeurs sûrs de leur choix (Elabe), appliquée à la moyenne ----------
+  function renderSolid() {
+    const CT = D.certainty, sec = $('#solidite');
+    if (!CT || !CT.waves || !CT.waves.length) { sec.hidden = true; return; }
+    const w = CT.waves[CT.waves.length - 1];
+    const rows = D.standings.filter(s => w.sure[s.c] != null).map(s => ({ c: s.c, v: s.v, sure: w.sure[s.c], hard: s.v * w.sure[s.c] / 100 }));
+    const max = Math.max(...rows.map(r => r.v));
+    const soft = [...rows].sort((a, b) => (b.v - b.hard) - (a.v - a.hard))[0];
+    $('#soIntro').innerHTML = `<p class="so-key">${t('so.key', { a: fmt(w.all, 0), b: fmt(100 - w.all, 0) })} ${soft ? t('so.most', { n: esc(nm(soft.c)), p: fmt(100 - soft.sure, 0), v: fmt(soft.v - soft.hard) }) : ''}</p>`;
+    $('#soRows').innerHTML = rows.map(r => `<div class="so-row"><span class="so-n"><i style="background:${col(r.c)}"></i>${esc(sh(r.c))}</span>
+      <div class="so-bar"><b style="width:${r.hard / max * 100}%;background:${col(r.c)}"></b><s style="width:${(r.v - r.hard) / max * 100}%;--c:${col(r.c)}"></s></div>
+      <span class="so-v"><b>${fmt(r.hard)}</b> + ${fmt(r.v - r.hard)}<small>${t('so.sure', { p: fmt(r.sure, 0) })}</small></span></div>`).join('');
+    $('#soSrc').innerHTML = t('so.src', { inst: esc(w.inst), sp: esc(w.sponsor), f: esc(tr(w.field)), n: w.n.toLocaleString(loc()), h: esc(tr(w.hyp)), u: esc(w.url) });
+  }
+
   // ---------- Liste des sondages + effets instituts ----------
   let showAll = false;
   function renderPolls() {
@@ -728,7 +743,7 @@
   function renderAll() {
     pct = pctOf();
     renderStatic(); renderHero(); renderFiches(); renderChanges(); renderBascule(); drawProj(); renderDecoded(); renderRaceControls(); drawRace(); renderTable(); renderProba(); drawGhosts();
-    renderTransfers(); renderWhatIf(); renderDuels(); renderSim(); renderGap(); renderConcerns(); renderPolls();
+    renderTransfers(); renderWhatIf(); renderDuels(); renderSim(); renderGap(); renderConcerns(); renderSolid(); renderPolls();
     renderSupport(); renderQuiz(); renderInstitutes(); renderTimeline(); renderEmbeds(); applyFeatures();
     if (window.Debate) window.Debate.render({ D, lang, t, tr, loc, pct: () => pct, col, nm, sh, fmt, esc, css, tipFor });
   }

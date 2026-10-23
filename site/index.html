@@ -9,9 +9,9 @@
 <link rel="canonical" href="https://la-sonde.fr/">
 <meta property="og:url" content="https://la-sonde.fr/">
 <meta property="og:site_name" content="La Sonde">
-<script type="application/ld+json" id="ldjson">[{"@context":"https://schema.org","@type":"WebSite","name":"La Sonde","url":"https://la-sonde.fr/","inLanguage":["fr","en","de","es","it"]},{"@context":"https://schema.org","@type":"Dataset","name":"Moyenne des sondages de l'élection présidentielle française de 2027","description":"Moyenne quotidienne des intentions de vote au premier tour, corrigée des effets instituts, avec tendances et probabilités de qualification.","url":"https://la-sonde.fr/","creator":{"@type":"Person","name":"Bruno Peiffer"},"dateModified":"2026-10-15","license":"https://opensource.org/licenses/MIT","isBasedOn":"https://github.com/MieuxVoter/presidentielle2027","temporalCoverage":"2025/2027","spatialCoverage":"France","variableMeasured":[{"@type":"PropertyValue","name":"Marine Le Pen","value":34.8,"unitText":"%"},{"@type":"PropertyValue","name":"Jean-Luc Mélenchon","value":17,"unitText":"%"},{"@type":"PropertyValue","name":"Édouard Philippe","value":17,"unitText":"%"},{"@type":"PropertyValue","name":"Raphaël Glucksmann","value":11.3,"unitText":"%"},{"@type":"PropertyValue","name":"Gabriel Attal","value":9.9,"unitText":"%"},{"@type":"PropertyValue","name":"Bruno Retailleau","value":8.1,"unitText":"%"},{"@type":"PropertyValue","name":"François Hollande","value":6.8,"unitText":"%"},{"@type":"PropertyValue","name":"Éric Zemmour","value":3.9,"unitText":"%"},{"@type":"PropertyValue","name":"Marine Tondelier","value":3.5,"unitText":"%"},{"@type":"PropertyValue","name":"David Lisnard","value":3.4,"unitText":"%"}]}]</script>
-<meta property="og:title" content="Présidentielle 2027 : Le Pen 35 %, Mélenchon 17 %, Philippe 17 % (moyenne des sondages au 15 octobre 2026)">
-<meta property="og:description" content="Le second tour se joue à un fil : Jean-Luc Mélenchon et Édouard Philippe sont séparés de 0,0 pt. Si les tendances se prolongent, 49 % de chances qu&#39;ils s&#39;inversent d&#39;ici un mois.">
+<script type="application/ld+json" id="ldjson">[{"@context":"https://schema.org","@type":"WebSite","name":"La Sonde","url":"https://la-sonde.fr/","inLanguage":["fr","en","de","es","it"]},{"@context":"https://schema.org","@type":"Dataset","name":"Moyenne des sondages de l'élection présidentielle française de 2027","description":"Moyenne quotidienne des intentions de vote au premier tour, corrigée des effets instituts, avec tendances et probabilités de qualification.","url":"https://la-sonde.fr/","creator":{"@type":"Person","name":"Bruno Peiffer"},"dateModified":"2026-10-22","license":"https://opensource.org/licenses/MIT","isBasedOn":"https://github.com/MieuxVoter/presidentielle2027","temporalCoverage":"2025/2027","spatialCoverage":"France","variableMeasured":[{"@type":"PropertyValue","name":"Marine Le Pen","value":35.3,"unitText":"%"},{"@type":"PropertyValue","name":"Jean-Luc Mélenchon","value":16.8,"unitText":"%"},{"@type":"PropertyValue","name":"Édouard Philippe","value":13.9,"unitText":"%"},{"@type":"PropertyValue","name":"Raphaël Glucksmann","value":13.2,"unitText":"%"},{"@type":"PropertyValue","name":"François Hollande","value":8,"unitText":"%"},{"@type":"PropertyValue","name":"Gabriel Attal","value":7.2,"unitText":"%"},{"@type":"PropertyValue","name":"Bruno Retailleau","value":6.9,"unitText":"%"},{"@type":"PropertyValue","name":"David Lisnard","value":6.7,"unitText":"%"},{"@type":"PropertyValue","name":"Éric Zemmour","value":4.1,"unitText":"%"},{"@type":"PropertyValue","name":"Marine Tondelier","value":2.8,"unitText":"%"}]}]</script>
+<meta property="og:title" content="Présidentielle 2027 : Le Pen 35 %, Mélenchon 17 %, Philippe 14 % (moyenne des sondages au 22 octobre 2026)">
+<meta property="og:description" content="Duel serré pour la 3e place : Édouard Philippe et Raphaël Glucksmann sont séparés de 0,7 pt. Si les tendances se prolongent, 95 % de chances qu&#39;ils s&#39;inversent d&#39;ici un mois.">
 <meta property="og:image" content="https://la-sonde.fr/share/carte-du-jour.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=mvl2fuvt">
+<link rel="stylesheet" href="styles.css?v=mvlfhzps">
 <link rel="alternate" hreflang="fr" href="https://la-sonde.fr/">
 <link rel="alternate" hreflang="en" href="https://la-sonde.fr/?lang=en">
 <link rel="alternate" hreflang="de" href="https://la-sonde.fr/?lang=de">
@@ -53,6 +53,7 @@
         <a href="#bascule" data-i18n="nav.bascule" class="p"></a>
         <a href="#etsi" data-i18n="nav.whatif" class="p"></a>
         <a href="#second" data-i18n="nav.round2" class="p"></a>
+        <a href="#solidite" data-i18n="nav.solid"></a>
         <a href="#candidats" data-i18n="nav.cands" class="p"></a>
         <a href="#proba" data-i18n="nav.proba"></a>
         <a href="#fantomes" data-i18n="nav.ghosts"></a>
@@ -92,7 +93,7 @@
     <div class="changes" id="changes"></div>
     <details class="read sumd">
       <summary><span data-i18n="sum.title"></span></summary>
-      <ul id="summary"><li>Marine Le Pen reste en tête de la moyenne des sondages avec 34,8 % (+0,6 pt en 30 jours).</li><li>Pour la deuxième place, Jean-Luc Mélenchon (17,0 %) devance Édouard Philippe (17,0 %) : un écart de 0,0 pt, trop faible pour être significatif.</li><li>Mouvement le plus marqué sur un mois : François Ruffin (−1,6 pt).</li><li>Probabilité de qualification au second tour estimée par le modèle, si les candidats testés se présentent : Marine Le Pen 95,5 %, Jean-Luc Mélenchon 49,4 %, Édouard Philippe 26,2 %.</li><li>2 enquêtes publiées sur les 7 derniers jours. Dernière : YouGov pour Le HuffPost (terrain achevé le 15 octobre 2026).</li></ul>
+      <ul id="summary"><li>Marine Le Pen reste en tête de la moyenne des sondages avec 35,3 % (+0,8 pt en 30 jours).</li><li>Pour la deuxième place, Jean-Luc Mélenchon (16,8 %) devance Édouard Philippe (13,9 %) : un écart de 2,9 pt, statistiquement net.</li><li>Mouvement le plus marqué sur un mois : Gabriel Attal (−3,0 pt).</li><li>Probabilité de qualification au second tour estimée par le modèle, si les candidats testés se présentent : Marine Le Pen 95,7 %, Jean-Luc Mélenchon 48,5 %, Édouard Philippe 24,9 %.</li><li>5 enquêtes publiées sur les 7 derniers jours. Dernière : OpinionWay pour CNews (terrain achevé le 22 octobre 2026).</li></ul>
       <div class="meta" id="sumMeta"></div>
     </details>
   </section>
@@ -132,9 +133,14 @@
     </div>
   </section>
 
+  <section id="solidite">
+    <div class="sh"><div><div class="tag" data-i18n="so.tag"></div><h2 data-i18n="so.title"></h2><p data-i18n="so.desc"></p></div></div>
+    <div class="card"><div id="soIntro"></div><div id="soRows"></div><div class="so-lg"><span><i class="a"></i><span data-i18n="so.lgSure"></span></span><span><i class="b"></i><span data-i18n="so.lgSoft"></span></span></div><p class="note" id="soSrc"></p></div>
+  </section>
+
   <section id="candidats">
     <div class="sh"><div><div class="tag" data-i18n="cf.tag"></div><h2 data-i18n="cf.title"></h2><p data-i18n="cf.desc"></p></div></div>
-    <div class="cfiches" id="cfiches"><a class="cfiche" href="candidat/marine-le-pen/">Sondages Marine Le Pen : 34,8 %</a><a class="cfiche" href="candidat/jean-luc-melenchon/">Sondages Jean-Luc Mélenchon : 17,0 %</a><a class="cfiche" href="candidat/edouard-philippe/">Sondages Édouard Philippe : 17,0 %</a><a class="cfiche" href="candidat/raphael-glucksmann/">Sondages Raphaël Glucksmann : 11,3 %</a><a class="cfiche" href="candidat/gabriel-attal/">Sondages Gabriel Attal : 9,9 %</a><a class="cfiche" href="candidat/bruno-retailleau/">Sondages Bruno Retailleau : 8,1 %</a><a class="cfiche" href="candidat/francois-hollande/">Sondages François Hollande : 6,8 %</a><a class="cfiche" href="candidat/eric-zemmour/">Sondages Éric Zemmour : 3,9 %</a><a class="cfiche" href="candidat/marine-tondelier/">Sondages Marine Tondelier : 3,5 %</a><a class="cfiche" href="candidat/david-lisnard/">Sondages David Lisnard : 3,4 %</a><a class="cfiche" href="candidat/francois-ruffin/">Sondages François Ruffin : 3,0 %</a><a class="cfiche" href="candidat/fabien-roussel/">Sondages Fabien Roussel : 2,3 %</a><a class="cfiche" href="candidat/nicolas-dupont-aignan/">Sondages Nicolas Dupont-Aignan : 2,1 %</a><a class="cfiche" href="candidat/nathalie-arthaud/">Sondages Nathalie Arthaud : 0,9 %</a></div>
+    <div class="cfiches" id="cfiches"><a class="cfiche" href="candidat/marine-le-pen/">Sondages Marine Le Pen : 35,3 %</a><a class="cfiche" href="candidat/jean-luc-melenchon/">Sondages Jean-Luc Mélenchon : 16,8 %</a><a class="cfiche" href="candidat/edouard-philippe/">Sondages Édouard Philippe : 13,9 %</a><a class="cfiche" href="candidat/raphael-glucksmann/">Sondages Raphaël Glucksmann : 13,2 %</a><a class="cfiche" href="candidat/francois-hollande/">Sondages François Hollande : 8,0 %</a><a class="cfiche" href="candidat/gabriel-attal/">Sondages Gabriel Attal : 7,2 %</a><a class="cfiche" href="candidat/bruno-retailleau/">Sondages Bruno Retailleau : 6,9 %</a><a class="cfiche" href="candidat/david-lisnard/">Sondages David Lisnard : 6,7 %</a><a class="cfiche" href="candidat/eric-zemmour/">Sondages Éric Zemmour : 4,1 %</a><a class="cfiche" href="candidat/marine-tondelier/">Sondages Marine Tondelier : 2,8 %</a><a class="cfiche" href="candidat/francois-ruffin/">Sondages François Ruffin : 2,1 %</a><a class="cfiche" href="candidat/nicolas-dupont-aignan/">Sondages Nicolas Dupont-Aignan : 2,0 %</a><a class="cfiche" href="candidat/fabien-roussel/">Sondages Fabien Roussel : 1,8 %</a><a class="cfiche" href="candidat/nathalie-arthaud/">Sondages Nathalie Arthaud : 0,7 %</a></div>
   </section>
 
   <section id="etsi">
@@ -269,11 +275,11 @@
 </footer>
 
 <script src="vendor/d3.min.js"></script>
-<script src="i18n.js?v=mvl2fuvt"></script>
-<script src="i18n-de.js?v=mvl2fuvt"></script>
-<script src="i18n-es.js?v=mvl2fuvt"></script>
-<script src="i18n-it.js?v=mvl2fuvt"></script>
-<script src="debate.js?v=mvl2fuvt"></script>
-<script src="app.js?v=mvl2fuvt"></script>
+<script src="i18n.js?v=mvlfhzps"></script>
+<script src="i18n-de.js?v=mvlfhzps"></script>
+<script src="i18n-es.js?v=mvlfhzps"></script>
+<script src="i18n-it.js?v=mvlfhzps"></script>
+<script src="debate.js?v=mvlfhzps"></script>
+<script src="app.js?v=mvlfhzps"></script>
 </body>
 </html>
