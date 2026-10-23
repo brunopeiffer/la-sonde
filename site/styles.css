@@ -535,3 +535,23 @@ body:not([data-view="accueil"]) .hero{display:none}
 .tile span{display:block;font-size:13.5px;color:var(--ink-2);line-height:1.45}
 details.fold{margin-top:16px}details.fold>summary{cursor:pointer;font-weight:800;font-size:15px;padding:8px 0;color:var(--accent)}
 main section[data-view]{scroll-margin-top:130px}
+/* Tuiles « Explorer » : la tuile survolée passe au dégradé de la marque, les autres s'effacent un peu */
+.tile{position:relative;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,opacity .18s ease,border-color .18s ease}
+.tile::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,#5b2cff,#ff3d7f 60%,#ff8a00);opacity:0;transition:opacity .18s ease;z-index:0}
+.tile::after{content:"→";position:absolute;right:16px;top:14px;font:800 20px var(--display);color:#fff;opacity:0;transform:translateX(-6px);transition:opacity .18s ease,transform .18s ease;z-index:1}
+.tile b,.tile span{position:relative;z-index:1;transition:color .18s ease}
+.tile:hover,.tile:focus-visible{transform:translateY(-4px) scale(1.02);box-shadow:0 14px 30px -12px rgba(91,44,255,.55);border-color:transparent;outline:none}
+.tile:hover::before,.tile:focus-visible::before{opacity:1}
+.tile:hover::after,.tile:focus-visible::after{opacity:1;transform:none}
+.tile:hover b,.tile:hover span,.tile:focus-visible b,.tile:focus-visible span{color:#fff}
+@media (hover:hover){.tiles:hover .tile:not(:hover){opacity:.6}}
+/* Fiches candidats : au survol, la carte prend la couleur du candidat, les autres s'effacent */
+.cfiche{position:relative;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,opacity .18s ease,background-color .18s ease}
+.cfiche>*{position:relative;z-index:1;transition:color .18s ease}
+.cfiche::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,var(--c),color-mix(in srgb,var(--c) 70%,#000));opacity:0;transition:opacity .18s ease;z-index:0}
+.cfiche:hover,.cfiche:focus-visible{transform:translateY(-4px) scale(1.03);box-shadow:0 14px 30px -12px color-mix(in srgb,var(--c) 70%,transparent);outline:none}
+.cfiche:hover::before,.cfiche:focus-visible::before{opacity:1}
+.cfiche:hover .cf-nm,.cfiche:hover b,.cfiche:hover .cf-pt,.cfiche:hover .cf-go,
+.cfiche:focus-visible .cf-nm,.cfiche:focus-visible b,.cfiche:focus-visible .cf-pt,.cfiche:focus-visible .cf-go{color:#fff}
+.cfiche:hover .cf-nm i,.cfiche:focus-visible .cf-nm i{background:#fff}
+@media (hover:hover){.cfiches:hover .cfiche:not(:hover){opacity:.6}}
