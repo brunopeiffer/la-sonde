@@ -361,7 +361,31 @@
       "tries": 0,
       "status": "relevée (2 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10333-pres-iv-opinionway-cnews-22-octobre.pdf"
+    },
+    "10334": {
+      "fid": "2353",
+      "title": "10334 Pres aides sociales CSA Cnews 22 octobre",
+      "pub": "2026-10-22",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10335": {
+      "fid": "2354",
+      "title": "10335 Pres etat urgence CSA Cnews 22 octobre",
+      "pub": "2026-10-22",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10336": {
+      "fid": "2355",
+      "title": "10336 Pres immigration violences urbaines CSA Cnews 22 octobre",
+      "pub": "2026-10-22",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-10-23T11:45:32.098Z"
+  "checked": "2026-10-23T13:35:54.414Z"
 }
