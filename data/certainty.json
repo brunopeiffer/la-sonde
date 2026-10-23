@@ -1,0 +1,37 @@
+{
+  "_note": "Sûreté du choix : « Et diriez-vous que vous êtes sûr(e) de votre choix ou que vous pourriez changer d'avis d'ici à l'élection ? » Base : intentions de vote au 1er tour (probabilité d'aller voter 8 à 10), configuration 1. À mettre à jour à chaque vague Elabe.",
+  "waves": [
+    {
+      "inst": "Elabe",
+      "sponsor": "BFMTV, La Tribune Dimanche",
+      "field": {
+        "fr": "14-16 octobre 2026",
+        "en": "14-16 October 2026",
+        "de": "14.–16. Oktober 2026",
+        "es": "14-16 de octubre de 2026",
+        "it": "14-16 ottobre 2026"
+      },
+      "end": "2026-10-16",
+      "n": 1553,
+      "hyp": {
+        "fr": "configuration 1 : Tondelier, Philippe et Villepin candidats",
+        "en": "line-up 1: Tondelier, Philippe and Villepin running",
+        "de": "Liste 1: Tondelier, Philippe und Villepin",
+        "es": "lista 1: Tondelier, Philippe y Villepin candidatos",
+        "it": "lista 1: Tondelier, Philippe e Villepin candidati"
+      },
+      "url": "https://elabe.fr/fichier-pdf/13329-les-francais-et-lelection-presidentielle-2027/",
+      "sure": {
+        "MLP": 79,
+        "JLM": 76,
+        "EZ": 67,
+        "RG": 39,
+        "EP": 38,
+        "BR": 37,
+        "DV": 35,
+        "MT": 28
+      },
+      "all": 54
+    }
+  ]
+}
