@@ -156,11 +156,18 @@ function validate(p) {
   if (![1, 2].includes(p.round)) errs.push('tour invalide');
   if (!Array.isArray(p.hypotheses) || !p.hypotheses.length) errs.push('aucune hypothèse');
   for (const h of p.hypotheses || []) {
-    const ids = {};
+    const ids = {}, unknown = [];
     for (const [name, v] of Object.entries(h.results || {})) {
-      const id = idOf(name); if (!id) { errs.push(`candidat inconnu : ${name}`); continue; }
       if (!(v >= 0 && v <= 80)) errs.push(`valeur invalide ${name}`);
+      const id = idOf(name);
+      if (!id) { unknown.push([name, +v]); continue; }
       ids[id] = +v;
+    }
+    // Candidat absent de la base (ex. personnalité testée pour la première fois) : au 1er tour, on garde
+    // l'hypothèse sans lui s'il pèse peu (≤ 5 %) ; les autres scores restent ceux publiés.
+    if (unknown.length) {
+      if (p.round === 1 && unknown.every(([, v]) => v <= 5)) (p.dropped ||= []).push(...unknown.map(([n, v]) => `${n} (${v} %)`));
+      else errs.push(`candidat inconnu : ${unknown.map(([n]) => n).join(', ')}`);
     }
     const s = Object.values(ids).reduce((a, b) => a + b, 0);
     if (p.round === 1 && (s < 85 || s > 103 || Object.keys(ids).length < 5)) errs.push(`total hypothèse ${s}`);
@@ -172,24 +179,24 @@ function validate(p) {
 
 // Contrôle, double vérification et enregistrement d'une liste de sondages relevés.
 async function addPolls(found, verify) {
-  let added = 0;
+  let added = 0; addPolls.failed = 0;
   for (const p of found) {
     const errs = validate(p);
-    if (errs.length) { log('✗ rejeté', p.institute, p.end, errs.join('; ')); SUMMARY.push(`✗ Rejeté : ${p.institute} ${p.end} (${errs.join('; ')})`); continue; }
+    if (errs.length) { addPolls.failed++; log('✗ rejeté', p.institute, p.end, errs.join('; ')); SUMMARY.push(`✗ Rejeté : ${p.institute} ${p.end} (${errs.join('; ')})`); continue; }
     // Double contrôle indépendant.
     const check = await verify(p);
-    if (!check.confirmed) { log('✗ non confirmé', p.institute, p.end, check.reason); SUMMARY.push(`✗ Non confirmé : ${p.institute} ${p.end} (${p.round === 2 ? '2nd' : '1er'} tour)${check.reason ? ' — ' + check.reason : ''}`); continue; }
+    if (!check.confirmed) { addPolls.failed++; log('✗ non confirmé', p.institute, p.end, check.reason); SUMMARY.push(`✗ Non confirmé : ${p.institute} ${p.end} (${p.round === 2 ? '2nd' : '1er'} tour)${check.reason ? ' — ' + check.reason : ''}`); continue; }
     // Comparaison par candidat (identifiant), en cherchant pour chaque hypothèse la plus proche dans la vérification.
     const ver = (check.hypotheses || []).map(h => Object.fromEntries(Object.entries(h.results || {}).map(([n, v]) => [idOf(n), +v]).filter(([id]) => id)));
     const mismatch = p.hypotheses.some(h => !ver.some(w => Object.entries(h.ids).every(([id, v]) => w[id] !== undefined && Math.abs(w[id] - v) <= 0.5)));
-    if (mismatch) { log('✗ chiffres divergents entre les deux passages', p.institute, p.end); SUMMARY.push(`✗ Chiffres divergents à la vérification : ${p.institute} ${p.end}`); continue; }
+    if (mismatch) { addPolls.failed++; log('✗ chiffres divergents entre les deux passages', p.institute, p.end); SUMMARY.push(`✗ Chiffres divergents à la vérification : ${p.institute} ${p.end}`); continue; }
     const code = norm(p.institute).slice(0, 2);
     const survey = `${p.start.replace(/-/g, '')}_${p.end.slice(5).replace('-', '')}_${code}_ag${p.round}`;
     if (store.polls.some(x => x.survey === survey)) continue;
     store.polls.push({ survey, institute: p.institute, sponsor: p.sponsor, start: p.start, end: p.end, n: p.n, round: p.round, source: p.source,
       foundAt: TODAY, hypotheses: p.hypotheses.map(h => ({ label: h.label || '', results: h.ids })) });
     known.set(survey, `${p.institute} (${p.sponsor}), terrain ${p.start} → ${p.end}`);
-    added++; log('✔ ajouté', survey); SUMMARY.push(`✔ Sondage ajouté : ${p.institute} pour ${p.sponsor}, terrain ${p.start} → ${p.end}, ${p.round === 2 ? '2nd' : '1er'} tour (${p.hypotheses.length} hypothèse(s))`);
+    added++; log('✔ ajouté', survey); SUMMARY.push(`✔ Sondage ajouté : ${p.institute} pour ${p.sponsor}, terrain ${p.start} → ${p.end}, ${p.round === 2 ? '2nd' : '1er'} tour (${p.hypotheses.length} hypothèse(s))${p.dropped ? ` — non suivi(s) dans la base : ${[...new Set(p.dropped)].join(', ')}` : ''}`);
   }
   store.polls = store.polls.filter(p => toDay(TODAY) - toDay(p.end) <= 60);
   writeJSON(P('data/agent_polls.json'), store, true);
@@ -218,7 +225,9 @@ Réponds uniquement par un bloc <json>…</json> au format ${SCHEMA}.` }], 0, 0)
       if (!found.length) { s.status = 'sans intentions de vote'; SUMMARY.push(`· Notice ${num} (${s.title}) : pas d'intentions de vote${res.none ? ' — ' + res.none : ''}`); continue; }
       const added = await addPolls(found, p => ask([...doc, { type: 'text', text: `${head}
 Vérifie, chiffre par chiffre, ce relevé de sondage par rapport au document ci-dessus (résultats publiés). Relevé : ${JSON.stringify(p)}
+Conventions du relevé (ce ne sont PAS des erreurs) : « < 1 % » ou « moins de 1 % » est relevé 0.5 ; « 2 % ou moins » est relevé 1 ; les lignes abstention, blancs, « ne se prononcent pas » ou « sans intention de vote » sont volontairement exclues ; un candidat absent de la base peut avoir été retiré du relevé. Ne refuse que si un chiffre relevé diffère du document, ou si les métadonnées sont fausses.
 Réponds par <json>{"confirmed":true|false,"reason":"…","hypotheses":[{"results":{"Nom Complet":valeur}}]}</json> avec les chiffres tels que publiés dans le document.` }], 0, 0));
+      if (!added && addPolls.failed) { s.tries = (s.tries || 0) + 1; SUMMARY.push(`… Notice ${num} : à réessayer au prochain passage (essai ${s.tries}/3)`); if (s.tries >= 3) s.status = 'abandonnée après 3 essais'; continue; }
       s.status = added ? `relevée (${added} sondage(s) ajouté(s))` : 'relevée, rien de nouveau';
       SUMMARY.push(`${added ? '✔' : '·'} Notice ${num} (${s.title}) : ${s.status}`);
     } catch (e) {
@@ -258,6 +267,7 @@ Réponds uniquement par un bloc <json>…</json> au format ${SCHEMA}. Si rien de
   log(`${found.length} sondage(s) candidat(s)`);
   SUMMARY.push(`Recherche : ${found.length} sondage(s) récent(s) non encore dans la base${found.length ? ' : ' + found.map(p => `${p.institute} (${p.end}, ${p.round === 2 ? '2nd' : '1er'} tour)`).join(', ') : ''}.`);
   const added = await addPolls(found, p => ask(`Vérifie ce relevé de sondage en ouvrant directement sa source avec web_fetch (${p.source}) ou la notice de la Commission des sondages. Relevé : ${JSON.stringify(p)}
+Conventions du relevé (ce ne sont PAS des erreurs) : « < 1 % » ou « moins de 1 % » est relevé 0.5 ; « 2 % ou moins » est relevé 1 ; les lignes abstention, blancs, « ne se prononcent pas » ou « sans intention de vote » sont volontairement exclues ; un candidat absent de la base peut avoir été retiré du relevé. Ne refuse que si un chiffre relevé diffère du document, ou si les métadonnées sont fausses.
 Réponds par <json>{"confirmed":true|false,"reason":"…","hypotheses":[{"results":{"Nom Complet":valeur}}]}</json> avec les chiffres tels que publiés.`, AG.verifySearches ?? 1, AG.verifyFetches ?? 1));
   // On purge les entrées de plus de 60 jours (la base MieuxVoter a pris le relais).
   store.polls = store.polls.filter(p => toDay(TODAY) - toDay(p.end) <= 60);
