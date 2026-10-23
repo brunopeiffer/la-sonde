@@ -138,5 +138,13 @@
   "x": {
     "maxPerMonth": 12,
     "link": true
+  },
+  "bluesky": {
+    "_note": "hashtags : ajoutés à chaque post. mentions : nom tel qu'écrit dans la base (institut ou média) → compte Bluesky vérifié, sans @.",
+    "hashtags": [
+      "Présidentielle2027",
+      "sondage"
+    ],
+    "mentions": {}
   }
 }
