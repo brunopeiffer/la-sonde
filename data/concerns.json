@@ -14,29 +14,73 @@
       },
       "waves": [
         {
-          "date": "2026-02-12",
-          "field": "11-12 février 2026",
+          "date": "2026-05-06",
+          "field": "5-6 mai 2026",
           "n": 1000,
-          "source": "https://www.breizh-info.com/2026/02/16/256831/barometre-ipsos-cesi-fevrier-2026-pouvoir-dachat-en-tete-immigration-et-insecurite-au-plus-haut-macron-au-plus-bas/",
+          "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/mai/10186-pres-barometre-politique-ipsos-bva-la-tribune-dimanche-huffpost-9-mai.pdf",
           "values": {
-            "pouvoir_achat": 43,
-            "systeme_social": 38,
-            "delinquance": 33,
-            "immigration": 28,
-            "dette": 26
+            "pouvoir_achat": 49,
+            "systeme_social": 41,
+            "dette": 30,
+            "delinquance": 29,
+            "immigration": 26,
+            "environnement": 24
+          }
+        },
+        {
+          "date": "2026-06-12",
+          "field": "10-12 juin 2026",
+          "n": 1000,
+          "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/juin/10204-pres-barometre-politique-ipsos-bva-la-tribune-dimanche-13-juin.pdf",
+          "values": {
+            "pouvoir_achat": 48,
+            "systeme_social": 39,
+            "delinquance": 37,
+            "immigration": 32,
+            "dette": 28,
+            "environnement": 20
+          }
+        },
+        {
+          "date": "2026-07-17",
+          "field": "15-17 juillet 2026",
+          "n": 1001,
+          "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/juillet/10231-pres-barometre-politique-ipsos-bva-la-tribune-dimanche-18-juillet.pdf",
+          "values": {
+            "pouvoir_achat": 47,
+            "systeme_social": 39,
+            "delinquance": 34,
+            "environnement": 32,
+            "dette": 28,
+            "immigration": 27
+          }
+        },
+        {
+          "date": "2026-09-10",
+          "field": "9-10 septembre 2026",
+          "n": 1000,
+          "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/septembre/10261-pres-barometre-politique-ipsos-bva-la-tribune-12-septembre.pdf",
+          "values": {
+            "pouvoir_achat": 54,
+            "systeme_social": 40,
+            "environnement": 31,
+            "immigration": 31,
+            "dette": 30,
+            "delinquance": 26
           }
         },
         {
           "date": "2026-10-08",
           "field": "7-8 octobre 2026",
           "n": 1000,
-          "source": "https://www.ipsos.com/fr-fr/barometre-politique-ipsos-bva-la-tribune-dimanche",
+          "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10303-pres-barometre-ipsos-bva-la-tribune-dimanche-10-octobre.pdf",
           "values": {
             "pouvoir_achat": 54,
             "systeme_social": 44,
             "dette": 33,
             "delinquance": 29,
-            "environnement": 27
+            "environnement": 27,
+            "immigration": 27
           }
         }
       ]
