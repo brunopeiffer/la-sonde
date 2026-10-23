@@ -120,7 +120,7 @@
   },
   "turnstileSiteKey": "",
   "agent": {
-    "everyDays": 3,
+    "everyDays": 7,
     "maxSearches": 5,
     "verifySearches": 1,
     "model": "claude-haiku-5-5",
@@ -133,7 +133,9 @@
     },
     "maxFetches": 2,
     "verifyFetches": 1,
-    "maxFetchTokens": 20000
+    "maxFetchTokens": 20000,
+    "searchPolls": false,
+    "_note": "Les sondages sont relevés sur les notices officielles de la Commission (à chaque mise à jour). La recherche web (searchPolls) est coupée ; une fois par semaine (everyDays), l'agent vérifie seulement les candidatures et le baromètre des préoccupations."
   },
   "x": {
     "maxPerMonth": 12,
