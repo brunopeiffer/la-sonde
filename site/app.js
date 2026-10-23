@@ -771,6 +771,19 @@
     setTimeout(() => { if (target) target.scrollIntoView(); else if (view !== 'accueil' || id) $('#vtabs').scrollIntoView(); }, changed ? 200 : 0);
   }
   addEventListener('hashchange', () => route(true));
+  // Tuiles « Explorer » : la tuile touchée s'allume un court instant avant d'ouvrir le thème
+  // (sinon, sur téléphone, on part avant de voir l'effet) ; les tuiles déjà visitées restent colorées.
+  const seenTiles = new Set((store.get('tilesSeen') || '').split('|').filter(Boolean));
+  document.querySelectorAll('a.tile').forEach(a => {
+    const h = a.getAttribute('href');
+    if (seenTiles.has(h)) a.classList.add('seen');
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      a.classList.add('pressed', 'seen');
+      seenTiles.add(h); store.set('tilesSeen', [...seenTiles].join('|'));
+      setTimeout(() => { a.classList.remove('pressed'); if (location.hash === h) route(true); else location.hash = h; }, 260);
+    });
+  });
   route(location.hash.length > 1);
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { drawRace(); drawProj(); drawGhosts(); renderConcerns(); window.Debate && window.Debate.redraw(); }, 150); });
   // Menu « Plus » : se referme après un clic sur un lien ou en dehors.

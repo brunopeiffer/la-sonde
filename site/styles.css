@@ -555,3 +555,12 @@ main section[data-view]{scroll-margin-top:130px}
 .cfiche:focus-visible .cf-nm,.cfiche:focus-visible b,.cfiche:focus-visible .cf-pt,.cfiche:focus-visible .cf-go{color:#fff}
 .cfiche:hover .cf-nm i,.cfiche:focus-visible .cf-nm i{background:#fff}
 @media (hover:hover){.cfiches:hover .cfiche:not(:hover){opacity:.6}}
+/* Tuile touchée (téléphone) : même effet que le survol ; tuiles déjà visitées : gardent le dégradé, plus doux, avec une coche */
+.tile.pressed{transform:scale(.98);box-shadow:0 14px 30px -12px rgba(91,44,255,.55);border-color:transparent}
+.tile.pressed::before{opacity:1}.tile.pressed b,.tile.pressed span{color:#fff}
+.tile.seen{border-color:transparent}
+.tile.seen::before{opacity:.82}
+.tile.seen b,.tile.seen span{color:#fff}
+.tile.seen::after{content:"✓";opacity:.9;transform:none;font-size:16px}
+.tile.seen:hover::after,.tile.seen:focus-visible::after{content:"→"}
+@media (hover:hover){.tiles:hover .tile.seen:not(:hover){opacity:.6}}
