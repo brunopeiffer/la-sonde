@@ -29,11 +29,15 @@ jobs:
       - name: Synchroniser la base ouverte des sondages
         run: node scripts/fetch-sources.mjs
 
-      - name: Agent de veille (sondages récents + préoccupations)
-        if: github.event.schedule == '17 5 * * *' || github.event_name == 'workflow_dispatch'
+      - name: Notices officielles de la Commission des sondages (gratuit)
+        run: node scripts/commission.mjs
+
+      - name: Agent de veille (notices à relever + recherche web le matin)
+        if: github.event_name != 'push'
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CLAUDE_MODEL: ${{ vars.CLAUDE_MODEL }}
+          MORNING: ${{ github.event.schedule == '17 5 * * *' && '1' || '' }}
           FORCE: ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
         run: node scripts/agent.mjs
 
@@ -54,6 +58,14 @@ jobs:
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE }}
           BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
         run: node scripts/bluesky.mjs
+      - name: Publication X (si les secrets sont configurés)
+        if: github.event.schedule == '17 5 * * *' || github.event_name == 'workflow_dispatch'
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+        run: node scripts/x.mjs
 
       - name: Enregistrer les données
         run: |
