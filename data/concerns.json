@@ -287,5 +287,200 @@
         }
       }
     ]
+  },
+  "priorities": {
+    "_note": "Enquête électorale française, vague 3. Question : « Parmi les grandes questions auxquelles la France est aujourd'hui confrontée, quelles sont les deux qui vous semblent les plus importantes ? » (2 réponses, total > 100 %). Chiffres de la notice officielle.",
+    "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/septembre/10262-pres-enquete-electorale-ipsos-bva-le-monde-13-septembre.pdf",
+    "label": {
+      "fr": "Enquête électorale Ipsos bva-CESI pour le CEVIPOF, la Fondation Jean-Jaurès et Le Monde, 3-9 septembre 2026, 13 060 inscrits",
+      "en": "Ipsos bva-CESI electoral survey for CEVIPOF, Fondation Jean-Jaurès and Le Monde, 3-9 September 2026, 13,060 registered voters",
+      "de": "Wahlstudie Ipsos bva-CESI für CEVIPOF, Fondation Jean-Jaurès und Le Monde, 3.–9. September 2026, 13 060 Wahlberechtigte",
+      "es": "Encuesta electoral Ipsos bva-CESI para el CEVIPOF, la Fondation Jean-Jaurès y Le Monde, 3-9 de septiembre de 2026, 13 060 electores inscritos",
+      "it": "Indagine elettorale Ipsos bva-CESI per il CEVIPOF, la Fondation Jean-Jaurès e Le Monde, 3-9 settembre 2026, 13.060 elettori iscritti"
+    },
+    "question": {
+      "fr": "Les deux grandes questions jugées les plus importantes (2 réponses possibles)",
+      "en": "The two most important issues facing France (2 answers allowed)",
+      "de": "Die zwei wichtigsten Fragen für Frankreich (2 Antworten möglich)",
+      "es": "Las dos cuestiones más importantes para Francia (2 respuestas posibles)",
+      "it": "Le due questioni più importanti per la Francia (2 risposte possibili)"
+    },
+    "cats": [
+      {
+        "k": "eco",
+        "color": "#ff5a36",
+        "fr": "Économiques et financières",
+        "en": "Economic and financial",
+        "de": "Wirtschaft und Finanzen",
+        "es": "Económicas y financieras",
+        "it": "Economiche e finanziarie"
+      },
+      {
+        "k": "soc",
+        "color": "#ff9f1c",
+        "fr": "Sociales",
+        "en": "Social",
+        "de": "Soziales",
+        "es": "Sociales",
+        "it": "Sociali"
+      },
+      {
+        "k": "env",
+        "color": "#22b04b",
+        "fr": "Environnementales",
+        "en": "Environmental",
+        "de": "Umwelt",
+        "es": "Medioambientales",
+        "it": "Ambientali"
+      },
+      {
+        "k": "idt",
+        "color": "#8a5cf6",
+        "fr": "Identitaires",
+        "en": "Identity",
+        "de": "Identität",
+        "es": "Identitarias",
+        "it": "Identitarie"
+      },
+      {
+        "k": "rep",
+        "color": "#00a6a6",
+        "fr": "Représentation et décision politique",
+        "en": "Representation and decision-making",
+        "de": "Repräsentation und politische Entscheidung",
+        "es": "Representación y decisión política",
+        "it": "Rappresentanza e decisione politica"
+      },
+      {
+        "k": "def",
+        "color": "#3a57e8",
+        "fr": "Défense",
+        "en": "Defence",
+        "de": "Verteidigung",
+        "es": "Defensa",
+        "it": "Difesa"
+      }
+    ],
+    "total": {
+      "eco": 54,
+      "soc": 53,
+      "env": 30,
+      "idt": 29,
+      "rep": 15,
+      "def": 15
+    },
+    "groups": [
+      {
+        "g": "LFI",
+        "v": {
+          "eco": 32,
+          "soc": 85,
+          "env": 58,
+          "idt": 7,
+          "rep": 13,
+          "def": 5
+        }
+      },
+      {
+        "g": "PCF",
+        "v": {
+          "eco": 40,
+          "soc": 81,
+          "env": 49,
+          "idt": 5,
+          "rep": 14,
+          "def": 8
+        }
+      },
+      {
+        "g": "Écolo.",
+        "v": {
+          "eco": 29,
+          "soc": 64,
+          "env": 79,
+          "idt": 5,
+          "rep": 8,
+          "def": 12
+        }
+      },
+      {
+        "g": "PS / PP",
+        "v": {
+          "eco": 52,
+          "soc": 62,
+          "env": 43,
+          "idt": 7,
+          "rep": 16,
+          "def": 18
+        }
+      },
+      {
+        "g": {
+          "fr": "Bloc central",
+          "en": "Centre bloc",
+          "de": "Zentrum",
+          "es": "Bloque central",
+          "it": "Blocco centrale"
+        },
+        "v": {
+          "eco": 72,
+          "soc": 35,
+          "env": 27,
+          "idt": 13,
+          "rep": 20,
+          "def": 32
+        }
+      },
+      {
+        "g": "LR",
+        "v": {
+          "eco": 71,
+          "soc": 31,
+          "env": 17,
+          "idt": 42,
+          "rep": 17,
+          "def": 21
+        }
+      },
+      {
+        "g": "RN",
+        "v": {
+          "eco": 55,
+          "soc": 49,
+          "env": 10,
+          "idt": 59,
+          "rep": 12,
+          "def": 12
+        }
+      },
+      {
+        "g": "Reconquête",
+        "v": {
+          "eco": 63,
+          "soc": 20,
+          "env": 6,
+          "idt": 83,
+          "rep": 18,
+          "def": 8
+        }
+      },
+      {
+        "g": {
+          "fr": "Sans proximité",
+          "en": "No party",
+          "de": "Ohne Partei",
+          "es": "Sin partido",
+          "it": "Nessun partito"
+        },
+        "v": {
+          "eco": 56,
+          "soc": 54,
+          "env": 30,
+          "idt": 22,
+          "rep": 15,
+          "def": 15
+        }
+      }
+    ]
   }
 }
