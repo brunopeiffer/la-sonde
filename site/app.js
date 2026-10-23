@@ -183,7 +183,7 @@
   }
 
   // ---------- V2 : ce qui a changé ----------
-  const page = c => (D.cands[c] && D.cands[c].slug) ? `candidat/${D.cands[c].slug}/` : '#course';
+  const page = c => (D.cands[c] && D.cands[c].slug) ? `${lang === 'fr' ? '' : lang + '/'}candidat/${D.cands[c].slug}/` : '#course';
   const ICON = { up: '▲', down: '▼', flat: '●', poll: '◆', proba: '%', swap: '⇅', transfer: '⇢', ghost: '◷' };
   // Boutons de partage pour les visiteurs : le texte du premier signal + le lien du site.
   function shareRow(txt) {
