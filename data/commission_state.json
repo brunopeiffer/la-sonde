@@ -6,7 +6,7 @@
       "pub": "2026-10-02",
       "inst": "YouGov",
       "tries": 0,
-      "status": "pending",
+      "status": "sans intentions de vote",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10288-pres-barometre-popularite-yougov-huffpost-2-octobre.pdf"
     },
     "10289": {
@@ -71,7 +71,7 @@
       "pub": "2026-10-07",
       "inst": "Cluster17",
       "tries": 0,
-      "status": "pending",
+      "status": "sans intentions de vote",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10296-pres-barometre-personnalites-politiques-cluster-17-le-point-7-octobre.pdf"
     },
     "10297": {
@@ -128,7 +128,7 @@
       "pub": "2026-10-10",
       "inst": "Ipsos BVA",
       "tries": 0,
-      "status": "pending",
+      "status": "sans intentions de vote",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10303-pres-barometre-ipsos-bva-la-tribune-dimanche-10-octobre.pdf"
     },
     "10304": {
@@ -241,7 +241,7 @@
       "pub": "2026-10-15",
       "inst": "OpinionWay",
       "tries": 0,
-      "status": "pending",
+      "status": "relevée (1 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10319-pres-iv-opinionway-cnews-15-octobre.pdf"
     },
     "10320": {
@@ -273,7 +273,7 @@
       "title": "10323 Pres IV Yougov Le HuffPost 18 octobre",
       "pub": "2026-10-18",
       "inst": "YouGov",
-      "tries": 0,
+      "tries": 1,
       "status": "pending",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10323-pres-iv-yougov-le-huffpost-18-octobre.pdf"
     },
@@ -283,7 +283,7 @@
       "pub": "2026-10-17",
       "inst": "ELABE",
       "tries": 0,
-      "status": "pending",
+      "status": "relevée (2 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10324-pres-iv-elabe-17-octobre.pdf"
     },
     "10325": {
@@ -363,5 +363,5 @@
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10333-pres-iv-opinionway-cnews-22-octobre.pdf"
     }
   },
-  "checked": "2026-10-23T11:01:45.568Z"
+  "checked": "2026-10-23T11:18:15.480Z"
 }
