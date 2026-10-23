@@ -29,7 +29,7 @@ const WITHDRAWN = new Set(ROSTER.filter(r => r.retrait_candidature && r.retrait_
 const TODAY = toDay(new Date().toISOString());
 
 // ---------- 1. Chargement des sondages 2027 ----------
-const normInst = s => s.toLowerCase().replace(/toluna|interactive|bva|[^a-z0-9]/g, '');
+const normInst = s => s.toLowerCase().replace(/toluna|interactive|bva|fiducial|[^a-z0-9]/g, '');
 const excluded = s => cfg.excludeSponsors.some(x => s.toLowerCase().includes(x.toLowerCase()));
 
 function loadPolls() {
@@ -53,6 +53,9 @@ function loadPolls() {
   const polls = [...byId.values()];
   // Sondages trouvés par l'agent, ignorés dès que la base MieuxVoter les contient.
   const agent = readJSON(P('data/agent_polls.json')).polls || [];
+  // Un même institut doit porter un seul nom (sinon ses effets sont mesurés en double) : on reprend celui de la base.
+  const canon = new Map(polls.map(p => [normInst(p.institute), p.institute]));
+  for (const a of agent) a.institute = canon.get(normInst(a.institute)) || a.institute;
   for (const a of agent) {
     const dup = polls.some(p => normInst(p.institute) === normInst(a.institute) && Math.abs(toDay(p.end) - toDay(a.end)) <= 1 && p.round === a.round);
     if (dup || excluded(a.sponsor || '')) continue;

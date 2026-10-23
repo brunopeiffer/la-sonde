@@ -20,13 +20,20 @@ function chart(c) {
   const S = D.series[c]; if (!S) return '';
   const W = 760, H = 300, m = { t: 14, r: 16, b: 30, l: 34 };
   const n = D.days.length; let i0 = Math.max(0, n - 183); while (i0 < n - 1 && S.v[i0] == null) i0++; i0 = Math.max(0, i0 - 3);
-  const pts = []; for (let i = i0; i < n; i++) if (S.v[i] != null) pts.push({ i, v: S.v[i], b: S.b[i] || 0 });
+  // Densité : nombre de sondages à ± 21 jours de chaque point ; en dessous de 3, la courbe est en pointillés et sans marge.
+  const pd = (D.points[c] || []).map(p => Date.parse(p[0]));
+  const dens = d => { const t = Date.parse(d); return pd.filter(x => Math.abs(x - t) <= 21 * 864e5).length; };
+  const pts = []; for (let i = i0; i < n; i++) if (S.v[i] != null) pts.push({ i, v: S.v[i], b: S.b[i] || 0, ok: dens(D.days[i]) >= 3 && (S.b[i] || 0) <= 2.5 });
   if (pts.length < 2) return '';
   const ymax = Math.ceil((Math.max(...pts.map(p => p.v + p.b)) + 2) / 5) * 5;
   const x = i => m.l + (i - i0) / (n - 1 - i0) * (W - m.l - m.r), y = v => m.t + (1 - v / ymax) * (H - m.t - m.b);
-  const line = pts.map((p, k) => `${k ? 'L' : 'M'}${x(p.i).toFixed(1)},${y(p.v).toFixed(1)}`).join('');
-  const band = pts.map((p, k) => `${k ? 'L' : 'M'}${x(p.i).toFixed(1)},${y(p.v + p.b).toFixed(1)}`).join('') +
-    [...pts].reverse().map(p => `L${x(p.i).toFixed(1)},${y(Math.max(0, p.v - p.b)).toFixed(1)}`).join('') + 'Z';
+  // Segments continus « bien mesurés » (trait plein + marge) et « peu de sondages » (pointillés).
+  const segs = [];
+  pts.forEach((p, k) => { const L = segs[segs.length - 1]; if (L && L.ok === p.ok) L.p.push(p); else segs.push({ ok: p.ok, p: k ? [pts[k - 1], p] : [p] }); });
+  const pathOf = a => a.map((p, k) => `${k ? 'L' : 'M'}${x(p.i).toFixed(1)},${y(p.v).toFixed(1)}`).join('');
+  const bandOf = a => a.map((p, k) => `${k ? 'L' : 'M'}${x(p.i).toFixed(1)},${y(p.v + p.b).toFixed(1)}`).join('') +
+    [...a].reverse().map(p => `L${x(p.i).toFixed(1)},${y(Math.max(0, p.v - p.b)).toFixed(1)}`).join('') + 'Z';
+  const sparse = segs.some(g => !g.ok);
   const col = D.cands[c].color;
   const grid = []; for (let v = 0; v <= ymax; v += 5) grid.push(`<line x1="${m.l}" x2="${W - m.r}" y1="${y(v)}" y2="${y(v)}" class="g"/><text x="${m.l - 6}" y="${y(v) + 4}" text-anchor="end">${v}</text>`);
   const ticks = []; let lastM = '';
@@ -35,8 +42,9 @@ function chart(c) {
     const i = D.days.findIndex(d => d >= p[0]); return i < 0 ? '' : `<circle cx="${x(i).toFixed(1)}" cy="${y(p[1]).toFixed(1)}" r="2.6" fill="${col}" opacity=".3"/>`; }).join('');
   const last = pts[pts.length - 1];
   return `<svg class="cchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Évolution de ${esc(D.cands[c].name)} dans la moyenne des sondages, six derniers mois">
-  ${grid.join('')}${ticks.join('')}<path d="${band}" fill="${col}" opacity=".14"/>${dots}<path d="${line}" fill="none" stroke="${col}" stroke-width="2.5" stroke-linejoin="round"/>
-  <circle cx="${x(last.i)}" cy="${y(last.v)}" r="4.5" fill="${col}" stroke="var(--surface)" stroke-width="2"/></svg>`;
+  ${grid.join('')}${ticks.join('')}${segs.filter(g => g.ok && g.p.length > 1).map(g => `<path d="${bandOf(g.p)}" fill="${col}" opacity=".14"/>`).join('')}${dots}
+  ${segs.filter(g => g.p.length > 1).map(g => `<path d="${pathOf(g.p)}" fill="none" stroke="${col}" stroke-width="${g.ok ? 2.5 : 1.8}" stroke-linejoin="round" ${g.ok ? '' : 'stroke-dasharray="5 5" opacity=".55"'}/>`).join('')}
+  <circle cx="${x(last.i)}" cy="${y(last.v)}" r="4.5" fill="${col}" stroke="var(--surface)" stroke-width="2"/></svg>${sparse ? '<p class="note" style="margin:6px 0 0">Pointillés : période avec trop peu de sondages (moins de 3 en six semaines) ou marge trop large pour une moyenne fiable.</p>' : ''}`;
 }
 
 function page(s, rank, all) {
@@ -56,6 +64,30 @@ function page(s, rank, all) {
   const title = `Sondages ${name} présidentielle 2027 : ${f1(s.v)} % dans la moyenne | La Sonde`;
   const desc = `${name} est à ${f1(s.v)} % dans la moyenne des sondages de la présidentielle 2027 (${ord(rank)}), ${sg(s.d30)} pt en 30 jours. Tendance, probabilités, derniers sondages, effets instituts.`;
   const url = `${BASE}/candidat/${K.slug}/`;
+  // Second tour : duels testés impliquant le candidat (moyenne des sondages).
+  const duels = (D.duels || []).filter(d => d.a === c || d.b === c).map(d => d.a === c ? { o: d.b, v: d.va, w: d.vb, n: d.n, last: d.last } : { o: d.a, v: d.vb, w: d.va, n: d.n, last: d.last })
+    .sort((a, b) => b.n - a.n);
+  const fd = x => (Math.round(x * 10) / 10).toFixed(1).replace('.', ',').replace(/,0$/, '');
+  const duelHtml = duels.length ? `<div class="cduels">${duels.map(d => `<div class="cduel"><div class="cdl"><b>${esc(K.short)}</b> contre <b>${esc(D.cands[d.o].short)}</b><span class="note" style="margin:0"> · ${d.n} sondage${d.n > 1 ? 's' : ''}, dernier le ${fshort(d.last)}</span></div>
+      <div class="cdbar"><i style="width:${d.v}%;background:${K.color}">${fd(d.v)} %</i><i style="width:${d.w}%;background:${D.cands[d.o].color}">${fd(d.w)} %</i><u></u></div></div>`).join('')}</div>`
+    : `<p class="note">Aucun duel de second tour impliquant ${esc(name)} n'a encore été testé par les instituts.</p>`;
+  // Reports mesurés si le candidat se retire.
+  const T = (D.transfers || []).find(t => t.c === c);
+  const trHtml = T ? `<p>D'après ${T.surveys} sondages qui testent des listes avec et sans ${esc(name)}, ses électeurs se reporteraient ainsi :</p>
+      <div class="helist">${T.flows.filter(f => f.pct >= 2).slice(0, 6).map(f => `<div><span>${esc(D.cands[f.c] ? D.cands[f.c].short : f.c)}</span><i class="hb"><b class="pos" style="width:${Math.min(100, f.pct)}%;left:0;background:${D.cands[f.c] ? D.cands[f.c].color : '#999'}"></b></i><em class="num">${f.pct} %</em></div>`).join('')}</div>`
+    : `<p>Les instituts ne testent pas encore assez de listes avec et sans ${esc(name)} pour mesurer directement ses reports. Le simulateur les estime à partir des positions politiques, calées sur les reports mesurés.</p>`;
+  // Faits de campagne.
+  const ev = (D.events || []).filter(e => e.c === c).sort((a, b) => b.date.localeCompare(a.date));
+  const evHtml = ev.length ? `<ul class="cev">${ev.map(e => `<li><b>${fdate(e.date)}</b> · ${esc(e.fr)}</li>`).join('')}</ul>` : '';
+  // Partage.
+  const msg = `${name} : ${f1(s.v)} % dans la moyenne des sondages de la présidentielle 2027`;
+  const enc = encodeURIComponent;
+  const share = `<div class="sharerow"><span>Partager cette fiche</span>
+      <a target="_blank" rel="noopener" href="https://bsky.app/intent/compose?text=${enc(msg + ' ' + url)}">Bluesky</a>
+      <a target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${enc(msg)}&url=${enc(url)}">X</a>
+      <a target="_blank" rel="noopener" href="https://wa.me/?text=${enc(msg + ' ' + url)}">WhatsApp</a>
+      <a target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}">LinkedIn</a>
+      <button type="button" data-u="${url}" onclick="navigator.clipboard && navigator.clipboard.writeText(this.dataset.u); this.textContent='✓ copié'">Copier le lien</button></div>`;
   const others = all.filter(x => x.c !== c).map(x => `<a href="../${D.cands[x.c].slug}/"><i style="background:${D.cands[x.c].color}"></i>${esc(D.cands[x.c].short)}</a>`).join('');
   return `<!doctype html>
 <html lang="fr">
@@ -100,7 +132,14 @@ function page(s, rank, all) {
       ${q ? `<div><span>Qualification</span><b class="num">${f1(q.p)} %</b><small>${qa ? 'au second tour (modèle)' : 'scénario « tous déclarés »'}</small></div>` : `<div><span>30 jours</span><b class="num">${sg(s.d30)}</b><small>points</small></div>`}
     </div>
   </section>
+  ${share}
   <section class="card"><h2>Six mois de sondages</h2><p class="note">Ligne : moyenne corrigée des effets instituts. Zone : marge d'incertitude. Points : chaque sondage publié.</p>${chart(c)}</section>
+  <div class="grid2" style="margin-top:18px">
+    <section class="card"><h2>Au second tour</h2><p class="note">Moyenne des sondages testant chaque duel. La ligne centrale marque 50 %.</p>${duelHtml}</section>
+    <section class="card"><h2>S'il se retirait</h2>${trHtml}
+      <p style="margin:14px 0 0"><a class="cta" href="../../?retrait=${c}#etsi">Simuler son retrait →</a></p>
+      ${evHtml ? `<h2 style="margin-top:22px">Campagne</h2>${evHtml}` : ''}</section>
+  </div>
   <div class="grid2" style="margin-top:18px">
     <section class="card"><h2>Derniers sondages</h2>
       ${polls.length ? `<div class="scroll"><table class="tbl"><thead><tr><th>Institut</th><th>Fin du terrain</th><th class="c">Score</th><th class="c">Hypothèses</th></tr></thead><tbody>${polls.map(p => `<tr><td><b>${esc(p.inst)}</b><br><span class="note" style="margin:0">${esc(p.sponsor)}</span></td><td>${fshort(p.end)}</td><td class="c num"><b>${p.lo === p.hi ? f1(p.lo) : f1(p.lo) + "–" + f1(p.hi)} %</b></td><td class="c num">${p.h}</td></tr>`).join('')}</tbody></table></div>` : '<p class="note">Aucun sondage récent.</p>'}
