@@ -96,7 +96,7 @@
   }
 
   // ---------- « Et si… ? » : simulateur de retraits ----------
-  const wi = { out: new Set() };
+  const wi = { out: new Set((qs.get('retrait') || '').split(',').filter(Boolean)) };
   function whatIf(out) {
     const W = D.whatif;
     const v = Object.fromEntries(W.base.map(b => [b.c, b.v]));
@@ -153,6 +153,7 @@
   function renderWhatIf() {
     const W = D.whatif; if (!W || D.features.whatif === false) return;
     const ids = W.base.map(b => b.c);
+    for (const c of [...wi.out]) if (!ids.includes(c)) wi.out.delete(c);
     const presets = [];
     for (const tr0 of D.transfers || []) if (ids.includes(tr0.c)) presets.push([tr0.c]);
     if (ids.includes('GA') && ids.includes('BR')) presets.push(['GA', 'BR']);
@@ -736,6 +737,8 @@
     const next = isDark() ? 'light' : 'dark'; document.documentElement.dataset.theme = next; store.set('theme', next); renderAll();
   };
   matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', renderAll);
+  // Lien direct vers une section (ex. ?retrait=EP#etsi) : on y revient une fois la page dessinée.
+  if (location.hash.length > 1) setTimeout(() => { const el = document.getElementById(location.hash.slice(1)); if (el) el.scrollIntoView(); }, 400);
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { drawRace(); drawProj(); drawGhosts(); renderConcerns(); window.Debate && window.Debate.redraw(); }, 150); });
   // Menu « Plus » : se referme après un clic sur un lien ou en dehors.
   const more = $('#navMore');
