@@ -138,7 +138,7 @@ Object.assign(window.I18N.de, {
   'wi.who': 'Wer tritt zurück?', 'wi.whoDesc': 'Klicken Sie auf einen oder mehrere Kandidaten, um sie herauszunehmen.', 'wi.examples': 'Beispiele',
   'wi.preset': 'Ohne {c}', 'wi.reset': 'Zurücksetzen', 'wi.res': 'Simulierter 1. Wahlgang',
   'wi.pick': 'Wählen Sie mindestens einen Kandidaten aus.',
-  'wi.base': 'Ausgangspunkt: die Liste mit allen erklärten Kandidaten (von La Sonde gebildet). Die Werte weichen vom Gesamtdurchschnitt ab, der Listen mischt, in denen einzelne Kandidaten fehlen.',
+  'wi.base': 'Ausgangspunkt: die vollständigste tatsächlich abgefragte Liste, ergänzt um selten abgefragte erklärte Kandidaten, deren Stimmen vor allem ihren politischen Nachbarn entnommen werden. Die Werte liegen etwas unter dem Gesamtdurchschnitt, der meist aus kürzeren Listen stammt.',
   'wi.noteMatch': 'Institute haben diese Konstellation bereits getestet: Ergebnisse aus {n} Umfrage(n), zuletzt am {d}, bereinigt um Instituts-Effekte.',
   'wi.noteChain': 'Kein Institut hat diese Konstellation getestet: Die Stimmen werden nach in Umfragen gemessenen Übertragungen verteilt, sonst nach politischer Nähe. Mehrere Rückzüge werden nacheinander berechnet.',
   'wi.lvPoll': 'getestet', 'wi.lvMeas': 'gemessen', 'wi.lvEst': 'geschätzt',

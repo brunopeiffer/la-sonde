@@ -138,7 +138,7 @@ Object.assign(window.I18N.it, {
   'wi.who': 'Chi si ritira?', 'wi.whoDesc': 'Cliccate su uno o più candidati per ritirarli.', 'wi.examples': 'Esempi',
   'wi.preset': 'Senza {c}', 'wi.reset': 'Ripristina', 'wi.res': 'Primo turno simulato',
   'wi.pick': 'Scegliete almeno un candidato da ritirare.',
-  'wi.base': 'Punto di partenza: la lista con tutti i candidati dichiarati (costruita da La Sonde). I valori differiscono dalla media generale, che mescola liste in cui mancano alcuni candidati.',
+  'wi.base': 'Punto di partenza: la lista più completa realmente sondata, completata dai candidati dichiarati poco sondati, i cui voti sono presi soprattutto ai loro vicini politici. I valori sono un po’ più bassi della media generale, che deriva per lo più da liste più corte.',
   'wi.noteMatch': 'Gli istituti hanno già testato questa configurazione: risultati da {n} sondaggio/i, l\'ultimo il {d}, corretti dagli effetti istituto.',
   'wi.noteChain': 'Nessun istituto ha testato questa configurazione: i voti sono ridistribuiti secondo i flussi misurati nei sondaggi quando esistono, altrimenti secondo la vicinanza politica. Più ritiri sono calcolati a cascata.',
   'wi.lvPoll': 'testato', 'wi.lvMeas': 'misurato', 'wi.lvEst': 'stimato',

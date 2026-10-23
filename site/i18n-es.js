@@ -138,7 +138,7 @@ Object.assign(window.I18N.es, {
   'wi.who': '¿Quién se retira?', 'wi.whoDesc': 'Pulse uno o varios candidatos para retirarlos.', 'wi.examples': 'Ejemplos',
   'wi.preset': 'Sin {c}', 'wi.reset': 'Restablecer', 'wi.res': 'Primera vuelta simulada',
   'wi.pick': 'Elija al menos un candidato para retirar.',
-  'wi.base': 'Punto de partida: la lista con todos los candidatos declarados (construida por La Sonde). Los resultados difieren de la media general, que mezcla listas en las que faltan algunos candidatos.',
+  'wi.base': 'Punto de partida: la lista más completa realmente encuestada, completada con los candidatos declarados poco encuestados, cuyos votos se toman sobre todo de sus vecinos políticos. Los resultados son algo más bajos que la media general, que procede sobre todo de listas más cortas.',
   'wi.noteMatch': 'Los institutos ya han probado esta configuración: resultados de {n} encuesta(s), la última el {d}, corregidos de los efectos de instituto.',
   'wi.noteChain': 'Ningún instituto ha probado esta configuración: los votos se redistribuyen según los trasvases medidos en las encuestas cuando existen y, si no, según la proximidad política. Varias retiradas se calculan en cascada.',
   'wi.lvPoll': 'probado', 'wi.lvMeas': 'medido', 'wi.lvEst': 'estimado',
