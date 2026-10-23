@@ -89,7 +89,10 @@
 </div>
 
 <main class="wrap">
-  <section id="resume" style="padding-top:28px">
+  <nav class="vtabs" id="vtabs" aria-label="Thèmes">
+    <a href="#accueil" data-v="accueil" data-i18n="vt.accueil"></a><a href="#simuler" data-v="simuler" data-i18n="vt.simuler"></a><a href="#tour2" data-v="tour2" data-i18n="vt.tour2"></a><a href="#comprendre" data-v="comprendre" data-i18n="vt.comprendre"></a><a href="#opinion" data-v="opinion" data-i18n="vt.opinion"></a><a href="#donnees" data-v="donnees" data-i18n="vt.donnees"></a><a href="#apropos" data-v="apropos" data-i18n="vt.apropos"></a>
+  </nav>
+  <section id="resume" data-view="accueil" style="padding-top:28px">
     <div class="changes" id="changes"></div>
     <details class="read sumd">
       <summary><span data-i18n="sum.title"></span></summary>
@@ -98,7 +101,7 @@
     </details>
   </section>
 
-  <section id="bascule">
+  <section id="bascule" data-view="comprendre">
     <div class="sh"><div><div class="tag" data-i18n="bas.tag"></div><h2 data-i18n="bas.title"></h2><p data-i18n="bas.desc"></p></div></div>
     <div class="grid2">
       <div class="card"><h3 style="margin:0 0 4px" data-i18n="bas.mom"></h3><p class="note" style="margin:0 0 12px" data-i18n="bas.momDesc"></p><div class="mom" id="momList"></div></div>
@@ -116,7 +119,7 @@
     <div class="warnbox"><strong>⚠︎</strong><span data-i18n="bas.warn"></span></div>
   </section>
 
-  <section id="course">
+  <section id="course" data-view="accueil">
     <div class="sh"><div><div class="tag" data-i18n="race.tag"></div><h2 data-i18n="race.title"></h2><p data-i18n="race.desc"></p></div></div>
     <div class="card">
       <div class="controls">
@@ -127,23 +130,39 @@
       <div class="chips" id="chips"></div>
       <div class="chart" id="raceChart"></div>
       <div class="legend"><span><i></i><span data-i18n="race.lgLine"></span></span><span><i style="border:0;height:10px;width:18px;background:var(--surface-2);border-radius:3px"></i><span data-i18n="race.lgBand"></span></span><span><i style="border:0;width:8px;height:8px;border-radius:50%;background:var(--muted);opacity:.5"></i><span data-i18n="race.lgDot"></span></span></div>
-      <h4 style="margin:18px 0 6px" data-i18n="tab.title"></h4><div class="scroll" id="allTable"></div>
+      <details class="fold"><summary><span data-i18n="tab.title"></span></summary><div class="scroll" id="allTable"></div></details>
       <p class="note" data-i18n="race.note"></p>
       <div class="embed-tool" data-embed="course"></div>
     </div>
   </section>
 
-  <section id="solidite">
+  <section id="solidite" data-view="accueil">
     <div class="sh"><div><div class="tag" data-i18n="so.tag"></div><h2 data-i18n="so.title"></h2><p data-i18n="so.desc"></p></div></div>
     <div class="card"><div id="soIntro"></div><div id="soRows"></div><div class="so-lg"><span><i class="a"></i><span data-i18n="so.lgSure"></span></span><span><i class="b"></i><span data-i18n="so.lgSoft"></span></span></div><p class="note" id="soSrc"></p></div>
   </section>
 
-  <section id="candidats">
+  <section id="candidats" data-view="accueil">
     <div class="sh"><div><div class="tag" data-i18n="cf.tag"></div><h2 data-i18n="cf.title"></h2><p data-i18n="cf.desc"></p></div></div>
     <div class="cfiches" id="cfiches"><a class="cfiche" href="candidat/marine-le-pen/">Sondages Marine Le Pen : 35,3 %</a><a class="cfiche" href="candidat/jean-luc-melenchon/">Sondages Jean-Luc Mélenchon : 16,8 %</a><a class="cfiche" href="candidat/edouard-philippe/">Sondages Édouard Philippe : 13,9 %</a><a class="cfiche" href="candidat/raphael-glucksmann/">Sondages Raphaël Glucksmann : 13,2 %</a><a class="cfiche" href="candidat/francois-hollande/">Sondages François Hollande : 8,0 %</a><a class="cfiche" href="candidat/gabriel-attal/">Sondages Gabriel Attal : 7,2 %</a><a class="cfiche" href="candidat/bruno-retailleau/">Sondages Bruno Retailleau : 6,9 %</a><a class="cfiche" href="candidat/david-lisnard/">Sondages David Lisnard : 6,7 %</a><a class="cfiche" href="candidat/eric-zemmour/">Sondages Éric Zemmour : 4,1 %</a><a class="cfiche" href="candidat/marine-tondelier/">Sondages Marine Tondelier : 2,8 %</a><a class="cfiche" href="candidat/francois-ruffin/">Sondages François Ruffin : 2,1 %</a><a class="cfiche" href="candidat/nicolas-dupont-aignan/">Sondages Nicolas Dupont-Aignan : 2,0 %</a><a class="cfiche" href="candidat/fabien-roussel/">Sondages Fabien Roussel : 1,8 %</a><a class="cfiche" href="candidat/nathalie-arthaud/">Sondages Nathalie Arthaud : 0,7 %</a></div>
   </section>
 
-  <section id="etsi">
+  <section id="explorer" data-view="accueil">
+    <div class="sh"><div><div class="tag" data-i18n="ex.tag"></div><h2 data-i18n="ex.title"></h2></div></div>
+    <div class="tiles">
+      <a class="tile" href="#etsi"><b data-i18n="ex.etsi"></b><span data-i18n="ex.etsiD"></span></a>
+      <a class="tile" href="#second"><b data-i18n="ex.second"></b><span data-i18n="ex.secondD"></span></a>
+      <a class="tile" href="#proba"><b data-i18n="ex.proba"></b><span data-i18n="ex.probaD"></span></a>
+      <a class="tile" href="#bascule"><b data-i18n="ex.bascule"></b><span data-i18n="ex.basculeD"></span></a>
+      <a class="tile" href="#fantomes"><b data-i18n="ex.ghosts"></b><span data-i18n="ex.ghostsD"></span></a>
+      <a class="tile" href="#reports"><b data-i18n="ex.reports"></b><span data-i18n="ex.reportsD"></span></a>
+      <a class="tile" href="#enjeux"><b data-i18n="ex.enjeux"></b><span data-i18n="ex.enjeuxD"></span></a>
+      <a class="tile" href="#quiz"><b data-i18n="ex.quiz"></b><span data-i18n="ex.quizD"></span></a>
+      <a class="tile" href="#sondages"><b data-i18n="ex.polls"></b><span data-i18n="ex.pollsD"></span></a>
+      <a class="tile" href="#methode"><b data-i18n="ex.method"></b><span data-i18n="ex.methodD"></span></a>
+    </div>
+  </section>
+
+  <section id="etsi" data-view="simuler">
     <div class="sh"><div><div class="tag" data-i18n="wi.tag"></div><h2 data-i18n="wi.title"></h2><p data-i18n="wi.desc"></p></div></div>
     <div class="grid2">
       <div class="card">
@@ -158,7 +177,7 @@
     <div class="warnbox"><strong>⚠︎</strong><span data-i18n="wi.warn"></span></div>
   </section>
 
-  <section id="second">
+  <section id="second" data-view="tour2">
     <div class="sh"><div><div class="tag" data-i18n="r2.tag"></div><h2 data-i18n="r2.title"></h2><p data-i18n="r2.desc"></p></div></div>
     <div class="grid2">
       <div class="card"><h3 style="margin:0 0 6px" data-i18n="r2.polls"></h3><div id="duels"></div></div>
@@ -173,7 +192,7 @@
     </div>
   </section>
 
-  <section id="proba">
+  <section id="proba" data-view="tour2">
     <div class="sh"><div><div class="tag" data-i18n="proba.tag"></div><h2 data-i18n="proba.title"></h2><p data-i18n="proba.desc"></p></div></div>
     <div class="controls"><div class="seg" id="scenSeg"></div></div>
     <p class="condnote"><strong>ⓘ</strong> <span data-i18n="proba.cond"></span></p>
@@ -185,7 +204,7 @@
     <div class="embed-tool" data-embed="proba"></div>
   </section>
 
-  <section id="fantomes">
+  <section id="fantomes" data-view="comprendre">
     <div class="sh"><div><div class="tag" data-i18n="ghost.tag"></div><h2 data-i18n="ghost.title"></h2><p data-i18n="ghost.desc"></p></div></div>
     <div class="card">
       <div class="chips" id="ghostChips"></div>
@@ -196,19 +215,19 @@
     </div>
   </section>
 
-  <section id="reports">
+  <section id="reports" data-view="simuler">
     <div class="sh"><div><div class="tag" data-i18n="tr.tag"></div><h2 data-i18n="tr.title"></h2><p data-i18n="tr.desc"></p></div></div>
     <div class="card" id="transfers"></div>
   </section>
 
 
 
-  <section id="debats">
+  <section id="debats" data-view="donnees">
     <div class="sh"><div><div class="tag" data-i18n="deb.tag"></div><h2 data-i18n="deb.title"></h2><p data-i18n="deb.desc"></p></div></div>
     <div class="card debate" id="debate"></div>
   </section>
 
-  <section id="ecart">
+  <section id="ecart" data-view="comprendre">
     <div class="sh"><div><div class="tag" data-i18n="gap.tag"></div><h2 data-i18n="gap.title"></h2><p data-i18n="gap.desc"></p></div></div>
     <div class="card">
       <div class="row">
@@ -220,7 +239,7 @@
     </div>
   </section>
 
-  <section id="enjeux">
+  <section id="enjeux" data-view="opinion">
     <div class="sh"><div><div class="tag" data-i18n="is.tag"></div><h2 data-i18n="is.title"></h2><p data-i18n="is.desc"></p></div></div>
     <div class="grid2">
       <div class="card"><h3 style="margin:0 0 4px" data-i18n="is.baro"></h3><p class="note" style="margin:0 0 6px" id="baroDesc"></p><div class="chart" id="concernChart"></div><p class="note" id="baroSrc"></p></div>
@@ -231,7 +250,7 @@
   </section>
 
 
-  <section id="quiz">
+  <section id="quiz" data-view="opinion">
     <div class="sh"><div><div class="tag" data-i18n="qz.tag"></div><h2 data-i18n="qz.title"></h2><p data-i18n="qz.desc"></p></div></div>
     <div class="grid2">
       <div class="card"><h3 style="margin:0 0 4px" data-i18n="qz.pick"></h3><p class="note" style="margin:0 0 12px" id="qzCount"></p><div class="chips" id="qzThemes"></div></div>
@@ -239,7 +258,7 @@
     </div>
   </section>
 
-  <section id="sondages">
+  <section id="sondages" data-view="donnees">
     <div class="sh"><div><div class="tag" data-i18n="po.tag"></div><h2 data-i18n="po.title"></h2><p data-i18n="po.desc"></p></div></div>
     <div class="card decoded" id="decoded"></div>
     <div class="card" style="margin-top:18px"><div class="polls" id="pollList"></div></div>
@@ -248,12 +267,12 @@
   </section>
 
 
-  <section id="frise">
+  <section id="frise" data-view="donnees">
     <div class="sh"><div><div class="tag" data-i18n="tl.tag"></div><h2 data-i18n="tl.title"></h2><p data-i18n="tl.desc"></p></div></div>
     <div class="card"><ol class="timeline" id="timeline"></ol></div>
   </section>
 
-  <section id="methode">
+  <section id="methode" data-view="apropos">
     <div class="sh"><div><div class="tag" data-i18n="me.tag"></div><h2 data-i18n="me.title"></h2></div></div>
     <div class="read" id="method"></div>
   </section>

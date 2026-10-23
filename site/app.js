@@ -626,7 +626,7 @@
   // ---------- Liste des sondages + effets instituts ----------
   let showAll = false;
   function renderPolls() {
-    const list = D.surveys.slice(0, showAll ? 40 : 10);
+    const list = D.surveys.slice(0, showAll ? 40 : 5);
     $('#pollList').innerHTML = list.map(s => {
       const r1 = s.hyps.filter(h => h.round === 1), r2 = s.hyps.filter(h => h.round === 2);
       const first = r1[0] ? Object.entries(r1[0].r).sort((a, b) => b[1] - a[1]).slice(0, 7) : [];
@@ -754,8 +754,24 @@
     const next = isDark() ? 'light' : 'dark'; document.documentElement.dataset.theme = next; store.set('theme', next); renderAll();
   };
   matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', renderAll);
-  // Lien direct vers une section (ex. ?retrait=EP#etsi) : on y revient une fois la page dessinée.
-  if (location.hash.length > 1) setTimeout(() => { const el = document.getElementById(location.hash.slice(1)); if (el) el.scrollIntoView(); }, 400);
+  // ---------- Thèmes (onglets) : une accueil courte, le reste par thème ----------
+  // Chaque section porte data-view. Une ancre (#etsi, #second…) ouvre le thème qui contient la section, puis y descend.
+  const VIEWS = ['accueil', 'simuler', 'tour2', 'comprendre', 'opinion', 'donnees', 'apropos'];
+  function route(scroll = true) {
+    const id = decodeURIComponent(location.hash.slice(1));
+    let view = 'accueil', target = null;
+    if (VIEWS.includes(id)) view = id;
+    else if (id) { const el = document.getElementById(id); const sec = el && el.closest('[data-view]'); if (sec) { view = sec.dataset.view; target = el; } }
+    const changed = document.body.dataset.view !== view;
+    document.body.dataset.view = view;
+    document.querySelectorAll('main [data-view]').forEach(s => s.classList.toggle('vhide', s.dataset.view !== view));
+    document.querySelectorAll('#vtabs a').forEach(a => a.classList.toggle('on', a.dataset.v === view));
+    if (changed) dispatchEvent(new Event('resize'));        // les graphiques d'un thème caché se redessinent à la bonne largeur
+    if (!scroll) return;
+    setTimeout(() => { if (target) target.scrollIntoView(); else if (view !== 'accueil' || id) $('#vtabs').scrollIntoView(); }, changed ? 200 : 0);
+  }
+  addEventListener('hashchange', () => route(true));
+  route(location.hash.length > 1);
   let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { drawRace(); drawProj(); drawGhosts(); renderConcerns(); window.Debate && window.Debate.redraw(); }, 150); });
   // Menu « Plus » : se referme après un clic sur un lien ou en dehors.
   const more = $('#navMore');
