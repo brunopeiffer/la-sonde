@@ -20,8 +20,15 @@ if (!KEY) { log('Pas de clé ANTHROPIC_API_KEY : veille par agent désactivée.'
 // Budget : l'agent ne tourne qu'un jour sur N (config.json → agent.everyDays), sauf lancement manuel.
 const STATE_PATH = P('data/agent_state.json');
 const state = fs.existsSync(STATE_PATH) ? readJSON(STATE_PATH) : {};
-if (!process.env.FORCE && state.lastRun && toDay(TODAY) - toDay(state.lastRun) < (AG.everyDays || 1)) {
-  log(`Dernier passage le ${state.lastRun} : prochain passage dans ${(AG.everyDays || 1) - (toDay(TODAY) - toDay(state.lastRun))} jour(s).`); process.exit(0);
+// Deux modes : (1) relevé des notices officielles en attente (scripts/commission.mjs), à chaque passage,
+// car c'est peu coûteux et seulement quand il y a du nouveau ; (2) recherche web, le matin, un jour sur N.
+const CS_PATH = P('data/commission_state.json');
+const CS = fs.existsSync(CS_PATH) ? readJSON(CS_PATH) : { seen: {} };
+const PENDING = Object.entries(CS.seen || {}).filter(([, s]) => s.status === 'pending' && (s.tries || 0) < 3).sort((a, b) => a[1].pub.localeCompare(b[1].pub)).slice(0, 6);
+const lastSearch = state.lastSearch || state.lastRun;
+const DUE = !!process.env.FORCE || (process.env.MORNING === '1' && (!lastSearch || toDay(TODAY) - toDay(lastSearch) >= (AG.everyDays || 1)));
+if (!DUE && !PENDING.length) {
+  log(`Aucune notice en attente. Recherche web : dernier passage le ${lastSearch || '—'}, tous les ${AG.everyDays || 1} jour(s), le matin.`); process.exit(0);
 }
 if (cfg.election.blackout.some(b => Date.now() >= Date.parse(b.from) && Date.now() <= Date.parse(b.to))) {
   log('Période de réserve électorale : aucune collecte.'); process.exit(0);
@@ -58,17 +65,19 @@ const searchDomains = () => cfg.trustedDomains.filter(d => !BLOCKED.has(d));
 async function ask(prompt, maxSearches = 8, maxFetches = AG.maxFetches || 2) {
   if (spent >= BUDGET) throw new Error('budget mensuel atteint');
   const messages = [{ role: 'user', content: prompt }];
+  const tools = [
+    ...(maxSearches > 0 ? [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches, allowed_domains: searchDomains() }] : []),
+    // Lecture complète d'une page ou d'un PDF (notice de la Commission, rapport d'institut).
+    ...(FETCH && maxFetches > 0 ? [{ type: 'web_fetch_20250910', name: 'web_fetch', max_uses: maxFetches, allowed_domains: searchDomains(), max_content_tokens: AG.maxFetchTokens || 20000 }] : [])];
   let text = '', last = null, finalize = false;
   for (let turn = 0; turn < 5; turn++) {
     const r = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json', ...(FETCH === 'beta' ? { 'anthropic-beta': 'web-fetch-2025-09-10' } : {}) },
+      headers: { 'x-api-key': KEY, 'anthropic-version': '2023-06-01', 'content-type': 'application/json', ...(FETCH === 'beta' && tools.some(t => t.name === 'web_fetch') ? { 'anthropic-beta': 'web-fetch-2025-09-10' } : {}) },
       body: JSON.stringify({
         model: MODEL, max_tokens: 8000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search', max_uses: maxSearches, allowed_domains: searchDomains() },
-          // Lecture complète d'une page ou d'un PDF (notice de la Commission, rapport d'institut).
-          ...(FETCH ? [{ type: 'web_fetch_20250910', name: 'web_fetch', max_uses: maxFetches, allowed_domains: searchDomains(), max_content_tokens: AG.maxFetchTokens || 20000 }] : [])],
-        ...(finalize ? { tool_choice: { type: 'none' } } : {}),
+        ...(tools.length ? { tools } : {}),
+        ...(finalize && tools.length ? { tool_choice: { type: 'none' } } : {}),
         messages
       })
     });
@@ -124,6 +133,7 @@ const idOf = name => {
   return hit ? hit.candidate_id : null;
 };
 const instOK = s => cfg.institutes.some(i => norm(s).includes(norm(i)) || norm(i).includes(norm(s)));
+const DISCOVERY = ['wikipedia.org', 'sondax.fr'];
 const domainOK = u => { try { const h = new URL(u).hostname.replace(/^www\./, ''); return cfg.trustedDomains.some(d => h === d || h.endsWith('.' + d)); } catch { return false; } };
 
 // Sondages déjà connus (pour ne pas les rechercher à nouveau).
@@ -140,7 +150,7 @@ const SCHEMA = `{"skipped":[{"institute":"IFOP","end":"YYYY-MM-DD","reason":"pou
 function validate(p) {
   const errs = [];
   if (!instOK(p.institute || '')) errs.push('institut inconnu');
-  if (!domainOK(p.source || '')) errs.push('source hors liste de confiance');
+  if (!domainOK(p.source || '') || DISCOVERY.some(d => (p.source || '').includes(d))) errs.push('source hors liste de confiance');
   if (!/^\d{4}-\d{2}-\d{2}$/.test(p.end || '') || p.end > TODAY || toDay(TODAY) - toDay(p.end) > 30) errs.push('dates invalides');
   if (!(p.n >= 500 && p.n <= 30000)) errs.push('échantillon invalide');
   if (![1, 2].includes(p.round)) errs.push('tour invalide');
@@ -160,13 +170,76 @@ function validate(p) {
   return errs;
 }
 
+// Contrôle, double vérification et enregistrement d'une liste de sondages relevés.
+async function addPolls(found, verify) {
+  let added = 0;
+  for (const p of found) {
+    const errs = validate(p);
+    if (errs.length) { log('✗ rejeté', p.institute, p.end, errs.join('; ')); SUMMARY.push(`✗ Rejeté : ${p.institute} ${p.end} (${errs.join('; ')})`); continue; }
+    // Double contrôle indépendant.
+    const check = await verify(p);
+    if (!check.confirmed) { log('✗ non confirmé', p.institute, p.end, check.reason); SUMMARY.push(`✗ Non confirmé : ${p.institute} ${p.end} (${p.round === 2 ? '2nd' : '1er'} tour)${check.reason ? ' — ' + check.reason : ''}`); continue; }
+    // Comparaison par candidat (identifiant), en cherchant pour chaque hypothèse la plus proche dans la vérification.
+    const ver = (check.hypotheses || []).map(h => Object.fromEntries(Object.entries(h.results || {}).map(([n, v]) => [idOf(n), +v]).filter(([id]) => id)));
+    const mismatch = p.hypotheses.some(h => !ver.some(w => Object.entries(h.ids).every(([id, v]) => w[id] !== undefined && Math.abs(w[id] - v) <= 0.5)));
+    if (mismatch) { log('✗ chiffres divergents entre les deux passages', p.institute, p.end); SUMMARY.push(`✗ Chiffres divergents à la vérification : ${p.institute} ${p.end}`); continue; }
+    const code = norm(p.institute).slice(0, 2);
+    const survey = `${p.start.replace(/-/g, '')}_${p.end.slice(5).replace('-', '')}_${code}_ag${p.round}`;
+    if (store.polls.some(x => x.survey === survey)) continue;
+    store.polls.push({ survey, institute: p.institute, sponsor: p.sponsor, start: p.start, end: p.end, n: p.n, round: p.round, source: p.source,
+      foundAt: TODAY, hypotheses: p.hypotheses.map(h => ({ label: h.label || '', results: h.ids })) });
+    known.set(survey, `${p.institute} (${p.sponsor}), terrain ${p.start} → ${p.end}`);
+    added++; log('✔ ajouté', survey); SUMMARY.push(`✔ Sondage ajouté : ${p.institute} pour ${p.sponsor}, terrain ${p.start} → ${p.end}, ${p.round === 2 ? '2nd' : '1er'} tour (${p.hypotheses.length} hypothèse(s))`);
+  }
+  store.polls = store.polls.filter(p => toDay(TODAY) - toDay(p.end) <= 60);
+  writeJSON(P('data/agent_polls.json'), store, true);
+  return added;
+}
+
+// Relevé des notices officielles déposées à la Commission des sondages (repérées par scripts/commission.mjs).
+// Le document est fourni directement au modèle (texte extrait du PDF, ou le PDF lui-même) : pas de recherche web.
+async function noticeWatch() {
+  for (const [num, s] of PENDING) {
+    const txt = P('.cache/notices', `${num}.txt`), pdf = P('.cache/notices', `${num}.pdf`);
+    let doc;
+    if (fs.existsSync(txt) && fs.statSync(txt).size > 500) doc = [{ type: 'text', text: `TEXTE INTÉGRAL DE LA NOTICE (extrait du PDF) :\n${fs.readFileSync(txt, 'utf8').replace(/[ \t]{3,}/g, '  ').slice(0, 150000)}` }];
+    else if (fs.existsSync(pdf)) doc = [{ type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: fs.readFileSync(pdf).toString('base64') } }];
+    else { s.tries = (s.tries || 0) + 1; SUMMARY.push(`⚠ Notice ${num} : fichier indisponible`); continue; }
+    const head = `Notice officielle n° ${num} déposée à la Commission des sondages : « ${s.title} » (publiée le ${s.pub}). URL : ${s.url}`;
+    try {
+      const res = await ask([...doc, { type: 'text', text: `${head}
+Si ce document contient des INTENTIONS DE VOTE pour l'élection présidentielle française de 2027, relève-les EXACTEMENT telles que publiées (colonne des résultats publiés, pas les résultats bruts), pour CHAQUE hypothèse testée, avec les noms complets des candidats.
+Un objet "polls" par tour (un pour le 1er tour avec toutes ses hypothèses, un pour le 2nd tour avec un duel par hypothèse). N'inclus pas « abstention », « blanc », « ne se prononce pas » ni « sans intention de vote » dans les résultats.
+institute : l'institut ; sponsor : le ou les commanditaires/médias ; start et end : dates de terrain ; n : nombre d'inscrits sur les listes électorales interrogés (à défaut, la taille de l'échantillon) ; source : ${s.url}
+Les petits candidats annoncés « 2 % ou moins » : 1 ; « moins de 1 % » : 0.5. N'invente rien : une hypothèse illisible n'est pas relevée.
+Si le document ne contient pas d'intentions de vote présidentielles, réponds <json>{"polls":[],"none":"raison courte"}</json>.
+Réponds uniquement par un bloc <json>…</json> au format ${SCHEMA}.` }], 0, 0);
+      const found = (res.polls || []).map(p => ({ ...p, source: s.url }));
+      if (!found.length) { s.status = 'sans intentions de vote'; SUMMARY.push(`· Notice ${num} (${s.title}) : pas d'intentions de vote${res.none ? ' — ' + res.none : ''}`); continue; }
+      const added = await addPolls(found, p => ask([...doc, { type: 'text', text: `${head}
+Vérifie, chiffre par chiffre, ce relevé de sondage par rapport au document ci-dessus (résultats publiés). Relevé : ${JSON.stringify(p)}
+Réponds par <json>{"confirmed":true|false,"reason":"…","hypotheses":[{"results":{"Nom Complet":valeur}}]}</json> avec les chiffres tels que publiés dans le document.` }], 0, 0));
+      s.status = added ? `relevée (${added} sondage(s) ajouté(s))` : 'relevée, rien de nouveau';
+      SUMMARY.push(`${added ? '✔' : '·'} Notice ${num} (${s.title}) : ${s.status}`);
+    } catch (e) {
+      s.tries = (s.tries || 0) + 1;
+      SUMMARY.push(`⚠ Notice ${num} : relevé en échec (${e.message.slice(0, 150)})${s.tries >= 3 ? ' — abandon après 3 essais' : ''}`);
+      if (/budget/.test(e.message)) break;
+    }
+  }
+  writeJSON(CS_PATH, CS, true);
+}
+
 async function pollWatch() {
   const prompt = `Tu es analyste pour un agrégateur de sondages. Aujourd'hui : ${TODAY}.
 Cherche les sondages d'INTENTIONS DE VOTE pour l'élection présidentielle française de 2027 (1er ou 2nd tour) dont le terrain s'est terminé dans les 21 derniers jours, réalisés par des instituts reconnus (${cfg.institutes.join(', ')}) et publiés par des médias nationaux (TV, radio, presse).
 Ignore les sondages commandés par un parti ou un candidat, les sondages « souhait de victoire » et les sondages déjà connus ci-dessous :
 ${[...known.values()].map(s => '- ' + s).join('\n') || '- (aucun)'}
 Pour chaque nouveau sondage, relève EXACTEMENT les chiffres publiés pour CHAQUE hypothèse testée (noms complets des candidats), l'échantillon (nombre d'inscrits interrogés ou, à défaut, de personnes interrogées), les dates de terrain et l'URL de la source primaire.
-Méthode conseillée : une recherche générale (« sondage présidentielle 2027 intentions de vote » + le mois en cours), puis les sites des instituts cités (pages « actualités » ou « publications », souvent avec un PDF) et commission-des-sondages.fr.
+Méthode conseillée :
+1. REPÉRAGE : ouvre d'abord avec web_fetch l'une de ces listes tenues à jour, qui recensent les sondages récents (les plus récents en haut) : https://fr.wikipedia.org/wiki/Liste_de_sondages_sur_l%27%C3%A9lection_pr%C3%A9sidentielle_fran%C3%A7aise_de_2027 ou https://sondax.fr/sondages.html. Note les sondages dont le terrain se termine après le plus récent sondage déjà connu ci-dessus.
+2. Complète par une recherche générale (« sondage présidentielle 2027 intentions de vote » + le mois en cours) et les sites des instituts (pages « actualités » ou « publications », souvent avec un PDF).
+3. Ces listes ne servent qu'au repérage : les chiffres doivent venir de la source primaire (institut ou notice de commission-des-sondages.fr). Si elle est inaccessible, mets le sondage dans "skipped" : la veille des notices officielles le relèvera.
 Si tu repères un sondage mais ne peux pas en relever tous les chiffres de façon certaine, mets-le dans "skipped" avec la raison, au lieu de l'ignorer en silence.
 Pour chaque sondage repéré, ouvre sa notice PDF sur commission-des-sondages.fr ou le rapport de l'institut avec l'outil web_fetch, et relève les chiffres dans ce document plutôt que dans un article de presse.
 Les petits candidats annoncés « 2 % ou moins » : indique 1 ; « moins de 1 % » : indique 0.5. Si seules certaines hypothèses sont lisibles avec certitude, ne relève que celles-là (il en faut au moins une complète pour les principaux candidats).
@@ -184,25 +257,8 @@ Réponds uniquement par un bloc <json>…</json> au format ${SCHEMA}. Si rien de
   for (const k of res0.skipped || []) SUMMARY.push(`… Repéré mais écarté par l'agent : ${k.institute || '?'} (${k.end || '?'}) — ${k.reason || 'sans raison'}`);
   log(`${found.length} sondage(s) candidat(s)`);
   SUMMARY.push(`Recherche : ${found.length} sondage(s) récent(s) non encore dans la base${found.length ? ' : ' + found.map(p => `${p.institute} (${p.end}, ${p.round === 2 ? '2nd' : '1er'} tour)`).join(', ') : ''}.`);
-  let added = 0;
-  for (const p of found) {
-    const errs = validate(p);
-    if (errs.length) { log('✗ rejeté', p.institute, p.end, errs.join('; ')); SUMMARY.push(`✗ Rejeté : ${p.institute} ${p.end} (${errs.join('; ')})`); continue; }
-    // Double contrôle indépendant.
-    const check = await ask(`Vérifie ce relevé de sondage en ouvrant directement sa source avec web_fetch (${p.source}) ou la notice de la Commission des sondages. Relevé : ${JSON.stringify(p)}
-Réponds par <json>{"confirmed":true|false,"reason":"…","hypotheses":[{"results":{"Nom Complet":valeur}}]}</json> avec les chiffres tels que publiés.`, AG.verifySearches ?? 1, AG.verifyFetches ?? 1);
-    if (!check.confirmed) { log('✗ non confirmé', p.institute, p.end, check.reason); SUMMARY.push(`✗ Non confirmé : ${p.institute} ${p.end} (${p.round === 2 ? '2nd' : '1er'} tour)${check.reason ? ' — ' + check.reason : ''}`); continue; }
-    // Comparaison par candidat (identifiant), en cherchant pour chaque hypothèse la plus proche dans la vérification.
-    const ver = (check.hypotheses || []).map(h => Object.fromEntries(Object.entries(h.results || {}).map(([n, v]) => [idOf(n), +v]).filter(([id]) => id)));
-    const mismatch = p.hypotheses.some(h => !ver.some(w => Object.entries(h.ids).every(([id, v]) => w[id] !== undefined && Math.abs(w[id] - v) <= 0.5)));
-    if (mismatch) { log('✗ chiffres divergents entre les deux passages', p.institute, p.end); SUMMARY.push(`✗ Chiffres divergents à la vérification : ${p.institute} ${p.end}`); continue; }
-    const code = norm(p.institute).slice(0, 2);
-    const survey = `${p.start.replace(/-/g, '')}_${p.end.slice(5).replace('-', '')}_${code}_ag${p.round}`;
-    if (store.polls.some(x => x.survey === survey)) continue;
-    store.polls.push({ survey, institute: p.institute, sponsor: p.sponsor, start: p.start, end: p.end, n: p.n, round: p.round, source: p.source,
-      foundAt: TODAY, hypotheses: p.hypotheses.map(h => ({ label: h.label || '', results: h.ids })) });
-    added++; log('✔ ajouté', survey); SUMMARY.push(`✔ Sondage ajouté : ${p.institute} pour ${p.sponsor}, terrain ${p.start} → ${p.end}, ${p.round === 2 ? '2nd' : '1er'} tour (${p.hypotheses.length} hypothèse(s))`);
-  }
+  const added = await addPolls(found, p => ask(`Vérifie ce relevé de sondage en ouvrant directement sa source avec web_fetch (${p.source}) ou la notice de la Commission des sondages. Relevé : ${JSON.stringify(p)}
+Réponds par <json>{"confirmed":true|false,"reason":"…","hypotheses":[{"results":{"Nom Complet":valeur}}]}</json> avec les chiffres tels que publiés.`, AG.verifySearches ?? 1, AG.verifyFetches ?? 1));
   // On purge les entrées de plus de 60 jours (la base MieuxVoter a pris le relais).
   store.polls = store.polls.filter(p => toDay(TODAY) - toDay(p.end) <= 60);
   writeJSON(P('data/agent_polls.json'), store, true);
@@ -251,10 +307,13 @@ Réponds par <json>{"items":[{"name":"Nom Complet","type":"withdrawal","date":"Y
   log(`${n} changement(s) de candidature ajouté(s).`);
 }
 
-try { await pollWatch(); } catch (e) { log('Veille sondages en échec :', e.message); SUMMARY.push(`⚠ Veille sondages en échec : ${e.message}`); }
-try { await concernsWatch(); } catch (e) { log('Veille préoccupations en échec :', e.message); SUMMARY.push(`⚠ Veille préoccupations en échec : ${e.message}`); }
-try { await candidacyWatch(); } catch (e) { log('Veille candidatures en échec :', e.message); SUMMARY.push(`⚠ Veille candidatures en échec : ${e.message}`); }
-writeJSON(STATE_PATH, { ...state, lastRun: TODAY, month: MONTH, spentUsd: Math.round(spent * 1000) / 1000, blockedDomains: [...BLOCKED].sort() }, true);
+if (PENDING.length) { try { await noticeWatch(); } catch (e) { log('Relevé des notices en échec :', e.message); SUMMARY.push(`⚠ Relevé des notices en échec : ${e.message}`); } }
+if (DUE) {
+  try { await pollWatch(); } catch (e) { log('Veille sondages en échec :', e.message); SUMMARY.push(`⚠ Veille sondages en échec : ${e.message}`); }
+  try { await concernsWatch(); } catch (e) { log('Veille préoccupations en échec :', e.message); SUMMARY.push(`⚠ Veille préoccupations en échec : ${e.message}`); }
+  try { await candidacyWatch(); } catch (e) { log('Veille candidatures en échec :', e.message); SUMMARY.push(`⚠ Veille candidatures en échec : ${e.message}`); }
+}
+writeJSON(STATE_PATH, { ...state, lastRun: TODAY, ...(DUE ? { lastSearch: TODAY } : { lastSearch }), month: MONTH, spentUsd: Math.round(spent * 1000) / 1000, blockedDomains: [...BLOCKED].sort() }, true);
 const recap = `### Agent de veille — ${TODAY} (modèle ${MODEL})\n\n${SUMMARY.length ? SUMMARY.map(x => '- ' + x).join('\n') : '- Rien de nouveau.'}\n\n${calls} appel(s), ${searches} recherche(s). Coût estimé ce mois-ci : ${spent.toFixed(2)} $ sur ${BUDGET} $.\n`;
 log(recap.replace(/\n+/g, ' | '));
 if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, recap);
