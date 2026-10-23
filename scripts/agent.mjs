@@ -221,6 +221,8 @@ institute : l'institut ; sponsor : le ou les commanditaires/médias ; start et e
 Les petits candidats annoncés « 2 % ou moins » : 1 ; « moins de 1 % » : 0.5. N'invente rien : une hypothèse illisible n'est pas relevée.
 Si le document ne contient pas d'intentions de vote présidentielles, réponds <json>{"polls":[],"none":"raison courte"}</json>.
 Réponds uniquement par un bloc <json>…</json> au format ${SCHEMA}.` }], 0, 0);
+      // Baromètre Ipsos / La Tribune Dimanche : on en profite pour relever la question des préoccupations.
+      if (/barom.*ipsos.*tribune|ipsos.*barom.*tribune/i.test(s.title)) { try { await concernsFromNotice(doc, head, s.url); } catch (e) { SUMMARY.push(`⚠ Préoccupations (notice ${num}) : ${e.message.slice(0, 120)}`); } }
       const found = (res.polls || []).map(p => ({ ...p, source: s.url }));
       if (!found.length) { s.status = 'sans intentions de vote'; SUMMARY.push(`· Notice ${num} (${s.title}) : pas d'intentions de vote${res.none ? ' — ' + res.none : ''}`); continue; }
       const added = await addPolls(found, p => ask([...doc, { type: 'text', text: `${head}
@@ -237,6 +239,23 @@ Réponds par <json>{"confirmed":true|false,"reason":"…","hypotheses":[{"result
     }
   }
   writeJSON(CS_PATH, CS, true);
+}
+
+// Préoccupations des Français, relevées dans la notice officielle du baromètre Ipsos bva-CESI / La Tribune Dimanche.
+async function concernsFromNotice(doc, head, url) {
+  const C = readJSON(P('data/concerns.json'));
+  const S = C.series.find(x => x.id === 'ipsos-tribune');
+  const codes = { pouvoir_achat: "pouvoir d'achat", systeme_social: 'avenir du système social (santé, retraites)', dette: 'dette et déficits', delinquance: 'délinquance', immigration: 'immigration', environnement: "protection de l'environnement" };
+  const res = await ask([...doc, { type: 'text', text: `${head}
+Ce document contient-il la question « Parmi les enjeux suivants, quels sont les trois qui vous préoccupent le plus à titre personnel ? » ? Si oui, relève les pourcentages de la vague ACTUELLE (pas la colonne « rappel ») pour ces enjeux : ${Object.entries(codes).map(([k, v]) => `${k} = ${v}`).join(' ; ')}.
+Réponds par <json>{"found":true|false,"date":"YYYY-MM-DD (dernier jour de terrain)","field":"dates de terrain en toutes lettres, ex. 7-8 octobre 2026","n":1000,"values":{"pouvoir_achat":54}}</json>` }], 0, 0);
+  if (!res.found || !/^\d{4}-\d{2}-\d{2}$/.test(res.date || '') || S.waves.some(w => w.date === res.date)) return;
+  const vals = Object.fromEntries(Object.entries(res.values || {}).filter(([k, v]) => codes[k] && v > 0 && v < 100));
+  if (Object.keys(vals).length < Object.keys(codes).length) { SUMMARY.push(`⚠ Préoccupations du ${res.date} incomplètes, non ajoutées`); return; }
+  S.waves.push({ date: res.date, field: res.field, n: res.n || 1000, source: url, values: vals, agent: true });
+  S.waves.sort((a, b) => a.date.localeCompare(b.date));
+  writeJSON(P('data/concerns.json'), C, true);
+  SUMMARY.push(`✔ Préoccupations : vague du ${res.field} ajoutée (notice officielle)`);
 }
 
 async function pollWatch() {
@@ -286,7 +305,7 @@ Codes de thèmes autorisés : ${themes}. N'inclus que les thèmes dont le pource
 Réponds par <json>{"found":true|false,"date":"YYYY-MM-DD (fin de terrain)","field":"texte des dates de terrain","n":1000,"source":"URL","values":{"pouvoir_achat":54}}</json>`, 3);
   if (!res.found || !res.date || res.date <= last || !domainOK(res.source || '')) { log('Pas de nouvelle vague exploitable.'); return; }
   const vals = Object.fromEntries(Object.entries(res.values || {}).filter(([k, v]) => C.themes[k] && v > 0 && v < 100));
-  if (Object.keys(vals).length < 3) { log('Vague incomplète, ignorée.'); return; }
+  if (Object.keys(vals).length < 6) { log('Vague incomplète, ignorée.'); return; }
   s.waves.push({ date: res.date, field: res.field, n: res.n, source: res.source, values: vals, agent: true });
   writeJSON(P('data/concerns.json'), C, true);
   log('✔ nouvelle vague préoccupations', res.date); SUMMARY.push(`✔ Préoccupations : nouvelle vague du ${res.date}`);
