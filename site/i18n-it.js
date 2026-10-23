@@ -54,7 +54,7 @@ window.I18N.it = {
   "is.src": "Fonte: {s}.", "is.waves": "{i} per {p}. {q}.", "is.missing": ". I temi mancanti non sono stati pubblicati in quella rilevazione.",
   "po.tag": "Trasparenza", "po.title": "Ultimi sondaggi",
   "po.desc": "Ogni sondaggio con i suoi dati legali: istituto, committente, date di rilevazione, campione. Le note complete sono depositate presso la Commissione dei sondaggi francese.",
-  "po.hyp": "{n} scenario/i", "po.notice": "Nota", "po.source": "Fonte", "po.prov": "Provvisorio: trovato dal nostro agente, in attesa della banca dati ufficiale",
+  "po.hyp": "{n} scenario/i", "po.notice": "Nota", "po.source": "Fonte", "po.prov": "Provvisorio: ripreso dalla stampa, in attesa della nota ufficiale",
   "po.sample": "{n} persone", "po.r2": "Ballottaggio", "po.more": "Mostra altri", "po.house": "Effetti istituto",
   "po.houseDesc": "Scarto medio di ogni istituto rispetto alla media generale su 8 mesi (punti). Non è una distorsione voluta: metodi, panel e ponderazioni differiscono.",
   "po.inst": "Istituto", "po.nsurv": "Sondaggi",

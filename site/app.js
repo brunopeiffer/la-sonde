@@ -603,8 +603,9 @@
       const first = r1[0] ? Object.entries(r1[0].r).sort((a, b) => b[1] - a[1]).slice(0, 7) : [];
       return `<div class="poll"><div class="who"><b>${esc(s.inst)}</b><span>${esc(s.sponsor)}</span><span class="num">${fdate(s.start, { day: 'numeric', month: 'short' })} → ${fdate(s.end)}</span>
         <span>${t('po.sample', { n: s.n.toLocaleString(loc()) })} · ${t('po.hyp', { n: s.hyps.length })}</span>
-        ${s.provisional ? `<span class="badge">${t('po.prov')}</span>` : ''}
-        <span>${s.source ? `<a href="${esc(s.source)}" target="_blank" rel="noopener">${t('po.source')}</a>` : s.file ? `<a href="https://www.commission-des-sondages.fr/" target="_blank" rel="noopener" title="${esc(s.file)}">${t('po.notice')} n° ${esc((s.file.match(/^\d+/) || [''])[0])}</a>` : ''}</span></div>
+        ${s.provisional && !/commission-des-sondages\.fr/.test(s.source || '') ? `<span class="badge">${t('po.prov')}</span>` : ''}
+        <span>${s.source && /commission-des-sondages\.fr/.test(s.source) ? `<a href="${esc(s.source)}" target="_blank" rel="noopener">${t('po.notice')} n° ${esc((s.source.match(/\/(\d{4,6})-/) || ['', ''])[1])}</a>`
+          : s.source ? `<a href="${esc(s.source)}" target="_blank" rel="noopener">${t('po.source')}</a>` : s.file ? `<a href="https://www.commission-des-sondages.fr/" target="_blank" rel="noopener" title="${esc(s.file)}">${t('po.notice')} n° ${esc((s.file.match(/^\d+/) || [''])[0])}</a>` : ''}</span></div>
         <div>${first.length ? `<div class="mini">${first.map(([c, v]) => `<span><i style="background:${col(c)}"></i>${esc(sh(c))} <b class="num">${fmt(v, v % 1 ? 1 : 0)}</b></span>`).join('')}</div>` : ''}
         ${r2.length ? `<div class="mini" style="margin-top:6px"><b>${t('po.r2')} :</b> ${r2.map(h => Object.entries(h.r).map(([c, v]) => `${esc(sh(c))} ${fmt(v, 0)}`).join(' – ')).join(' · ')}</div>` : ''}</div></div>`;
     }).join('') + (showAll ? '' : `<button class="pill" id="moreBtn" style="justify-self:start">${t('po.more')}</button>`);

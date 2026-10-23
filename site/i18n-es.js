@@ -54,7 +54,7 @@ window.I18N.es = {
   "is.src": "Fuente: {s}.", "is.waves": "{i} para {p}. {q}.", "is.missing": ". Los temas que faltan no se publicaron en esa oleada.",
   "po.tag": "Transparencia", "po.title": "Últimas encuestas",
   "po.desc": "Cada encuesta con sus datos legales: instituto, cliente, fechas de campo y muestra. Las fichas completas se depositan ante la Comisión de Encuestas francesa.",
-  "po.hyp": "{n} escenario(s)", "po.notice": "Ficha", "po.source": "Fuente", "po.prov": "Provisional: encontrada por nuestro agente, pendiente de la base oficial",
+  "po.hyp": "{n} escenario(s)", "po.notice": "Ficha", "po.source": "Fuente", "po.prov": "Provisional: tomada de la prensa, pendiente de la ficha oficial",
   "po.sample": "{n} personas", "po.r2": "2.ª vuelta", "po.more": "Ver más", "po.house": "Efectos de instituto",
   "po.houseDesc": "Desviación media de cada instituto respecto a la media general en 8 meses (puntos). No es un sesgo deliberado: métodos, paneles y ponderaciones difieren.",
   "po.inst": "Instituto", "po.nsurv": "Encuestas",

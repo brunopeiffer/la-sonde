@@ -54,7 +54,7 @@ window.I18N.de = {
   "is.src": "Quelle: {s}.", "is.waves": "{i} für {p}. {q}.", "is.missing": ". Fehlende Themen wurden in dieser Welle nicht veröffentlicht.",
   "po.tag": "Transparenz", "po.title": "Neueste Umfragen",
   "po.desc": "Jede Umfrage mit ihren gesetzlichen Angaben: Institut, Auftraggeber, Feldzeit, Stichprobe. Die vollständigen Berichte liegen der französischen Umfragekommission vor.",
-  "po.hyp": "{n} Szenario(s)", "po.notice": "Bericht", "po.source": "Quelle", "po.prov": "Vorläufig: von unserem Agenten gefunden, noch nicht in der offiziellen Datenbank",
+  "po.hyp": "{n} Szenario(s)", "po.notice": "Bericht", "po.source": "Quelle", "po.prov": "Vorläufig: aus Presseberichten, offizieller Bericht ausstehend",
   "po.sample": "{n} Personen", "po.r2": "Stichwahl", "po.more": "Mehr anzeigen", "po.house": "Instituts-Effekte",
   "po.houseDesc": "Durchschnittliche Abweichung jedes Instituts vom Gesamtdurchschnitt über 8 Monate (Punkte). Keine absichtliche Verzerrung: Methoden, Panels und Gewichtungen unterscheiden sich.",
   "po.inst": "Institut", "po.nsurv": "Umfragen",
