@@ -147,3 +147,5 @@ Object.assign(window.I18N.es, {
 });
 Object.assign(window.I18N.es, { 'wi.posT': 'Posiciones izquierda (0) – derecha (10) usadas por el simulador', 'wi.calT': 'Ajustes recalculados sobre {n} trasvases medidos: abstención {a} %, alcance de proximidad {l}, efecto de tamaño {s}' });
 Object.assign(window.I18N.es, { 'nav.more': 'Más', 'nav.menu': 'Menú' });
+Object.assign(window.I18N.es, {"meta.title": "Encuestas de las presidenciales francesas de 2027: media, tendencias y probabilidades | La Sonde", "meta.desc": "Todas las encuestas de las presidenciales francesas de 2027 de un vistazo: media corregida, tendencias, probabilidades de segunda vuelta y simulador de retiradas. Actualizado a diario."});
+Object.assign(window.I18N.es, {"sh.title": "Compartir:", "sh.copy": "Copiar enlace"});

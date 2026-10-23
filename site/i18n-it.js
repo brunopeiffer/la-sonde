@@ -147,3 +147,5 @@ Object.assign(window.I18N.it, {
 });
 Object.assign(window.I18N.it, { 'wi.posT': 'Posizioni sinistra (0) – destra (10) usate dal simulatore', 'wi.calT': 'Parametri ricalcolati su {n} flussi misurati: astensione {a}%, raggio di vicinanza {l}, effetto dimensione {s}' });
 Object.assign(window.I18N.it, { 'nav.more': 'Altro', 'nav.menu': 'Menu' });
+Object.assign(window.I18N.it, {"meta.title": "Sondaggi presidenziali francesi 2027: media, tendenze e probabilità | La Sonde", "meta.desc": "Tutti i sondaggi delle presidenziali francesi 2027 in un colpo d'occhio: media corretta, tendenze, probabilità di ballottaggio e simulatore di ritiri. Aggiornato ogni giorno."});
+Object.assign(window.I18N.it, {"sh.title": "Condividi:", "sh.copy": "Copia link"});

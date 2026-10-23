@@ -61,6 +61,8 @@
   // ---------- Textes statiques ----------
   function renderStatic() {
     document.documentElement.lang = lang;
+    document.title = t('meta.title');
+    const md = document.querySelector('meta[name="description"]'); if (md) md.setAttribute('content', t('meta.desc'));
     document.querySelectorAll('[data-i18n]').forEach(el => { el.innerHTML = t(el.dataset.i18n); });
     $('#langSel').value = lang;
     const now = Date.now();
@@ -182,10 +184,23 @@
   // ---------- V2 : ce qui a changé ----------
   const page = c => (D.cands[c] && D.cands[c].slug) ? `candidat/${D.cands[c].slug}/` : '#course';
   const ICON = { up: '▲', down: '▼', flat: '●', poll: '◆', proba: '%', swap: '⇅', transfer: '⇢', ghost: '◷' };
+  // Boutons de partage pour les visiteurs : le texte du premier signal + le lien du site.
+  function shareRow(txt) {
+    const url = (D.site.url || location.origin).replace(/\/$/, '') + '/' + (lang === 'fr' ? '' : '?lang=' + lang);
+    const msg = (txt || t('meta.title')).slice(0, 220);
+    const enc = encodeURIComponent;
+    return `<div class="sharerow"><span>${t('sh.title')}</span>
+      <a target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${enc(msg)}&url=${enc(url)}">X</a>
+      <a target="_blank" rel="noopener" href="https://bsky.app/intent/compose?text=${enc(msg + ' ' + url)}">Bluesky</a>
+      <a target="_blank" rel="noopener" href="https://wa.me/?text=${enc(msg + ' ' + url)}">WhatsApp</a>
+      <a target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}">LinkedIn</a>
+      <button type="button" data-u="${esc(url)}" onclick="navigator.clipboard && navigator.clipboard.writeText(this.dataset.u); this.textContent='✓'">${t('sh.copy')}</button>
+      <a class="sharelink" href="share/carte-du-jour.png" target="_blank" rel="noopener">↗ ${t('chg.card')}</a></div>`;
+  }
   function renderChanges() {
     const it = D.changes ? (D.changes[lang] || D.changes.en || []) : [];
     $('#changes').innerHTML = it.length ? `<h3>${t('chg.title')}</h3><div class="chg-grid">` + it.map(x =>
-      `<div class="chg k-${x.k}"><span class="ico" aria-hidden="true">${ICON[x.k] || '•'}</span><p>${esc(x.t)}</p></div>`).join('') + `</div><a class="sharelink" href="share/carte-du-jour.png" target="_blank" rel="noopener">↗ ${t('chg.card')}</a>` : '';
+      `<div class="chg k-${x.k}"><span class="ico" aria-hidden="true">${ICON[x.k] || '•'}</span><p>${esc(x.t)}</p></div>`).join('') + `</div>${shareRow(it[0] && it[0].t)}` : '';
   }
 
   // ---------- V2 : détecteur de bascule ----------

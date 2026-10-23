@@ -5,7 +5,7 @@ window.I18N = {
     'nav.race': 'La course', 'nav.proba': 'Probabilités', 'nav.ghosts': 'Fantômes 2022', 'nav.transfers': 'Reports',
     'nav.round2': 'Second tour', 'nav.issues': 'Enjeux', 'nav.polls': 'Sondages', 'nav.method': 'Méthode',
     'hero.kicker': 'Mis à jour automatiquement',
-    'hero.title': 'Le pouls de la présidentielle 2027',
+    'hero.title': 'Le pouls des sondages de la présidentielle 2027',
     'hero.lead': "Tous les sondages des grands instituts, agrégés, corrigés et mis en perspective. Pour voir ce qui bouge vraiment, et ce qui n'est que du bruit.",
     'cd.r1': 'jours avant le 1er tour', 'cd.r2': 'jours avant le 2nd tour', 'cd.polls': 'enquêtes analysées',
     'pod.title': 'Moyenne des sondages', 'pod.d30': '30 j', 'pod.others': 'Autres candidats déclarés', 'pod.few': 'testé dans moins d’un tiers des enquêtes',
@@ -316,3 +316,7 @@ Object.assign(window.I18N.fr, { 'wi.posT': 'Positions gauche (0) – droite (10)
 Object.assign(window.I18N.en, { 'wi.posT': 'Left (0) – right (10) positions used by the simulator', 'wi.calT': 'Settings fitted to {n} measured transfers: abstention {a}%, proximity range {l}, size effect {s}' });
 Object.assign(window.I18N.fr, { 'nav.more': 'Plus', 'nav.menu': 'Menu' });
 Object.assign(window.I18N.en, { 'nav.more': 'More', 'nav.menu': 'Menu' });
+Object.assign(window.I18N.fr, {"meta.title": "Sondages présidentielle 2027 : moyenne, tendances et probabilités | La Sonde", "meta.desc": "Tous les sondages de la présidentielle 2027 en un coup d'œil : moyenne corrigée des effets instituts, tendances, probabilités de qualification, simulateur de retraits. Mis à jour chaque jour."});
+Object.assign(window.I18N.en, {"meta.title": "French presidential election 2027 polls: average, trends and odds | La Sonde", "meta.desc": "Every poll for France's 2027 presidential election at a glance: house-effect-adjusted average, trends, run-off odds, withdrawal simulator. Updated daily."});
+Object.assign(window.I18N.fr, {"sh.title": "Partager :", "sh.copy": "Copier le lien"});
+Object.assign(window.I18N.en, {"sh.title": "Share:", "sh.copy": "Copy link"});

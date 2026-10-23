@@ -147,3 +147,5 @@ Object.assign(window.I18N.de, {
 });
 Object.assign(window.I18N.de, { 'wi.posT': 'Vom Simulator verwendete Positionen links (0) – rechts (10)', 'wi.calT': 'An {n} gemessene Übertragungen angepasste Einstellungen: Enthaltung {a} %, Reichweite der Nähe {l}, Größeneffekt {s}' });
 Object.assign(window.I18N.de, { 'nav.more': 'Mehr', 'nav.menu': 'Menü' });
+Object.assign(window.I18N.de, {"meta.title": "Umfragen zur französischen Präsidentschaftswahl 2027: Durchschnitt, Trends, Chancen | La Sonde", "meta.desc": "Alle Umfragen zur französischen Präsidentschaftswahl 2027 auf einen Blick: bereinigter Durchschnitt, Trends, Chancen auf die Stichwahl, Rückzugs-Simulator. Täglich aktualisiert."});
+Object.assign(window.I18N.de, {"sh.title": "Teilen:", "sh.copy": "Link kopieren"});

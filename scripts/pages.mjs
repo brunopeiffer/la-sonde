@@ -133,3 +133,62 @@ all.forEach((s, i) => {
 fs.writeFileSync(P('site/sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
   [`${BASE}/`, ...["en", "de", "es", "it"].map(l => `${BASE}/?lang=${l}`), ...urls].map((u, i) => `  <url><loc>${u.replace(/&/g, "&amp;")}</loc><lastmod>${D.asOf}</lastmod><changefreq>daily</changefreq><priority>${i < 5 ? '1.0' : '0.8'}</priority></url>`).join('\n') + '\n</urlset>\n');
 console.log(`Pages candidats : ${urls.length}`);
+
+// ---------- Page d'accueil : contenu lisible sans JavaScript (Google, aperçus de liens) ----------
+{
+  const idx = P('site/index.html');
+  let h = fs.readFileSync(idx, 'utf8');
+  const top = D.standings.filter(s => s.presence >= 30).slice(0, 3);
+  const dateFr = fdate(D.asOf);
+  const headline = `Présidentielle 2027 : ${top.map(s => `${D.cands[s.c].short} ${Math.round(s.v)} %`).join(', ')} (moyenne des sondages au ${dateFr})`;
+  const firstSignal = ((D.changes || {}).fr || [])[0];
+  h = h.replace(/<meta property="og:title" content="[^"]*">/, `<meta property="og:title" content="${esc(headline)}">`);
+  if (firstSignal) h = h.replace(/<meta property="og:description" content="[^"]*">/, `<meta property="og:description" content="${esc(firstSignal.t)}">`);
+  // Résumé et liens vers les fiches, écrits en dur (le JavaScript les remplace ensuite).
+  h = h.replace(/<ul id="summary">[\s\S]*?<\/ul>/, `<ul id="summary">${(D.summary.fr || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul>`);
+  h = h.replace(/<div class="cfiches" id="cfiches">[\s\S]*?<\/div>/, `<div class="cfiches" id="cfiches">${all.filter(s => D.cands[s.c] && D.cands[s.c].slug).map(s => `<a class="cfiche" href="candidat/${D.cands[s.c].slug}/">Sondages ${esc(D.cands[s.c].name)} : ${f1(s.v)} %</a>`).join('')}</div>`);
+  // Données structurées (schema.org) : site, éditeur et jeu de données.
+  const ld = [
+    { '@context': 'https://schema.org', '@type': 'WebSite', name: 'La Sonde', url: BASE + '/', inLanguage: ['fr', 'en', 'de', 'es', 'it'] },
+    { '@context': 'https://schema.org', '@type': 'Dataset', name: 'Moyenne des sondages de l\'élection présidentielle française de 2027',
+      description: 'Moyenne quotidienne des intentions de vote au premier tour, corrigée des effets instituts, avec tendances et probabilités de qualification.',
+      url: BASE + '/', creator: { '@type': 'Person', name: D.site.author }, dateModified: D.asOf, license: 'https://opensource.org/licenses/MIT',
+      isBasedOn: 'https://github.com/MieuxVoter/presidentielle2027', temporalCoverage: '2025/2027', spatialCoverage: 'France',
+      variableMeasured: all.slice(0, 10).map(s => ({ '@type': 'PropertyValue', name: D.cands[s.c].name, value: s.v, unitText: '%' })) }
+  ];
+  h = h.replace(/<script type="application\/ld\+json" id="ldjson">[\s\S]*?<\/script>/, `<script type="application/ld+json" id="ldjson">${JSON.stringify(ld).replace(/</g, '\\u003c')}</script>`);
+  fs.writeFileSync(idx, h);
+}
+
+// ---------- Page /partager/ : la publication du jour, prête à poster sur X ou Bluesky en un clic ----------
+{
+  const top = D.standings.filter(s => s.presence >= 30).slice(0, 4).map(s => `${D.cands[s.c].short} ${f1(s.v)} %`).join(' · ');
+  // X compte un lien pour 23 caractères : on garde le chapeau chiffré seulement s'il tient avec le signal entier.
+  const head = `Présidentielle 2027, moyenne des sondages :\n${top}`;
+  const posts = ((D.changes || {}).fr || []).map(sig => (head.length + sig.t.length + 2 + 25 <= 280) ? `${head}\n\n${sig.t}` : `${sig.t}\n\n#Présidentielle2027`);
+  if (!posts.length) posts.push(`Présidentielle 2027, moyenne des sondages :\n${top}`);
+  const link = BASE + '/';
+  const fit = (txt, max) => txt.length + link.length + 2 <= max ? txt : txt.slice(0, max - link.length - 4).replace(/\s+\S*$/, '') + '…';
+  const card = (txt, i) => {
+    const x = fit(txt, 280), b = fit(txt, 300);
+    return `<div class="card" style="margin-bottom:16px"><h2 style="font:800 18px var(--display);margin:0 0 8px">Publication ${i + 1}</h2>
+      <pre style="white-space:pre-wrap;font:15px/1.5 var(--font);margin:0 0 12px">${esc(x)}\n\n${link}</pre>
+      <p style="display:flex;gap:8px;flex-wrap:wrap;margin:0">
+        <a class="cta" target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${encodeURIComponent(x)}&url=${encodeURIComponent(link)}">Publier sur X</a>
+        <a class="cta" style="background:#1185fe" target="_blank" rel="noopener" href="https://bsky.app/intent/compose?text=${encodeURIComponent(b + '\n\n' + link)}">Publier sur Bluesky</a>
+        <button class="pill" onclick="navigator.clipboard.writeText(this.dataset.t);this.textContent='Copié'" data-t="${esc(x + '\n\n' + link)}">Copier le texte</button></p></div>`;
+  };
+  const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Publication du jour | La Sonde</title><meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css?v=${Date.now().toString(36)}"></head>
+<body class="cpage"><main class="wrap" style="max-width:720px;padding:28px 16px">
+<h1 style="font:800 30px var(--display);margin:0 0 6px">Publication du jour</h1>
+<p class="note" style="margin:0 0 20px">Données au ${fdate(D.asOf)}. Choisissez une publication et cliquez : le texte est prérempli, l'image du jour s'affiche automatiquement en aperçu du lien. Page non référencée par Google.</p>
+${posts.map(card).join('')}
+<p class="note"><a href="../share/carte-du-jour.png" target="_blank">Télécharger l'image du jour</a> (à joindre si l'aperçu n'apparaît pas).</p>
+</main></body></html>`;
+  fs.mkdirSync(P('site/partager'), { recursive: true });
+  fs.writeFileSync(P('site/partager/index.html'), html);
+}

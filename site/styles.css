@@ -475,3 +475,10 @@ a.clink:hover b, .prow a.nm:hover span { text-decoration: underline; text-underl
   .navmore > summary { padding: 6px 10px; }
   .top .pill { padding: 6px 9px; }
 }
+
+/* Partage visiteurs */
+.sharerow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 12px 0 22px; font-size: 13px; }
+.sharerow span { font-weight: 700; color: var(--muted); margin-right: 2px; }
+.sharerow a:not(.sharelink), .sharerow button { text-decoration: none; font: 700 13px var(--font); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 99px; padding: 6px 12px; cursor: pointer; }
+.sharerow a:not(.sharelink):hover, .sharerow button:hover { background: var(--surface-2); }
+.sharerow .sharelink { margin: 0 0 0 6px; }
