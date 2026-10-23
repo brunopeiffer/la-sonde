@@ -134,7 +134,9 @@
     const major = W.base.filter(b => b.v >= 5).map(b => b.c);
     const keyOf = cs => major.filter(c => cs.includes(c)).sort().join(',');
     const target = keyOf(A);
-    const match = out.size ? W.tested.filter(tl => keyOf(tl.cs) === target).sort((a, b) => b.surveys - a.surveys)[0] || null : null;
+    // Une liste testée ne compte que si elle exclut bien TOUS les candidats retirés (même les petits),
+    // sinon on prendrait des scores mesurés en leur présence.
+    const match = out.size ? W.tested.filter(tl => keyOf(tl.cs) === target && !tl.cs.some(c => out.has(c))).sort((a, b) => b.surveys - a.surveys)[0] || null : null;
     const level = {};
     if (match) {
       const inL = A.filter(c => match.set[c] != null), minor = A.filter(c => match.set[c] == null);
