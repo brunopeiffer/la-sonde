@@ -338,7 +338,7 @@ Réponds par <json>{"items":[{"name":"Nom Complet","type":"withdrawal","date":"Y
 
 if (PENDING.length) { try { await noticeWatch(); } catch (e) { log('Relevé des notices en échec :', e.message); SUMMARY.push(`⚠ Relevé des notices en échec : ${e.message}`); } }
 if (DUE) {
-  try { await pollWatch(); } catch (e) { log('Veille sondages en échec :', e.message); SUMMARY.push(`⚠ Veille sondages en échec : ${e.message}`); }
+  if (AG.searchPolls !== false) try { await pollWatch(); } catch (e) { log('Veille sondages en échec :', e.message); SUMMARY.push(`⚠ Veille sondages en échec : ${e.message}`); }
   try { await concernsWatch(); } catch (e) { log('Veille préoccupations en échec :', e.message); SUMMARY.push(`⚠ Veille préoccupations en échec : ${e.message}`); }
   try { await candidacyWatch(); } catch (e) { log('Veille candidatures en échec :', e.message); SUMMARY.push(`⚠ Veille candidatures en échec : ${e.message}`); }
 }
