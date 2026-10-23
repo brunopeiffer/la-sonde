@@ -250,6 +250,35 @@ function monteCarlo(set, duelList, calib, FR) {
 }
 
 // ---------- 6. Reports implicites (« qui prend des voix à qui ») ----------
+// ---------- Reports de voix : calibration du modèle de proximité sur les reports mesurés ----------
+// On cherche les réglages (taille, portée de proximité, abstention) qui reproduisent au mieux
+// les reports réellement mesurés dans les sondages (section « Reports »).
+function calibrate(baseW, T, POS) {
+  let cal = { alpha: POS.alpha ?? 0.75, lambda: POS.lambda, abst: POS.abstention }, calib = null;
+  const meas = T.filter(tr => POS.positions[tr.c] != null && baseW[tr.c] != null);
+  if (meas.length) {
+    let best = null;
+    for (const alpha of [0, 0.25, 0.5, 0.75, 1]) for (const lambda of [0.4, 0.6, 0.8, 1, 1.2, 1.5, 2, 3]) for (const abst of [0, 0.1, 0.2, 0.3, 0.4]) {
+      let err = 0, n = 0;
+      for (const tr of meas) {
+        const A = Object.keys(baseW).filter(c => c !== tr.c && POS.positions[c] != null);
+        const tot = A.reduce((s, c) => s + baseW[c], 0);
+        const w = A.map(c => Math.pow(baseW[c], alpha) * Math.exp(-Math.abs(POS.positions[tr.c] - POS.positions[c]) / lambda));
+        const sw = w.reduce((s, x) => s + x, 0);
+        A.forEach((c, i) => {
+          const pred = abst * baseW[c] / tot + (1 - abst) * w[i] / sw;
+          const m = ((tr.flows.find(f => f.c === c) || { pts: 0 }).pts) / tr.score;
+          err += (pred - m) ** 2; n++;
+        });
+      }
+      if (!best || err < best.err) best = { alpha, lambda, abst, err, n };
+    }
+    cal = { alpha: best.alpha, lambda: best.lambda, abst: best.abst };
+    calib = { n: meas.length, rmse: Math.round(Math.sqrt(best.err / best.n) * 10000) / 100 };
+  }
+  return { cal, calib };
+}
+
 function transfers(FR) {
   const recent = FR.r1.filter(p => FR.lastPoll - p.t <= M.transfersWindowDays);
   const bySurvey = {};
@@ -394,11 +423,31 @@ function build() {
   const decl = standings.filter(x => x.declared);
   const base = [...SC].sort((a, b) => b.set.filter(x => decl.some(d => d.c === x.c)).length - a.set.filter(x => decl.some(d => d.c === x.c)).length || b.surveys - a.surveys)[0];
   const added = decl.filter(d => !base.set.some(x => x.c === d.c));
-  const addSum = added.reduce((a, x) => a + x.v, 0);
+  // Les déclarés absents de cette liste y sont ajoutés avec leur moyenne, en prenant leurs voix
+  // surtout à leurs voisins politiques (même modèle de proximité, calibré sur les reports mesurés),
+  // et non uniformément sur tout le monde.
+  const T = transfers(FR);
+  const POS = readJSON(P('data/positions.json'));
+  const { cal, calib } = calibrate(Object.fromEntries(base.set.map(x => [x.c, x.share])), T, POS);
+  const cur = Object.fromEntries(base.set.map(x => [x.c, x.share]));
+  for (const a of [...added].sort((x, y) => y.v - x.v)) {
+    const cs = Object.keys(cur), tot = cs.reduce((s, c) => s + cur[c], 0);
+    const pa = POS.positions[a.c];
+    const k = cs.map(c => pa != null && POS.positions[c] != null ? Math.pow(cur[c], cal.alpha) * Math.exp(-Math.abs(pa - POS.positions[c]) / cal.lambda) : 0);
+    const sk = k.reduce((s, x) => s + x, 0);
+    cs.forEach((c, i) => {
+      const w = sk ? cal.abst * cur[c] / tot + (1 - cal.abst) * k[i] / sk : cur[c] / tot;
+      cur[c] = Math.max(0.2, cur[c] - a.v * w);
+    });
+    cur[a.c] = a.v;
+  }
+  const S0 = Object.values(cur).reduce((x, y) => x + y, 0);
   const allScen = { key: 'all', label: { fr: 'Tous les candidats déclarés', en: 'All declared candidates', de: 'Alle erklärten Kandidaten', es: 'Todos los candidatos declarados', it: 'Tutti i candidati dichiarati' }, model: true,
-    surveys: base.surveys, last: base.last, with: [], without: [], added: added.map(x => x.c),
-    set: [...base.set.map(x => ({ c: x.c, share: x.share * (100 - addSum) / 100, k: 1 })),
-          ...added.map(x => ({ c: x.c, share: x.v, k: 1 + 0.6 * (1 - Math.min(x.presence, 100) / 100) }))].sort((a, b) => b.share - a.share) };
+    surveys: base.surveys, last: base.last, with: [], without: [], added: added.map(x => x.c), from: base.key,
+    set: Object.entries(cur).map(([c, v]) => {
+      const ad = added.find(x => x.c === c);
+      return { c, share: v * 100 / S0, k: ad ? 1 + 0.6 * (1 - Math.min(ad.presence, 100) / 100) : 1 };
+    }).sort((a, b) => b.share - a.share) };
   allScen.mc = monteCarlo(allScen.set, D, G.calib, FR);
   // Synthèse : moyenne des scénarios pondérée par leur fréquence récente.
   const totS = SC.reduce((a, s) => a + s.surveys, 0);
@@ -408,7 +457,6 @@ function build() {
     return Object.entries(m).map(([c, p]) => ({ c, p: round1(p) })).sort((a, b) => b.p - a.p);
   };
   const mc = { ...SC[0].mc, qualify: agg('qualify'), win: agg('win'), coverage: round1(SC.reduce((a, s) => a + s.mc.coverage * s.surveys / totS, 0)) };
-  const T = transfers(FR);
 
   // Effets instituts (candidats principaux uniquement).
   const top = standings.slice(0, 7).map(s => s.c);
@@ -493,32 +541,6 @@ function build() {
         for (const c in set) set[c] = round1(set[c] * 100 / S);
         return { cs, set, surveys: g.surveys, last: fromDay(Math.max(...g.ps.map(p => p.t))) };
       });
-    const POS = readJSON(P('data/positions.json'));
-    const baseW = Object.fromEntries(allScen.set.map(x => [x.c, x.share]));
-    // Calibration : on cherche les réglages (taille, portée de proximité, abstention) qui reproduisent
-    // au mieux les reports réellement mesurés dans les sondages (section « Reports »).
-    let cal = { alpha: POS.alpha ?? 0.75, lambda: POS.lambda, abst: POS.abstention }, calib = null;
-    const meas = T.filter(tr => POS.positions[tr.c] != null && baseW[tr.c] != null);
-    if (meas.length) {
-      let best = null;
-      for (const alpha of [0, 0.25, 0.5, 0.75, 1]) for (const lambda of [0.4, 0.6, 0.8, 1, 1.2, 1.5, 2, 3]) for (const abst of [0, 0.1, 0.2, 0.3, 0.4]) {
-        let err = 0, n = 0;
-        for (const tr of meas) {
-          const A = Object.keys(baseW).filter(c => c !== tr.c && POS.positions[c] != null);
-          const tot = A.reduce((s, c) => s + baseW[c], 0);
-          const w = A.map(c => Math.pow(baseW[c], alpha) * Math.exp(-Math.abs(POS.positions[tr.c] - POS.positions[c]) / lambda));
-          const sw = w.reduce((s, x) => s + x, 0);
-          A.forEach((c, i) => {
-            const pred = abst * baseW[c] / tot + (1 - abst) * w[i] / sw;
-            const m = ((tr.flows.find(f => f.c === c) || { pts: 0 }).pts) / tr.score;
-            err += (pred - m) ** 2; n++;
-          });
-        }
-        if (!best || err < best.err) best = { alpha, lambda, abst, err, n };
-      }
-      cal = { alpha: best.alpha, lambda: best.lambda, abst: best.abst };
-      calib = { n: meas.length, rmse: round1(Math.sqrt(best.err / best.n) * 1000) / 10 };
-    }
     out.whatif = {
       base: allScen.set.map(x => ({ c: x.c, v: round1(x.share), band: (standings.find(s => s.c === x.c) || { band: 1.5 }).band })),
       tested, pos: POS.positions, ...cal, calib, source: POS.source
