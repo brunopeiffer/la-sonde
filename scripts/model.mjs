@@ -509,6 +509,7 @@ function build() {
     mc, duels: D, transfers: T, house, surveys: surveyList, events,
     ghosts: { daysBack: G.daysBack, series: G.series, round1: cfg.previousElection.round1 },
     concerns: readJSON(P('data/concerns.json')),
+    certainty: fs.existsSync(P('data/certainty.json')) ? readJSON(P('data/certainty.json')) : null,
     summary: null
   };
   out.summary = summary(standings, mc, polls, FR);
