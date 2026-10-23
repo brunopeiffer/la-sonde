@@ -1,6 +1,6 @@
 # La Sonde
 
-**Le pouls de la présidentielle 2027.** Un agrégateur de sondages indépendant, public et entièrement automatique : moyenne corrigée des effets instituts, probabilités par scénario, reports de voix, comparaison avec 2022, préoccupations des Français. Bilingue FR / EN, pensé pour le mobile.
+**Présidentielle 2027 : sonder plus loin que le dernier sondage.** Un agrégateur de sondages indépendant, public et entièrement automatique : moyenne corrigée des effets instituts, probabilités par scénario, reports de voix, comparaison avec 2022, préoccupations des Français. Bilingue FR / EN, pensé pour le mobile.
 
 Conçu et signé par Bruno Peiffer.
 
