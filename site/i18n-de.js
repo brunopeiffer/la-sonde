@@ -50,7 +50,7 @@ window.I18N.de = {
   "gap.note": "Berechnet mit 95 % wie für eine Zufallsstichprobe. Französische Institute arbeiten mit Quotenverfahren, die Marge ist daher ein Richtwert.",
   "is.tag": "Meinung", "is.title": "Was die Franzosen beunruhigt",
   "is.desc": "Wahlabsichten sagen nicht, warum. Barometer zeigen, was die Menschen beschäftigt und was die Wahl entscheiden wird.",
-  "is.baro": "Größte Sorgen", "is.stakes": "Themen, die die Wahl entscheiden", "is.byElec": "Was jeder Wählerschaft wichtig ist",
+  "is.baro": "Größte Sorgen", "is.stakes": "Detaillierte Themenrangliste (April 2026, letzte Messung)", "is.prio": "Was den Franzosen am wichtigsten ist (September 2026)", "is.prioBy": "Nach Parteinähe", "is.prioNote": "Anteil, der jede Frage unter den zwei wichtigsten nennt. Je dunkler das Feld, desto häufiger genannt.", "is.byElec": "Was jeder Wählerschaft wichtig ist",
   "is.src": "Quelle: {s}.", "is.waves": "{i} für {p}. {q}.", "is.missing": ". Fehlende Themen wurden in dieser Welle nicht veröffentlicht.",
   "po.tag": "Transparenz", "po.title": "Neueste Umfragen",
   "po.desc": "Jede Umfrage mit ihren gesetzlichen Angaben: Institut, Auftraggeber, Feldzeit, Stichprobe. Die vollständigen Berichte liegen der französischen Umfragekommission vor.",

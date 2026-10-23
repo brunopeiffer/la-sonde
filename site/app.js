@@ -591,6 +591,17 @@
     $('#stakesDesc').innerHTML = `<a href="${esc(st.source)}" rel="noopener" target="_blank">${esc(tr(st.label))}</a>`;
     $('#stakes').innerHTML = st.ranking.map(r => `<div class="stake"><span class="rk" style="background:${th[r.theme].color}">${r.rank}</span><div><b>${th[r.theme].icon} ${esc(tr(th[r.theme]))}</b><div class="note" style="margin:0">${lang === 'fr' ? (r.rank === 1 ? '1er enjeu cité' : r.rank + 'e enjeu cité') : 'Ranked #' + r.rank}</div></div></div>`).join('')
       + `<ul style="margin:12px 0 0;padding-left:18px;font-size:14px;color:var(--ink-2)">${tr(st.facts).map(f => `<li>${esc(f)}</li>`).join('')}</ul>`;
+    const PR = C.priorities;
+    if (PR) {
+      $('#prioDesc').innerHTML = `${esc(tr(PR.question))} · <a href="${esc(PR.source)}" rel="noopener" target="_blank">${esc(tr(PR.label))}</a>`;
+      const gl = g => typeof g === 'string' ? g : tr(g);
+      const cell = (v, col) => `<td style="background:color-mix(in srgb, ${col} ${Math.round(v * 0.85)}%, transparent)"><b>${v}</b></td>`;
+      $('#prio').innerHTML = `<div class="prio-bars">${PR.cats.map(ct => `<div class="prio-row"><span>${esc(tr(ct))}</span><i style="width:${PR.total[ct.k]}%;background:${ct.color}"></i><b>${PR.total[ct.k]}${pct}</b></div>`).join('')}</div>
+        <h4 style="margin:18px 0 6px">${t('is.prioBy')}</h4>
+        <div class="tscroll"><table class="prio-t"><thead><tr><th></th>${PR.groups.map(g => `<th>${esc(gl(g.g))}</th>`).join('')}</tr></thead>
+        <tbody>${PR.cats.map(ct => `<tr><th>${esc(tr(ct))}</th>${PR.groups.map(g => cell(g.v[ct.k], ct.color)).join('')}</tr>`).join('')}</tbody></table></div>
+        <p class="meta">${t('is.prioNote')}</p>`;
+    } else $('#prioCard').hidden = true;
     $('#byElec').innerHTML = `<ul>${st.byElectorate.map(e => `<li><b>${esc(tr(e.who))}</b> : ${esc(tr(e.themes))}</li>`).join('')}</ul><p class="meta">${esc(tr(st.label))}</p>`;
   }
 

@@ -50,7 +50,7 @@ window.I18N.it = {
   "gap.note": "Calcolato al 95% come per un campione casuale. Gli istituti francesi usano il metodo delle quote: il margine è indicativo.",
   "is.tag": "Opinione", "is.title": "Cosa preoccupa i francesi",
   "is.desc": "Le intenzioni di voto non dicono perché. I barometri mostrano cosa preoccupa e cosa deciderà il voto.",
-  "is.baro": "Principali preoccupazioni", "is.stakes": "Temi che decideranno il voto", "is.byElec": "Cosa conta per ciascun elettorato",
+  "is.baro": "Principali preoccupazioni", "is.stakes": "Classifica dettagliata dei temi (aprile 2026, ultima misura)", "is.prio": "Ciò che conta di più per i francesi (settembre 2026)", "is.prioBy": "Secondo la vicinanza partitica", "is.prioNote": "Percentuale che cita ogni questione tra le due più importanti. Più la casella è scura, più è citata.", "is.byElec": "Cosa conta per ciascun elettorato",
   "is.src": "Fonte: {s}.", "is.waves": "{i} per {p}. {q}.", "is.missing": ". I temi mancanti non sono stati pubblicati in quella rilevazione.",
   "po.tag": "Trasparenza", "po.title": "Ultimi sondaggi",
   "po.desc": "Ogni sondaggio con i suoi dati legali: istituto, committente, date di rilevazione, campione. Le note complete sono depositate presso la Commissione dei sondaggi francese.",
