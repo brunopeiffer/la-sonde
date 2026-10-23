@@ -1,0 +1,367 @@
+{
+  "seen": {
+    "10288": {
+      "fid": "2305",
+      "title": "10288 Pres Barometre popularite YOUGOV Huffpost 2 octobre",
+      "pub": "2026-10-02",
+      "inst": "YouGov",
+      "tries": 0,
+      "status": "pending",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10288-pres-barometre-popularite-yougov-huffpost-2-octobre.pdf"
+    },
+    "10289": {
+      "fid": "2306",
+      "title": "10289 Pres Primaire à gauche ELABE 3 octobre",
+      "pub": "2026-10-03",
+      "inst": "ELABE",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10290": {
+      "fid": "2307",
+      "title": "10290 Pres blocages des lycées CSA Cnews 4 octobre",
+      "pub": "2026-10-04",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10291": {
+      "fid": "2309",
+      "title": "10291 Pres Avenir jeunesse IPSOS BVA 6 octobre",
+      "pub": "2026-10-06",
+      "inst": "Ipsos BVA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10292": {
+      "fid": "2310",
+      "title": "10292 Pres vote blanc IFOP 6 octobre",
+      "pub": "2026-10-06",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "déjà dans la base"
+    },
+    "10293": {
+      "fid": "2312",
+      "title": "10293 Pres Questions actu CSA Cnews 7 octobre",
+      "pub": "2026-10-07",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10294": {
+      "fid": "2311",
+      "title": "10294 Pres colère des lyceens ELABE 7 octobre",
+      "pub": "2026-10-07",
+      "inst": "ELABE",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10295": {
+      "fid": "2313",
+      "title": "10295 Pres Mouvement lyceen IFOP TF1 7 octobre",
+      "pub": "2026-10-07",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10296": {
+      "fid": "2314",
+      "title": "10296 Pres barometre personnalites politiques CLUSTER 17 Le Point 7 octobre",
+      "pub": "2026-10-07",
+      "inst": "Cluster17",
+      "tries": 0,
+      "status": "pending",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10296-pres-barometre-personnalites-politiques-cluster-17-le-point-7-octobre.pdf"
+    },
+    "10297": {
+      "fid": "2315",
+      "title": "10297 Pres Stature présidentielle V6 VERIAN Le Figaro magazine 8 octobre",
+      "pub": "2026-10-08",
+      "inst": "Verian",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10298": {
+      "fid": "2316",
+      "title": "10298 Pres mouvement lycées ODOXA 8 octobre",
+      "pub": "2026-10-08",
+      "inst": "ODOXA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10299": {
+      "fid": "2318",
+      "title": "10299 Pres Propos M. Bardella IFOP LCI 9 octobre",
+      "pub": "2026-10-09",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10300": {
+      "fid": "2317",
+      "title": "10300 Pres Suivi potentiel electoral TOLUNA HARRIS INTERACTIVE L'Opinion 8 octobre",
+      "pub": "2026-10-08",
+      "inst": "Toluna Harris Interactive",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10301": {
+      "fid": "2319",
+      "title": "10301 Pres CSA Cnews 10 octobre",
+      "pub": "2026-10-10",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10302": {
+      "fid": "2338",
+      "title": "10302 Pres YOUGOV LInternaute 15 octobre",
+      "pub": "2026-10-15",
+      "inst": "YouGov",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10303": {
+      "fid": "2322",
+      "title": "10303 Pres Barometre IPSOS BVA La Tribune Dimanche 10 octobre",
+      "pub": "2026-10-10",
+      "inst": "Ipsos BVA",
+      "tries": 0,
+      "status": "pending",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10303-pres-barometre-ipsos-bva-la-tribune-dimanche-10-octobre.pdf"
+    },
+    "10304": {
+      "fid": "2320",
+      "title": "10304 Pres Primaire PS TOLUNA HARRIS INTERACTIVE 9 octobre",
+      "pub": "2026-10-09",
+      "inst": "Toluna Harris Interactive",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10305": {
+      "fid": "2321",
+      "title": "10305 Pres IV TOLUNA HARRIS INTERACTIVE 12 octobre",
+      "pub": "2026-10-12",
+      "inst": "Toluna Harris Interactive",
+      "tries": 0,
+      "status": "déjà dans la base"
+    },
+    "10307": {
+      "fid": "2323",
+      "title": "10307 Pres pouvoir achat IFOP Le Figaro 12 octobre",
+      "pub": "2026-10-12",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10308": {
+      "fid": "2324",
+      "title": "10308 Pres IA et élection VERIAN LHemcicycle 14 octobre",
+      "pub": "2026-10-14",
+      "inst": "Verian",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10309": {
+      "fid": "2326",
+      "title": "10309 Pres IFOP 14 octobre",
+      "pub": "2026-10-14",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10310": {
+      "fid": "2325",
+      "title": "10310 Pres IV ODOXA 14 octobre",
+      "pub": "2026-10-14",
+      "inst": "ODOXA",
+      "tries": 0,
+      "status": "déjà dans la base"
+    },
+    "10311": {
+      "fid": "2328",
+      "title": "10311 Pres laïcite et fait religieux IFOP 14 octobre",
+      "pub": "2026-10-14",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10312": {
+      "fid": "2329",
+      "title": "10312 Pres Peuple de droite IFOP Valeurs actuelles 14 octobre",
+      "pub": "2026-10-14",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10313": {
+      "fid": "2330",
+      "title": "10313 Pres blocus lycées CSA JDD 15 octobre",
+      "pub": "2026-10-15",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10314": {
+      "fid": "2327",
+      "title": "10314 Pres climat politique post primaire PS PP IFOP LCI 14 octobre",
+      "pub": "2026-10-14",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10315": {
+      "fid": "2331",
+      "title": "10315 Pres La fête de l'entreprise IFOP 15 octobre",
+      "pub": "2026-10-15",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10316": {
+      "fid": "2332",
+      "title": "10316 Pres soirée Marine Le Pen CSA Cnews 15 octobre",
+      "pub": "2026-10-15",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10318": {
+      "fid": "2333",
+      "title": "10318 Pres Presitrack V3 OPINIONWAY 15 octobre",
+      "pub": "2026-10-15",
+      "inst": "OpinionWay",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10319": {
+      "fid": "2347",
+      "title": "10319 Pres IV OPINIONWAY Cnews 15 octobre",
+      "pub": "2026-10-15",
+      "inst": "OpinionWay",
+      "tries": 0,
+      "status": "pending",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10319-pres-iv-opinionway-cnews-15-octobre.pdf"
+    },
+    "10320": {
+      "fid": "2335",
+      "title": "10320 Pres Budget 2027 ODOXA 15 octobre",
+      "pub": "2026-10-15",
+      "inst": "ODOXA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10321": {
+      "fid": "2336",
+      "title": "10321 Pres Rapport à la République V2 IFOP 15 octobre",
+      "pub": "2026-10-15",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10322": {
+      "fid": "2337",
+      "title": "10322 Pres mobilisations sociales ELABE 16 octobre",
+      "pub": "2026-10-16",
+      "inst": "ELABE",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10323": {
+      "fid": "2346",
+      "title": "10323 Pres IV Yougov Le HuffPost 18 octobre",
+      "pub": "2026-10-18",
+      "inst": "YouGov",
+      "tries": 0,
+      "status": "pending",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10323-pres-iv-yougov-le-huffpost-18-octobre.pdf"
+    },
+    "10324": {
+      "fid": "2339",
+      "title": "10324 Pres IV ELABE 17 octobre",
+      "pub": "2026-10-17",
+      "inst": "ELABE",
+      "tries": 0,
+      "status": "pending",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10324-pres-iv-elabe-17-octobre.pdf"
+    },
+    "10325": {
+      "fid": "2341",
+      "title": "10325 Pres Focus droite et centre CLUSTER17 Le Point 18 octobre",
+      "pub": "2026-10-18",
+      "inst": "Cluster17",
+      "tries": 0,
+      "status": "pending",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10325-pres-focus-droite-et-centre-cluster17-le-point-18-octobre.pdf"
+    },
+    "10326": {
+      "fid": "2342",
+      "title": "10326 Pres Tableau de bord des personnalites IFOP 20 octobre",
+      "pub": "2026-10-20",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10327": {
+      "fid": "2343",
+      "title": "10327 Pres Barometre election V7 IFOP 20 octobre",
+      "pub": "2026-10-20",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "pending",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10327-pres-barometre-election-v7-ifop-20-octobre.pdf"
+    },
+    "10328": {
+      "fid": "2345",
+      "title": "10328 Pres Attentes reformes IFOP 21 octobre",
+      "pub": "2026-10-21",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10329": {
+      "fid": "2349",
+      "title": "10329 Pres Manifestations du 17 octobre et violences ELABE 21 octobre",
+      "pub": "2026-10-21",
+      "inst": "ELABE",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10330": {
+      "fid": "2350",
+      "title": "10330 Pres droit animal IFOP 22 octobre",
+      "pub": "2026-10-22",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10331": {
+      "fid": "2348",
+      "title": "10331 Pres Les violences du 17 octobre ODOXA 22 octobre",
+      "pub": "2026-10-22",
+      "inst": "ODOXA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10332": {
+      "fid": "2351",
+      "title": "10332 Pres IV TOLUNA HARRIS INTERACTIVE 23 octobre",
+      "pub": "2026-10-23",
+      "inst": "Toluna Harris Interactive",
+      "tries": 0,
+      "status": "pending",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10332-pres-iv-toluna-harris-interactive-23-octobre.pdf"
+    },
+    "10333": {
+      "fid": "2352",
+      "title": "10333 Pres IV OPINIONWAY Cnews 22 octobre",
+      "pub": "2026-10-22",
+      "inst": "OpinionWay",
+      "tries": 0,
+      "status": "pending",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10333-pres-iv-opinionway-cnews-22-octobre.pdf"
+    }
+  },
+  "checked": "2026-10-23T10:50:02.302Z"
+}
