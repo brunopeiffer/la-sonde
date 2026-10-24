@@ -151,9 +151,9 @@
   },
   "newsletter": {
     "_note": "Lettre « Le point du lundi » via Brevo. listId : identifiant de la liste d'abonnés ; senderEmail : adresse d'envoi validée dans Brevo ; formUrl : lien du formulaire d'inscription Brevo. Secret GitHub : BREVO_API_KEY.",
-    "listId": "",
+    "listId": "3",
     "senderEmail": "contact@la-sonde.fr",
     "senderName": "La Sonde",
-    "formUrl": ""
+    "formUrl": "https://1de50167.sibforms.com/serve/MUIFAFbYJQzFIO2fssrX9Fsj4yuS3rZ4PeMrBdUbqwhefB1YBS5VSlDrQun9K-bjI7lwAY2-USTnn64t6MEN_HtUAauLI8lhy2NwTRA5o4Mg8jFCNuvAuPoaqJHpCQo-ibUww04L1KCvZf7b4fzuBsX-Aj1ITYLOqr_sLYNu2y2yaL4IdAK7pGyffJNQ7Xo5sPoR6Lxxp35lQ40P4Q=="
   }
 }
