@@ -3,6 +3,9 @@
   'use strict';
   const D = window.SITE_DATA || await fetch('data/site.json', { cache: 'no-cache' }).then(r => r.json());
   const $ = s => document.querySelector(s);
+  // Animations : coupées si le visiteur a demandé de réduire les animations.
+  const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let heroDone = false, raceDrawn = false, raceSeen = false;
   const store = {
     get(k) { try { return localStorage.getItem(k); } catch { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch { /* stockage indisponible */ } }
@@ -91,6 +94,20 @@
         `<a class="pchip" href="${page(s.c)}" title="${esc(nm(s.c))}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num">${fmt(s.v, 0)}${pct}</b>${s.presence < 30 ? '<sup>*</sup>' : ''}</a>`).join('') +
         `</div>${rest.some(s => s.presence < 30) ? `<p class="pnote">* ${t('pod.few')}</p>` : ''}<p class="pnote"><a href="#candidats">${t('cf.hint')} →</a></p></div>`;
     })();
+    // Première ouverture : les chiffres défilent jusqu'à leur valeur, les barres se remplissent.
+    if (!heroDone && !RM) {
+      heroDone = true;
+      const nodes = [...document.querySelectorAll('#podium .prow .v, #countdown .cd b')].map(el => el.firstChild).filter(n => n && n.nodeType === 3);
+      const finals = nodes.map(n => n.textContent), vals = finals.map(s => parseFloat(s.replace(/\s|\u202f|\u00a0/g, '').replace(',', '.')) || 0);
+      const t0 = performance.now(), dur = 900;
+      const step = now => {
+        const k = Math.min(1, (now - t0) / dur), ease = 1 - Math.pow(1 - k, 3);
+        nodes.forEach((n, i) => { n.textContent = k < 1 ? Math.round(vals[i] * ease).toLocaleString(loc()) : finals[i]; });
+        if (k < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+      $('#podium').classList.add('grow');
+    }
     $('#summary').innerHTML = tr(D.summary).map(x => `<li>${esc(x)}</li>`).join('');
     $('#sumMeta').textContent = t('sum.meta', { d: fdate(D.asOf, { day: 'numeric', month: 'long', year: 'numeric' }) });
   }
@@ -260,6 +277,7 @@
     renderProjChips();
     const MOM = D.momentum || {};
     const W = host.clientWidth, mobile = W < 600, H = mobile ? 300 : 360;
+    if (!W) return;   // section masquée (autre thème) : on dessinera à l'ouverture
     const m = { t: 14, r: mobile ? 100 : 120, b: 40, l: 34 };
     const last = new Date(D.days[D.days.length - 1] + 'T12:00:00Z');
     const x0 = new Date(+last - 75 * DAY), x1 = new Date(+last + 30 * DAY);
@@ -332,6 +350,7 @@
   function drawRace() {
     const host = $('#raceChart'); host.querySelectorAll('svg').forEach(n => n.remove());
     const W = host.clientWidth, mobile = W < 600, H = mobile ? 360 : 440;
+    if (!W) return;   // section masquée (autre thème) : on dessinera à l'ouverture
     const m = { t: 12, r: mobile ? 92 : 128, b: 46, l: 34 };
     const last = new Date(D.days[D.days.length - 1] + 'T12:00:00Z');
     const span = { '3m': 92, '6m': 183, '1y': 366, all: 4000 }[race.range];
@@ -368,18 +387,28 @@
         .attr('cx', p => x(new Date(p[0] + 'T12:00:00Z'))).attr('cy', p => y(p[1])).attr('r', 2.6)
         .attr('fill', col(c)).attr('opacity', .28);
     }
-    // Bandes et lignes
+    // Bandes et lignes (la première fois que le graphique arrive à l'écran, les courbes se tracent)
+    const animNow = raceSeen && !raceDrawn && W > 0 && !RM;
+    if (animNow) raceDrawn = true;
     for (const c of vis) {
       const S = D.series[c], pts = days.map((d, i) => ({ d, v: S.v[i], b: S.b[i] })).filter(p => p.d >= x0 - 3 * DAY);
-      g.append('path').datum(pts).attr('fill', col(c)).attr('opacity', .14)
+      const band = g.append('path').datum(pts).attr('fill', col(c)).attr('opacity', .14)
         .attr('d', d3.area().defined(p => p.v != null).x(p => x(p.d)).y0(p => y(p.v - p.b)).y1(p => y(p.v + p.b)).curve(d3.curveMonotoneX));
-      g.append('path').datum(pts).attr('fill', 'none').attr('stroke', col(c)).attr('stroke-width', 2.25).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round')
+      const ln = g.append('path').datum(pts).attr('fill', 'none').attr('stroke', col(c)).attr('stroke-width', 2.25).attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round')
         .attr('d', d3.line().defined(p => p.v != null).x(p => x(p.d)).y(p => y(p.v)).curve(d3.curveMonotoneX));
+      // Première apparition : chaque courbe se trace de gauche à droite, comme un sismographe.
+      if (animNow) {
+        const L = ln.node().getTotalLength();
+        ln.attr('stroke-dasharray', `${L} ${L}`).attr('stroke-dashoffset', L).transition().duration(1400).ease(d3.easeCubicOut).attr('stroke-dashoffset', 0)
+          .on('end', function () { d3.select(this).attr('stroke-dasharray', null).attr('stroke-dashoffset', null); });
+        band.attr('opacity', 0).transition().delay(500).duration(900).attr('opacity', .14);
+      }
     }
     // Étiquettes de fin de ligne
     // Étiquette au dernier point disponible (un candidat peu testé peut s'arrêter avant la fin).
     const li = declutter(vis.map(c => { let i = days.length - 1; while (i >= 0 && D.series[c].v[i] == null) i--; if (i < 0 || days[i] < x0) return null; const v = D.series[c].v[i]; return { c, v, y: y(v), i }; }).filter(Boolean), 15, m.t + 6, H - m.b);
     const lg = svg.append('g');
+    if (animNow) { lg.attr('opacity', 0).transition().delay(1100).duration(400).attr('opacity', 1); g.selectAll('circle').attr('opacity', 0).transition().delay(900).duration(600).attr('opacity', .28); }
     li.forEach(l => {
       lg.append('circle').attr('cx', x(days[l.i])).attr('cy', y(l.v)).attr('r', 4).attr('fill', col(l.c)).attr('stroke', css('--surface')).attr('stroke-width', 2);
       lg.append('text').attr('class', 'lbl v').attr('x', x(last) + 9).attr('y', l.y + 4).text(fmt(l.v));
@@ -443,6 +472,7 @@
   function drawGhosts() {
     const host = $('#ghostChart'); host.querySelectorAll('svg').forEach(n => n.remove());
     const W = host.clientWidth, mobile = W < 600, H = mobile ? 420 : 420, m = { t: 14, r: mobile ? 86 : 150, b: 44, l: 28 };
+    if (!W) return;
     const G = D.ghosts, R1 = Date.parse(D.election.round1 + 'T12:00:00Z');
     const dNow = Math.round((R1 - Date.parse(D.days[D.days.length - 1] + 'T12:00:00Z')) / DAY);
     const x = d3.scaleLinear().domain([420, 0]).range([m.l, W - m.r]);
@@ -572,6 +602,7 @@
     const keys = [...new Set(waves.flatMap(w => Object.keys(w.values)))].sort((a, b) => (last.values[b] ?? -1) - (last.values[a] ?? -1));
     const host = $('#concernChart'); host.querySelectorAll('svg').forEach(n => n.remove());
     const W = host.clientWidth, narrow = W < 500, rowH = narrow ? 54 : 40, m = { t: 34, r: 40, b: 10, l: narrow ? 8 : 170 }, H = m.t + keys.length * rowH + m.b;
+    if (!W) return;   // section masquée (autre thème) : on dessinera à l'ouverture
     const x = d3.scaleLinear().domain([0, 70]).range([m.l, W - m.r]);
     const svg = d3.select(host).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', t('is.baro'));
     svg.append('g').attr('class', 'gridl').attr('transform', `translate(0,${H - m.b})`).call(d3.axisBottom(x).ticks(5).tickSize(-(H - m.t - m.b)).tickFormat(''));
@@ -625,12 +656,23 @@
 
   // ---------- Liste des sondages + effets instituts ----------
   let showAll = false;
+  // Sondages ajoutés depuis la dernière visite (mémorisé dans le navigateur ; rien n'est marqué à la première visite).
+  const NEWP = (() => {
+    const prev = store.get('pollsSeen'), ids = D.surveys.map(s => s.id);
+    store.set('pollsSeen', ids.slice(0, 80).join('|'));
+    if (!prev) return new Set();
+    const old = new Set(prev.split('|'));
+    return new Set(ids.filter(i => !old.has(i)));
+  })();
   function renderPolls() {
+    // Pastille sur l'onglet « Sondages » (remise après chaque traduction des libellés).
+    const tab = document.querySelector('#vtabs a[data-v="donnees"]');
+    if (tab && NEWP.size && !tab.querySelector('.tabdot')) tab.insertAdjacentHTML('beforeend', ` <span class="tabdot">${NEWP.size}</span>`);
     const list = D.surveys.slice(0, showAll ? 40 : 5);
     $('#pollList').innerHTML = list.map(s => {
       const r1 = s.hyps.filter(h => h.round === 1), r2 = s.hyps.filter(h => h.round === 2);
       const first = r1[0] ? Object.entries(r1[0].r).sort((a, b) => b[1] - a[1]).slice(0, 7) : [];
-      return `<div class="poll"><div class="who"><b>${esc(s.inst)}</b><span>${esc(s.sponsor)}</span><span class="num">${fdate(s.start, { day: 'numeric', month: 'short' })} → ${fdate(s.end)}</span>
+      return `<div class="poll${NEWP.has(s.id) ? ' isnew' : ''}"><div class="who"><b>${esc(s.inst)}</b>${NEWP.has(s.id) ? ` <span class="newb">${t('po.new')}</span>` : ''}<span>${esc(s.sponsor)}</span><span class="num">${fdate(s.start, { day: 'numeric', month: 'short' })} → ${fdate(s.end)}</span>
         <span>${t('po.sample', { n: s.n.toLocaleString(loc()) })} · ${t('po.hyp', { n: s.hyps.length })}</span>
         ${s.provisional && !/commission-des-sondages\.fr/.test(s.source || '') ? `<span class="badge">${t('po.prov')}</span>` : ''}
         <span>${s.source && /commission-des-sondages\.fr/.test(s.source) ? `<a href="${esc(s.source)}" target="_blank" rel="noopener">${t('po.notice')} n° ${esc((s.source.match(/\/(\d{4,6})-/) || ['', ''])[1])}</a>`
@@ -771,6 +813,17 @@
     setTimeout(() => { if (target) target.scrollIntoView(); else if (view !== 'accueil' || id) $('#vtabs').scrollIntoView(); }, changed ? 200 : 0);
   }
   addEventListener('hashchange', () => route(true));
+  // Le graphique « La course » se trace quand il arrive à l'écran (et non pendant qu'il est encore plus bas).
+  if (!RM && 'IntersectionObserver' in window) {
+    const ro = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { ro.disconnect(); raceSeen = true; drawRace(); } }, { rootMargin: '0px 0px -10% 0px' });
+    ro.observe($('#raceChart'));
+  }
+  // Apparition douce des blocs au défilement.
+  if (!RM && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('main section .sh, main section > .card, main section > .grid2 > *, main section > .grid3 > *, #cfiches, .tiles .tile, #changes')
+      .forEach((el, i) => { el.classList.add('rv'); if (el.classList.contains('tile')) el.style.transitionDelay = `${(i % 5) * 60}ms`; io.observe(el); });
+  }
   // Tuiles « Explorer » : la tuile touchée s'allume un court instant avant d'ouvrir le thème
   // (sinon, sur téléphone, on part avant de voir l'effet) ; les tuiles déjà visitées restent colorées.
   const seenTiles = new Set((store.get('tilesSeen') || '').split('|').filter(Boolean));

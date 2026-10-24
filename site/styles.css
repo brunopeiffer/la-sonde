@@ -564,3 +564,22 @@ main section[data-view]{scroll-margin-top:130px}
 .tile.seen::after{content:"✓";opacity:.9;transform:none;font-size:16px}
 .tile.seen:hover::after,.tile.seen:focus-visible::after{content:"→"}
 @media (hover:hover){.tiles:hover .tile.seen:not(:hover){opacity:.6}}
+/* ---------- Animations (désactivées si « réduire les animations ») ---------- */
+.rv{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+.tile.rv.in:hover,.tile.rv.in:focus-visible{transform:translateY(-4px) scale(1.02)}
+#podium.grow .bar i{transform-origin:left center;animation:growX .9s cubic-bezier(.2,.7,.2,1) both}
+#podium.grow .prow:nth-child(3) .bar i{animation-delay:.06s}#podium.grow .prow:nth-child(4) .bar i{animation-delay:.12s}
+#podium.grow .prow:nth-child(5) .bar i{animation-delay:.18s}#podium.grow .prow:nth-child(6) .bar i{animation-delay:.24s}#podium.grow .prow:nth-child(7) .bar i{animation-delay:.3s}
+@keyframes growX{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+/* Nouveau sondage depuis la dernière visite */
+.newb{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;font:800 11px var(--font);letter-spacing:.04em;text-transform:uppercase;color:#fff;background:linear-gradient(135deg,#5b2cff,#ff3d7f);vertical-align:2px}
+.poll.isnew{position:relative}
+.poll.isnew::before{content:"";position:absolute;left:-10px;top:12px;bottom:12px;width:3px;border-radius:3px;background:linear-gradient(#5b2cff,#ff3d7f)}
+.poll.isnew .newb{animation:shine 2.4s ease-in-out 3}
+@keyframes shine{0%,100%{box-shadow:0 0 0 0 rgba(255,61,127,0)}50%{box-shadow:0 0 0 6px rgba(255,61,127,.18)}}
+.tabdot{display:inline-grid;place-items:center;min-width:18px;height:18px;padding:0 5px;margin-left:4px;border-radius:9px;background:#ff3d7f;color:#fff;font:800 11px var(--font);animation:shine 2.4s ease-in-out 3}
+/* Pastille « en direct » : pulsation plus visible */
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,255,255,.75)}70%{box-shadow:0 0 0 9px rgba(255,255,255,0)}100%{box-shadow:0 0 0 0 rgba(255,255,255,0)}}
+@media (prefers-reduced-motion: reduce){.rv{opacity:1;transform:none;transition:none}#podium.grow .bar i,.newb,.tabdot{animation:none}}
+.poll .who .newb{display:inline-block;width:auto;align-self:flex-start;justify-self:start;color:#fff;margin:2px 0 4px;font-size:10.5px}
