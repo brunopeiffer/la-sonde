@@ -154,6 +154,11 @@
     "listId": "3",
     "senderEmail": "contact@la-sonde.fr",
     "senderName": "La Sonde",
-    "formUrl": "https://1de50167.sibforms.com/serve/MUIFAFbYJQzFIO2fssrX9Fsj4yuS3rZ4PeMrBdUbqwhefB1YBS5VSlDrQun9K-bjI7lwAY2-USTnn64t6MEN_HtUAauLI8lhy2NwTRA5o4Mg8jFCNuvAuPoaqJHpCQo-ibUww04L1KCvZf7b4fzuBsX-Aj1ITYLOqr_sLYNu2y2yaL4IdAK7pGyffJNQ7Xo5sPoR6Lxxp35lQ40P4Q=="
+    "formUrl": "https://1de50167.sibforms.com/serve/MUIFAFbYJQzFIO2fssrX9Fsj4yuS3rZ4PeMrBdUbqwhefB1YBS5VSlDrQun9K-bjI7lwAY2-USTnn64t6MEN_HtUAauLI8lhy2NwTRA5o4Mg8jFCNuvAuPoaqJHpCQo-ibUww04L1KCvZf7b4fzuBsX-Aj1ITYLOqr_sLYNu2y2yaL4IdAK7pGyffJNQ7Xo5sPoR6Lxxp35lQ40P4Q==",
+    "translation": {
+      "_note": "Traduction automatique de la lettre en anglais, allemand, espagnol et italien : un seul appel par semaine, coût plafonné à maxUsd (calculé avec des tarifs prudents).",
+      "enabled": true,
+      "maxUsd": 0.05
+    }
   }
 }
