@@ -157,3 +157,5 @@ Object.assign(window.I18N.it, {"vt.accueil": "Home", "vt.simuler": "Simula", "vt
 Object.assign(window.I18N.it, {"po.new": "Nuovo"});
 
 Object.assign(window.I18N.it, {"hero.kickerS": "2027 · in diretta", "hero.fresh": "Aggiornato {a}", "hero.last": "ultimo sondaggio: {i} ({s}), {d}", "sh.btn": "Condividi"});
+
+Object.assign(window.I18N.it, {"nl.title": "Il punto del lunedì", "nl.text": "Ogni lunedì mattina: la media dei sondaggi, cosa si è mosso e i sondaggi della settimana, via email (in francese). Gratis, disiscrizione in un clic.", "nl.cta": "Ricevi la newsletter", "nl.archive": "Numeri precedenti", "ft.whoLink": "Chi siamo"});

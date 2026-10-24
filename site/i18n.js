@@ -336,3 +336,7 @@ Object.assign(window.I18N.en, {"po.new": "New"});
 Object.assign(window.I18N.fr, {"hero.kickerS": "2027 · en direct", "hero.fresh": "Mis à jour {a}", "hero.last": "dernier sondage : {i} ({s}), {d}", "sh.btn": "Partager"});
 
 Object.assign(window.I18N.en, {"hero.kickerS": "2027 · live", "hero.fresh": "Updated {a}", "hero.last": "latest poll: {i} ({s}), {d}", "sh.btn": "Share"});
+
+Object.assign(window.I18N.fr, {"nl.title": "Le point du lundi", "nl.text": "Chaque lundi matin, la moyenne des sondages, ce qui a bougé et les sondages de la semaine, dans votre boîte mail. Gratuit, désinscription en un clic.", "nl.cta": "Recevoir la lettre", "nl.archive": "Lire les anciens numéros", "ft.whoLink": "Qui sommes-nous ?"});
+
+Object.assign(window.I18N.en, {"nl.title": "The Monday briefing", "nl.text": "Every Monday morning: the poll average, what moved and the week's polls, in your inbox (in French). Free, unsubscribe in one click.", "nl.cta": "Get the newsletter", "nl.archive": "Past issues", "ft.whoLink": "About us"});

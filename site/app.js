@@ -731,7 +731,9 @@
 
 
   // ---------- V2 : soutien, liens ----------
+  function renderNewsletter() { const u = D.newsletter && D.newsletter.formUrl; if (u && $('#nlBtn')) { $('#nlBtn').href = u; $('#nlBtn').target = '_blank'; $('#nlBtn').rel = 'noopener'; } }
   function renderSupport() {
+    renderNewsletter();
     ['#donateTop', '#donateBtn', '#donateHero'].forEach(sel => { const a = $(sel); if (a) a.href = D.site.donate; });
     $('#contactMail').textContent = D.site.contact;
     const live = window.Debate && window.Debate.liveDebate(D), bar = $('#liveBar');

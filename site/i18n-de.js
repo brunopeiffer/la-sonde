@@ -157,3 +157,5 @@ Object.assign(window.I18N.de, {"vt.accueil": "Start", "vt.simuler": "Simulieren"
 Object.assign(window.I18N.de, {"po.new": "Neu"});
 
 Object.assign(window.I18N.de, {"hero.kickerS": "2027 · live", "hero.fresh": "Aktualisiert {a}", "hero.last": "letzte Umfrage: {i} ({s}), {d}", "sh.btn": "Teilen"});
+
+Object.assign(window.I18N.de, {"nl.title": "Der Montags-Überblick", "nl.text": "Jeden Montagmorgen: Umfragedurchschnitt, Bewegungen und die Umfragen der Woche per E-Mail (auf Französisch). Kostenlos, jederzeit abbestellbar.", "nl.cta": "Newsletter erhalten", "nl.archive": "Frühere Ausgaben", "ft.whoLink": "Über uns"});

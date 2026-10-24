@@ -631,3 +631,8 @@ main section[data-view]{scroll-margin-top:130px}
 #simRes i{transition:flex-basis .45s cubic-bezier(.2,.7,.2,1)}
 .wiv b span{font-size:inherit}
 .sharebox{z-index:40}.changes{position:relative;z-index:5}
+
+/* Lettre hebdomadaire */
+.nlcard{border-top:4px solid #5b2cff}
+.btn-nl{display:inline-flex;align-items:center;gap:6px;padding:11px 18px;border-radius:999px;background:linear-gradient(135deg,#5b2cff,#ff3d7f);color:#fff;font:800 15px var(--font);text-decoration:none;transition:transform .15s,box-shadow .15s}
+.btn-nl:hover{transform:translateY(-2px);box-shadow:0 12px 24px -12px rgba(91,44,255,.6)}
