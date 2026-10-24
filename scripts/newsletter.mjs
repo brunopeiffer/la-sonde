@@ -81,11 +81,22 @@ function archive() {
 <body style="margin:0;background:#fbf7f1;font:16px/1.6 Arial,sans-serif;color:#2a2733"><div style="max-width:680px;margin:0 auto;padding:32px 18px">
 <p><a href="${BASE}/" style="color:#5b2cff;font-weight:800;text-decoration:none">← La Sonde</a></p>
 <h1 style="font:800 32px/1.15 Arial,sans-serif;color:#15131f">Le point du lundi</h1>
-<p id="merci" style="display:none;padding:14px 18px;border-radius:14px;background:#e9fbf1;color:#0f5c3a;font-weight:700">✓ Votre inscription est confirmée. Premier numéro lundi matin !</p>
-<script>if(/confirm|merci|success/i.test(location.search+location.hash)||document.referrer.includes('sibforms'))document.getElementById('merci').style.display='block'</script>
 <p>Chaque lundi matin : la moyenne des sondages de la présidentielle 2027, ce qui a bougé, et les sondages de la semaine. Gratuit, sans publicité, désinscription en un clic.</p>${form}
 <h2 style="font:800 20px Arial,sans-serif;margin-top:30px">Tous les numéros</h2>
 ${files.length ? `<ul>${files.map(f => `<li><a href="${f.slice(0, 10)}/">${fdate(f.slice(0, 10))}</a></li>`).join('')}</ul>` : '<p>Le premier numéro paraîtra lundi prochain.</p>'}
+</div></body></html>`);
+  // Page d'arrivée après le clic dans l'e-mail de confirmation Brevo (réglage Brevo : « page de confirmation » → /lettre/merci/).
+  fs.mkdirSync(P('site/lettre/merci'), { recursive: true });
+  fs.writeFileSync(P('site/lettre/merci/index.html'), `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Inscription confirmée | La Sonde</title><meta name="robots" content="noindex"></head>
+<body style="margin:0;background:#fbf7f1;font:17px/1.6 Arial,sans-serif;color:#2a2733"><div style="max-width:620px;margin:0 auto;padding:48px 18px;text-align:center">
+<div style="height:8px;border-radius:4px;background:linear-gradient(90deg,#5b2cff,#ff3d7f,#ff8a00);background-color:#ff3d7f;margin-bottom:36px"></div>
+<div style="width:72px;height:72px;margin:0 auto 18px;border-radius:50%;background:#e9fbf1;color:#0f8a5f;font:800 40px/72px Arial,sans-serif">✓</div>
+<h1 style="font:800 32px/1.15 Arial,sans-serif;color:#15131f;margin:0 0 12px">C'est confirmé, merci !</h1>
+<p style="margin:0 0 8px">Vous recevrez <b>Le point du lundi</b> chaque lundi matin : la moyenne des sondages de la présidentielle 2027, ce qui a bougé et les sondages de la semaine.</p>
+<p style="margin:0 0 28px;color:#6b6680;font-size:15px">Pour ne pas le manquer, ajoutez <b>contact@la-sonde.fr</b> à vos contacts.</p>
+<p><a href="${BASE}/" style="display:inline-block;padding:13px 22px;border-radius:999px;background:#5b2cff;color:#fff;font-weight:800;text-decoration:none">Voir la moyenne des sondages →</a></p>
+<p style="margin-top:22px;font-size:15px">Le site vous est utile ? <a href="https://ko-fi.com/lasonde" style="color:#5b2cff;font-weight:700">Un café fait la différence</a> · <a href="${BASE}/lettre/" style="color:#5b2cff;font-weight:700">Les anciens numéros</a></p>
 </div></body></html>`);
   return files.length;
 }
