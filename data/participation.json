@@ -1,0 +1,12 @@
+{
+  "_note": "Mesures de participation et d'indécision, reprises des notices officielles (à mettre à jour à chaque nouvelle vague).",
+  "mesures": [
+    { "institut": "Ifop-Fiducial", "commanditaire": "LCI, Le Figaro, Sud Radio", "terrain": "17-19 octobre 2026", "fin": "2026-10-19", "base": "inscrits envisageant d'aller voter (95 % des inscrits)",
+      "question": "Certitude d'aller voter au 1er tour", "resultats": { "tout à fait certain": 77.6, "pratiquement certain": 15.6, "de grandes chances": 5.5, "pas certain": 1.3 },
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10327-pres-barometre-election-v7-ifop-20-octobre.pdf" },
+    { "institut": "Ipsos bva-CESI", "commanditaire": "CEVIPOF, Fondation Jean-Jaurès, Le Monde", "terrain": "3-9 septembre 2026", "fin": "2026-09-09", "base": "13 060 inscrits",
+      "question": "Intention d'aller voter au 1er tour (note de 0 à 10)", "resultats": { "certains d'aller voter (10/10)": 67, "presque certains (9/10)": 12, "abstentionnistes potentiels (6 à 8)": 12, "abstentionnistes probables (0 à 5)": 9 },
+      "indecis": "Parmi les électeurs certains d'aller voter, 8 % à 12 % n'expriment pas d'intention de vote selon l'hypothèse testée.",
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/septembre/10262-pres-enquete-electorale-ipsos-bva-le-monde-13-septembre.pdf" }
+  ]
+}
