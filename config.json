@@ -148,5 +148,12 @@
       "sondage"
     ],
     "mentions": {}
+  },
+  "newsletter": {
+    "_note": "Lettre « Le point du lundi » via Brevo. listId : identifiant de la liste d'abonnés ; senderEmail : adresse d'envoi validée dans Brevo ; formUrl : lien du formulaire d'inscription Brevo. Secret GitHub : BREVO_API_KEY.",
+    "listId": "",
+    "senderEmail": "contact@la-sonde.fr",
+    "senderName": "La Sonde",
+    "formUrl": ""
   }
 }
