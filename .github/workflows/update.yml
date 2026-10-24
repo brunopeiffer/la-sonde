@@ -59,6 +59,11 @@ jobs:
           BSKY_APP_PASSWORD: ${{ secrets.BSKY_APP_PASSWORD }}
         run: node scripts/bluesky.mjs
 
+      - name: Lettre hebdomadaire (archive + envoi le lundi si Brevo est configuré)
+        env:
+          BREVO_API_KEY: ${{ secrets.BREVO_API_KEY }}
+        run: node scripts/newsletter.mjs
+
       - name: Enregistrer les données
         run: |
           git config user.name "lasonde-bot"
