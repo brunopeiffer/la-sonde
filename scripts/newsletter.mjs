@@ -63,8 +63,9 @@ ${uniq.length ? `<ul style="padding-left:20px;margin:0">${uniq.map(s => `<li sty
 
 // ---------- Archive publique ----------
 function archive() {
-  const dir = P('data/newsletter'); if (!fs.existsSync(dir)) return 0;
-  const files = fs.readdirSync(dir).filter(f => /^\d{4}-\d{2}-\d{2}\.html$/.test(f)).sort().reverse();
+  // La page /lettre/ existe toujours (même avant le premier numéro) : c'est là qu'arrivent les nouveaux abonnés.
+  const dir = P('data/newsletter');
+  const files = (fs.existsSync(dir) ? fs.readdirSync(dir) : []).filter(f => /^\d{4}-\d{2}-\d{2}\.html$/.test(f)).sort().reverse();
   fs.rmSync(P('site/lettre'), { recursive: true, force: true });
   for (const f of files) {
     const d = f.slice(0, 10), out = P('site/lettre', d);
@@ -80,6 +81,8 @@ function archive() {
 <body style="margin:0;background:#fbf7f1;font:16px/1.6 Arial,sans-serif;color:#2a2733"><div style="max-width:680px;margin:0 auto;padding:32px 18px">
 <p><a href="${BASE}/" style="color:#5b2cff;font-weight:800;text-decoration:none">← La Sonde</a></p>
 <h1 style="font:800 32px/1.15 Arial,sans-serif;color:#15131f">Le point du lundi</h1>
+<p id="merci" style="display:none;padding:14px 18px;border-radius:14px;background:#e9fbf1;color:#0f5c3a;font-weight:700">✓ Votre inscription est confirmée. Premier numéro lundi matin !</p>
+<script>if(/confirm|merci|success/i.test(location.search+location.hash)||document.referrer.includes('sibforms'))document.getElementById('merci').style.display='block'</script>
 <p>Chaque lundi matin : la moyenne des sondages de la présidentielle 2027, ce qui a bougé, et les sondages de la semaine. Gratuit, sans publicité, désinscription en un clic.</p>${form}
 <h2 style="font:800 20px Arial,sans-serif;margin-top:30px">Tous les numéros</h2>
 ${files.length ? `<ul>${files.map(f => `<li><a href="${f.slice(0, 10)}/">${fdate(f.slice(0, 10))}</a></li>`).join('')}</ul>` : '<p>Le premier numéro paraîtra lundi prochain.</p>'}
