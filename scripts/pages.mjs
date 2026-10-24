@@ -184,7 +184,7 @@ for (const L of LANGS) all.forEach((s, i) => {
   urls.push(pageUrl(L, K.slug));
 });
 fs.writeFileSync(P('site/sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  [`${BASE}/`, ...["en", "de", "es", "it"].map(l => `${BASE}/?lang=${l}`), ...urls].map((u, i) => `  <url><loc>${u.replace(/&/g, "&amp;")}</loc><lastmod>${D.asOf}</lastmod><changefreq>daily</changefreq><priority>${i < 5 ? '1.0' : '0.8'}</priority></url>`).join('\n') + '\n</urlset>\n');
+  [`${BASE}/`, ...["en", "de", "es", "it"].map(l => `${BASE}/?lang=${l}`), `${BASE}/a-propos/`, `${BASE}/lettre/`, ...urls].map((u, i) => `  <url><loc>${u.replace(/&/g, "&amp;")}</loc><lastmod>${D.asOf}</lastmod><changefreq>daily</changefreq><priority>${i < 5 ? '1.0' : '0.8'}</priority></url>`).join('\n') + '\n</urlset>\n');
 console.log(`Pages candidats : ${urls.length} (${LANGS.length} langues)`);
 
 // ---------- Page d'accueil : contenu lisible sans JavaScript (Google, aperçus de liens) ----------
