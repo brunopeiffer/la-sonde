@@ -39,33 +39,9 @@
       <svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#5b2cff"/><stop offset=".6" stop-color="#ff3d7f"/><stop offset="1" stop-color="#ff8a00"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#lg)"/><circle cx="16" cy="16" r="3.4" fill="#fff"/><circle cx="16" cy="16" r="8" fill="none" stroke="#fff" stroke-width="2.2" opacity=".85"/><circle cx="16" cy="16" r="12.5" fill="none" stroke="#fff" stroke-width="1.8" opacity=".45"/></svg>
       <span>La <b>Sonde</b></span>
     </a>
-    <nav class="nav" aria-label="Sections">
-      <a href="#course" data-i18n="nav.race"></a>
-      <a href="#bascule" data-i18n="nav.bascule"></a>
-      <a href="#etsi" data-i18n="nav.whatif"></a>
-      <a href="#second" data-i18n="nav.round2"></a>
-      <a href="#candidats" data-i18n="nav.cands"></a>
-    </nav>
-    <details class="navmore" id="navMore">
-      <summary><span class="lbl-more" data-i18n="nav.more"></span><span class="lbl-menu" data-i18n="nav.menu"></span></summary>
-      <div class="menu">
-        <a href="#course" data-i18n="nav.race" class="p"></a>
-        <a href="#bascule" data-i18n="nav.bascule" class="p"></a>
-        <a href="#etsi" data-i18n="nav.whatif" class="p"></a>
-        <a href="#second" data-i18n="nav.round2" class="p"></a>
-        <a href="#solidite" data-i18n="nav.solid"></a>
-        <a href="#candidats" data-i18n="nav.cands" class="p"></a>
-        <a href="#proba" data-i18n="nav.proba"></a>
-        <a href="#fantomes" data-i18n="nav.ghosts"></a>
-        <a href="#reports" data-i18n="nav.transfers"></a>
-        <a href="#debats" data-i18n="nav.debates"></a>
-        <a href="#enjeux" data-i18n="nav.issues"></a>
-        <a href="#quiz" data-i18n="nav.quiz"></a>
-        <a href="#sondages" data-i18n="nav.polls"></a>
-        <a href="#frise" data-i18n="nav.timeline"></a>
-        <a href="#methode" data-i18n="nav.method"></a>
-      </div>
-    </details>
+    <nav class="vtabs" id="vtabs" aria-label="Thèmes">
+    <a href="#accueil" data-v="accueil" data-i18n="vt.accueil"></a><a href="#simuler" data-v="simuler" data-i18n="vt.simuler"></a><a href="#tour2" data-v="tour2" data-i18n="vt.tour2"></a><a href="#comprendre" data-v="comprendre" data-i18n="vt.comprendre"></a><a href="#opinion" data-v="opinion" data-i18n="vt.opinion"></a><a href="#donnees" data-v="donnees" data-i18n="vt.donnees"></a><a href="#apropos" data-v="apropos" data-i18n="vt.apropos"></a>
+  </nav>
     <div class="tools">
       <a class="pill donate" id="donateTop" target="_blank" rel="noopener"><span aria-hidden="true">♥</span> <span data-i18n="don.short"></span></a>
       <select class="pill langsel" id="langSel" aria-label="Langue / Language"><option value="fr">FR</option><option value="en">EN</option><option value="de">DE</option><option value="es">ES</option><option value="it">IT</option></select>
@@ -77,9 +53,10 @@
 <div class="hero">
   <div class="wrap">
     <div>
-      <span class="kicker"><span class="live"></span><span data-i18n="hero.kicker"></span></span>
+      <span class="kicker"><span class="live"></span><span class="k-long" data-i18n="hero.kicker"></span><span class="k-short" data-i18n="hero.kickerS"></span></span>
       <h1 data-i18n="hero.title"></h1>
       <p class="lead" data-i18n="hero.lead"></p>
+      <p class="fresh" id="fresh"></p>
       <div class="countdown" id="countdown"></div>
       <a class="btn-hero-don" id="donateHero" target="_blank" rel="noopener"><span aria-hidden="true">♥</span> <span data-i18n="don.hero"></span></a>
       <a class="livebar" id="liveBar" href="#debats" hidden></a>
@@ -89,9 +66,6 @@
 </div>
 
 <main class="wrap">
-  <nav class="vtabs" id="vtabs" aria-label="Thèmes">
-    <a href="#accueil" data-v="accueil" data-i18n="vt.accueil"></a><a href="#simuler" data-v="simuler" data-i18n="vt.simuler"></a><a href="#tour2" data-v="tour2" data-i18n="vt.tour2"></a><a href="#comprendre" data-v="comprendre" data-i18n="vt.comprendre"></a><a href="#opinion" data-v="opinion" data-i18n="vt.opinion"></a><a href="#donnees" data-v="donnees" data-i18n="vt.donnees"></a><a href="#apropos" data-v="apropos" data-i18n="vt.apropos"></a>
-  </nav>
   <section id="resume" data-view="accueil" style="padding-top:28px">
     <div class="changes" id="changes"></div>
     <details class="read sumd">
@@ -222,10 +196,7 @@
 
 
 
-  <section id="debats" data-view="donnees">
-    <div class="sh"><div><div class="tag" data-i18n="deb.tag"></div><h2 data-i18n="deb.title"></h2><p data-i18n="deb.desc"></p></div></div>
-    <div class="card debate" id="debate"></div>
-  </section>
+
 
   <section id="ecart" data-view="comprendre">
     <div class="sh"><div><div class="tag" data-i18n="gap.tag"></div><h2 data-i18n="gap.title"></h2><p data-i18n="gap.desc"></p></div></div>
@@ -270,6 +241,11 @@
   <section id="frise" data-view="donnees">
     <div class="sh"><div><div class="tag" data-i18n="tl.tag"></div><h2 data-i18n="tl.title"></h2><p data-i18n="tl.desc"></p></div></div>
     <div class="card"><ol class="timeline" id="timeline"></ol></div>
+  </section>
+
+  <section id="debats" data-view="donnees">
+    <div class="sh"><div><div class="tag" data-i18n="deb.tag"></div><h2 data-i18n="deb.title"></h2><p data-i18n="deb.desc"></p></div></div>
+    <div class="card debate" id="debate"></div>
   </section>
 
   <section id="methode" data-view="apropos">

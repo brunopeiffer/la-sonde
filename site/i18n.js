@@ -332,3 +332,7 @@ Object.assign(window.I18N.en, {"vt.accueil": "Home", "vt.simuler": "Simulate", "
 Object.assign(window.I18N.fr, {"po.new": "Nouveau"});
 
 Object.assign(window.I18N.en, {"po.new": "New"});
+
+Object.assign(window.I18N.fr, {"hero.kickerS": "2027 · en direct", "hero.fresh": "Mis à jour {a}", "hero.last": "dernier sondage : {i} ({s}), {d}", "sh.btn": "Partager"});
+
+Object.assign(window.I18N.en, {"hero.kickerS": "2027 · live", "hero.fresh": "Updated {a}", "hero.last": "latest poll: {i} ({s}), {d}", "sh.btn": "Share"});

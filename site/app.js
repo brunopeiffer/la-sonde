@@ -80,6 +80,14 @@
     $('#countdown').innerHTML = [
       [daysTo(D.election.round1), t('cd.r1')], [daysTo(D.election.round2), t('cd.r2')], [D.counts.surveys, t('cd.polls')]
     ].map(([n, l]) => `<div class="cd"><b class="num">${n}</b><span>${l}</span></div>`).join('');
+    // Fraîcheur : depuis quand la page est à jour, et le dernier sondage intégré.
+    {
+      const mins = Math.max(1, Math.round((Date.now() - Date.parse(D.generated)) / 60000));
+      const rtf = new Intl.RelativeTimeFormat(loc(), { numeric: 'auto' });
+      const ago = mins < 60 ? rtf.format(-mins, 'minute') : mins < 48 * 60 ? rtf.format(-Math.round(mins / 60), 'hour') : rtf.format(-Math.round(mins / 1440), 'day');
+      const L = [...D.surveys].sort((a, b) => b.end.localeCompare(a.end))[0];
+      $('#fresh').innerHTML = `<span class="fr-dot"></span>${t('hero.fresh', { a: ago })}${L ? ` · ${t('hero.last', { i: esc(L.inst), s: esc(L.sponsor), d: fdate(L.end, { day: 'numeric', month: 'short' }) })}` : ''}`;
+    }
     const top = D.standings.slice(0, 6), max = Math.max(...top.map(s => s.v)) * 1.08;
     $('#podium').innerHTML = `<h2><span>${t('pod.title')}</span><span>${t('pod.d30')}</span></h2>` + top.map(s => {
       const cls = s.d30 > 0.4 ? 'up' : s.d30 < -0.4 ? 'down' : 'flat', ar = s.d30 > 0.4 ? '▲' : s.d30 < -0.4 ? '▼' : '•';
@@ -184,13 +192,30 @@
     const { rows, match } = whatIf(wi.out), on = wi.out.size > 0;
     const max = Math.max(...rows.map(r => r.hi), ...W.base.map(b => b.v)) * 1.05;
     const badge = { poll: t('wi.lvPoll'), meas: t('wi.lvMeas'), est: t('wi.lvEst') };
+    // Animation : on mémorise position, largeur et valeur de chaque ligne avant de redessiner.
+    const prev = {};
+    $('#wiRes').querySelectorAll('.wirow').forEach(r => { prev[r.dataset.c] = { top: r.getBoundingClientRect().top, w: r.querySelector('.now').style.width, v: +r.dataset.v }; });
     $('#wiRes').innerHTML = (on ? '' : `<p class="note" style="margin:0 0 10px">${t('wi.pick')}</p>`) + rows.map(r => {
       const d = r.after - r.before, show = on && r.lv !== 'same';
-      return `<div class="wirow"><div class="nm"><i style="background:${col(r.c)}"></i>${esc(sh(r.c))}${show ? ` <span class="wib ${r.lv}">${badge[r.lv]}</span>` : ''}</div>
+      return `<div class="wirow" data-c="${r.c}" data-v="${r.after}"><div class="nm"><i style="background:${col(r.c)}"></i>${esc(sh(r.c))}${show ? ` <span class="wib ${r.lv}">${badge[r.lv]}</span>` : ''}</div>
         <div class="wibar"><i class="was" style="width:${r.before / max * 100}%"></i><i class="now" style="width:${r.after / max * 100}%;background:${col(r.c)}"></i>${show ? `<b class="rng" style="left:${r.lo / max * 100}%;width:${(r.hi - r.lo) / max * 100}%"></b>` : ''}</div>
         <div class="wiv num"><b>${fmt(r.after)}${pct}</b>${on && Math.abs(d) >= 0.1 ? `<small class="${d > 0 ? 'up' : 'down'}">${sgn(d)}</small>` : ''}${show ? `<small class="rgt">${fmt(r.lo, 0)}–${fmt(r.hi, 0)}${pct}</small>` : ''}</div></div>`;
     }).join('');
     $('#wiNote').innerHTML = !on ? t('wi.base') : match ? t('wi.noteMatch', { n: match.surveys, d: fdate(match.last) }) : t('wi.noteChain');
+    if (!RM && Object.keys(prev).length) {
+      const E = 'cubic-bezier(.2,.7,.2,1)';
+      $('#wiRes').querySelectorAll('.wirow').forEach(r => {
+        const p = prev[r.dataset.c]; if (!p) return;
+        const now = r.querySelector('.now'), w = now.style.width, dy = p.top - r.getBoundingClientRect().top, num = r.querySelector('.wiv b'), v1 = +r.dataset.v;
+        now.style.transition = 'none'; now.style.width = p.w; r.style.transition = 'none'; r.style.transform = `translateY(${dy}px)`;
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          now.style.transition = `width .6s ${E}`; now.style.width = w; r.style.transition = `transform .6s ${E}`; r.style.transform = '';
+        }));
+        if (num && Math.abs(v1 - p.v) >= 0.05) { const t0 = performance.now();
+          const st = n => { const k = Math.min(1, (n - t0) / 600), e = 1 - Math.pow(1 - k, 3); num.firstChild.textContent = fmt(p.v + (v1 - p.v) * e); if (k < 1) requestAnimationFrame(st); };
+          num.innerHTML = `${fmt(p.v)}<span>${pct}</span>`; requestAnimationFrame(st); }
+      });
+    }
   }
 
   // ---------- Fiches candidats ----------
@@ -209,14 +234,24 @@
     const url = (D.site.url || location.origin).replace(/\/$/, '') + '/' + (lang === 'fr' ? '' : '?lang=' + lang);
     const msg = (txt || t('meta.title')).slice(0, 220);
     const enc = encodeURIComponent;
-    return `<div class="sharerow"><span>${t('sh.title')}</span>
-      <a target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${enc(msg)}&url=${enc(url)}">X</a>
-      <a target="_blank" rel="noopener" href="https://bsky.app/intent/compose?text=${enc(msg + ' ' + url)}">Bluesky</a>
-      <a target="_blank" rel="noopener" href="https://wa.me/?text=${enc(msg + ' ' + url)}">WhatsApp</a>
-      <a target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}">LinkedIn</a>
-      <button type="button" data-u="${esc(url)}" onclick="navigator.clipboard && navigator.clipboard.writeText(this.dataset.u); this.textContent='✓'">${t('sh.copy')}</button>
-      <a class="sharelink" href="share/carte-du-jour.png" target="_blank" rel="noopener">↗ ${t('chg.card')}</a></div>`;
+    return `<div class="sharebox"><button type="button" class="sharebtn" data-u="${esc(url)}" data-t="${esc(msg)}"><svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/></svg>${t('sh.btn')}</button>
+      <div class="sharemenu" hidden>
+        <a target="_blank" rel="noopener" href="https://wa.me/?text=${enc(msg + ' ' + url)}">WhatsApp</a>
+        <a target="_blank" rel="noopener" href="https://bsky.app/intent/compose?text=${enc(msg + ' ' + url)}">Bluesky</a>
+        <a target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${enc(msg)}&url=${enc(url)}">X</a>
+        <a target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}">LinkedIn</a>
+        <button type="button" class="sharecopy" data-u="${esc(url)}">${t('sh.copy')}</button>
+        <a href="share/carte-du-jour.png" target="_blank" rel="noopener">${t('chg.card')}</a></div></div>`;
   }
+  // Partager : menu natif du téléphone s'il existe, sinon petite liste.
+  document.addEventListener('click', async e => {
+    const b = e.target.closest('.sharebtn'), c = e.target.closest('.sharecopy');
+    if (c) { try { await navigator.clipboard.writeText(c.dataset.u); c.textContent = '✓'; } catch { /* rien */ } return; }
+    document.querySelectorAll('.sharemenu').forEach(m => { if (!b || !b.parentNode.contains(m)) m.hidden = true; });
+    if (!b) return;
+    if (navigator.share && matchMedia('(pointer: coarse)').matches) { try { await navigator.share({ title: 'La Sonde', text: b.dataset.t, url: b.dataset.u }); } catch { /* annulé */ } return; }
+    const m = b.parentNode.querySelector('.sharemenu'); m.hidden = !m.hidden;
+  });
   function renderChanges() {
     const it = D.changes ? (D.changes[lang] || D.changes.en || []) : [];
     $('#changes').innerHTML = it.length ? `<h3>${t('chg.title')}</h3><div class="chg-grid">` + it.map(x =>
@@ -569,7 +604,14 @@
     let A = sh1[sim.a], B = sh1[sim.b];
     for (const c of others) { A += sh1[c] * sim.rates[c].a / 100; B += sh1[c] * sim.rates[c].b / 100; }
     const pa = A / (A + B) * 100;
-    $('#simRes').innerHTML = `<i style="flex-basis:${pa}%;background:${col(sim.a)}">${esc(sh(sim.a))} ${fmt(pa)}</i><i style="flex-basis:${100 - pa}%;background:${col(sim.b)}">${fmt(100 - pa)} ${esc(sh(sim.b))}</i>`;
+    const bars = $('#simRes').querySelectorAll('i');
+    if (bars.length === 2 && $('#simRes').dataset.k === sim.a + sim.b) {
+      bars[0].style.flexBasis = pa + '%'; bars[0].textContent = `${sh(sim.a)} ${fmt(pa)}`;
+      bars[1].style.flexBasis = (100 - pa) + '%'; bars[1].textContent = `${fmt(100 - pa)} ${sh(sim.b)}`;
+    } else {
+      $('#simRes').dataset.k = sim.a + sim.b;
+      $('#simRes').innerHTML = `<i style="flex-basis:${pa}%;background:${col(sim.a)}">${esc(sh(sim.a))} ${fmt(pa)}</i><i style="flex-basis:${100 - pa}%;background:${col(sim.b)}">${fmt(100 - pa)} ${esc(sh(sim.b))}</i>`;
+    }
     const [x, y] = [sim.a, sim.b].sort(); const d = D.duels.find(z => z.a === x && z.b === y);
     $('#simCmp').textContent = d ? t('r2.cmp', { a: fmt(x === sim.a ? d.va : d.vb), b: fmt(x === sim.a ? d.vb : d.va), n: d.n }) : t('r2.nocmp');
   }
@@ -790,6 +832,7 @@
     renderTransfers(); renderWhatIf(); renderDuels(); renderSim(); renderGap(); renderConcerns(); renderSolid(); renderPolls();
     renderSupport(); renderQuiz(); renderInstitutes(); renderTimeline(); renderEmbeds(); applyFeatures();
     if (window.Debate) window.Debate.render({ D, lang, t, tr, loc, pct: () => pct, col, nm, sh, fmt, esc, css, tipFor });
+    if (typeof moveInd === 'function') setTimeout(moveInd, 0);
   }
   $('#langSel').onchange = e => { lang = e.target.value; store.set('lang', lang); const u = new URL(location.href); u.searchParams.delete('lang'); history.replaceState(null, '', u); renderAll(); };
   $('#themeBtn').onclick = () => {
@@ -799,6 +842,14 @@
   // ---------- Thèmes (onglets) : une accueil courte, le reste par thème ----------
   // Chaque section porte data-view. Une ancre (#etsi, #second…) ouvre le thème qui contient la section, puis y descend.
   const VIEWS = ['accueil', 'simuler', 'tour2', 'comprendre', 'opinion', 'donnees', 'apropos'];
+  // Indicateur qui glisse sous l'onglet actif ; sur téléphone, l'onglet actif reste visible dans la barre.
+  const vtabs = $('#vtabs'); vtabs.insertAdjacentHTML('afterbegin', '<span class="vt-ind" aria-hidden="true"></span>');
+  function moveInd() {
+    const a = vtabs.querySelector('a.on'), ind = vtabs.querySelector('.vt-ind'); if (!a || !ind) return;
+    ind.style.width = a.offsetWidth + 'px'; ind.style.transform = `translateX(${a.offsetLeft}px)`; ind.style.height = a.offsetHeight + 'px'; ind.style.top = a.offsetTop + 'px';
+    if (vtabs.scrollWidth > vtabs.clientWidth) vtabs.scrollTo({ left: a.offsetLeft - (vtabs.clientWidth - a.offsetWidth) / 2, behavior: RM ? 'auto' : 'smooth' });
+  }
+  addEventListener('resize', moveInd);
   function route(scroll = true) {
     const id = decodeURIComponent(location.hash.slice(1));
     let view = 'accueil', target = null;
@@ -808,9 +859,13 @@
     document.body.dataset.view = view;
     document.querySelectorAll('main [data-view]').forEach(s => s.classList.toggle('vhide', s.dataset.view !== view));
     document.querySelectorAll('#vtabs a').forEach(a => a.classList.toggle('on', a.dataset.v === view));
-    if (changed) dispatchEvent(new Event('resize'));        // les graphiques d'un thème caché se redessinent à la bonne largeur
+    moveInd();
+    if (changed) {
+      dispatchEvent(new Event('resize'));        // les graphiques d'un thème caché se redessinent à la bonne largeur
+      if (!RM) document.querySelectorAll(`main [data-view="${view}"]`).forEach(s => { s.classList.remove('vin'); void s.offsetWidth; s.classList.add('vin'); });
+    }
     if (!scroll) return;
-    setTimeout(() => { if (target) target.scrollIntoView(); else if (view !== 'accueil' || id) $('#vtabs').scrollIntoView(); }, changed ? 200 : 0);
+    setTimeout(() => { if (target) target.scrollIntoView(); else window.scrollTo({ top: 0, behavior: RM ? 'auto' : 'smooth' }); }, changed ? 120 : 0);
   }
   addEventListener('hashchange', () => route(true));
   // Le graphique « La course » se trace quand il arrive à l'écran (et non pendant qu'il est encore plus bas).
