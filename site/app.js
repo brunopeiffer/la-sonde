@@ -731,7 +731,8 @@
 
 
   // ---------- V2 : soutien, liens ----------
-  function renderNewsletter() { const u = D.newsletter && D.newsletter.formUrl; if (u && $('#nlBtn')) { $('#nlBtn').href = u; $('#nlBtn').target = '_blank'; $('#nlBtn').rel = 'noopener'; } }
+  function renderNewsletter() { const u = D.newsletter && D.newsletter.formUrl; if (u && $('#nlBtn')) { $('#nlBtn').href = u; $('#nlBtn').target = '_blank'; $('#nlBtn').rel = 'noopener'; }
+    document.querySelectorAll('a[href$="lettre/"]:not(#nlBtn)').forEach(a => { a.setAttribute('href', (lang === 'fr' ? '' : lang + '/') + 'lettre/'); }); }
   function renderSupport() {
     renderNewsletter();
     ['#donateTop', '#donateBtn', '#donateHero'].forEach(sel => { const a = $(sel); if (a) a.href = D.site.donate; });
