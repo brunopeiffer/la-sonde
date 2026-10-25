@@ -385,7 +385,24 @@
       "inst": "CSA",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10337": {
+      "fid": "2356",
+      "title": "10337 Pres indices popularite executif CSA JDD 24 octobre",
+      "pub": "2026-10-24",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10338": {
+      "fid": "2357",
+      "title": "10338 Pres IV IPSOS BVA Le Parisien 24 octobre",
+      "pub": "2026-10-24",
+      "inst": "Ipsos BVA",
+      "tries": 0,
+      "status": "relevée (1 sondage(s) ajouté(s))",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10338-pres-iv-ipsos-bva-le-parisien-24-octobre.pdf"
     }
   },
-  "checked": "2026-10-25T11:41:01.241Z"
+  "checked": "2026-10-25T17:39:58.755Z"
 }

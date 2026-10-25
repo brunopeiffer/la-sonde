@@ -817,6 +817,81 @@
           }
         }
       ]
+    },
+    {
+      "survey": "20261021_1022_ip_ag1",
+      "institute": "Ipsos bva",
+      "sponsor": "Le Parisien",
+      "start": "2026-10-21",
+      "end": "2026-10-22",
+      "n": 1500,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10338-pres-iv-ipsos-bva-le-parisien-24-octobre.pdf",
+      "foundAt": "2026-10-25",
+      "hypotheses": [
+        {
+          "label": "Hypothèse avec Gabriel Attal et Edouard Philippe",
+          "results": {
+            "NA": 0.5,
+            "JLM": 17,
+            "FRo": 2,
+            "MT": 3.5,
+            "RG": 13,
+            "GA": 4,
+            "EP": 13,
+            "BR": 7.5,
+            "NDA": 1.5,
+            "MLP": 33.5,
+            "EZ": 4.5
+          }
+        },
+        {
+          "label": "Hypothèse avec Edouard Philippe candidat unique Renaissance-MoDem-Horizons",
+          "results": {
+            "NA": 0.5,
+            "JLM": 17,
+            "FRo": 2,
+            "MT": 3.5,
+            "RG": 14,
+            "EP": 15,
+            "BR": 8,
+            "NDA": 2,
+            "MLP": 33.5,
+            "EZ": 4.5
+          }
+        },
+        {
+          "label": "Hypothèse avec Gabriel Attal candidat unique Renaissance-MoDem-Horizons",
+          "results": {
+            "NA": 0.5,
+            "JLM": 17,
+            "FRo": 2.5,
+            "MT": 3.5,
+            "RG": 15.5,
+            "GA": 9.5,
+            "BR": 11.5,
+            "NDA": 2,
+            "MLP": 33.5,
+            "EZ": 4.5
+          }
+        },
+        {
+          "label": "Hypothèse avec Edouard Philippe et David Lisnard",
+          "results": {
+            "NA": 0.5,
+            "JLM": 17,
+            "FRo": 2.5,
+            "MT": 3.5,
+            "RG": 13,
+            "EP": 14,
+            "BR": 5.5,
+            "DL": 6.5,
+            "NDA": 1.5,
+            "MLP": 32,
+            "EZ": 4
+          }
+        }
+      ]
     }
   ]
 }
