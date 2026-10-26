@@ -147,7 +147,8 @@
       "Présidentielle2027",
       "sondage"
     ],
-    "mentions": {}
+    "mentions": {},
+    "style": "dark"
   },
   "newsletter": {
     "_note": "Lettre « Le point du lundi » via Brevo. listId : identifiant de la liste d'abonnés ; senderEmail : adresse d'envoi validée dans Brevo ; formUrl : lien du formulaire d'inscription Brevo. Secret GitHub : BREVO_API_KEY.",
@@ -160,5 +161,10 @@
       "enabled": true,
       "maxUsd": 0.05
     }
+  },
+  "socials": {
+    "_note": "Comptes officiels lus sur Wikidata. Corriger un compte : overrides, ex. {\"DL\": {\"x\": \"identifiant\", \"tiktok\": null}} (null = masquer). Imposer l'article Wikipédia : wiki, ex. {\"FR\": \"François Ruffin\"}.",
+    "overrides": {},
+    "wiki": {}
   }
 }
