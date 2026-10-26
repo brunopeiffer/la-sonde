@@ -1,0 +1,86 @@
+{
+ "17-19 octobre 2026": {
+  "en": "17-19 October 2026",
+  "de": "17.–19. Oktober 2026",
+  "es": "17-19 de octubre de 2026",
+  "it": "17-19 ottobre 2026"
+ },
+ "Certitude d'aller voter au 1er tour": {
+  "en": "Certainty of voting in the first round",
+  "de": "Gewissheit, im ersten Wahlgang zu wählen",
+  "es": "Certeza de votar en la primera vuelta",
+  "it": "Certezza di votare al primo turno"
+ },
+ "tout à fait certain": {
+  "en": "completely certain",
+  "de": "völlig sicher",
+  "es": "totalmente seguro",
+  "it": "del tutto certo"
+ },
+ "pratiquement certain": {
+  "en": "almost certain",
+  "de": "praktisch sicher",
+  "es": "prácticamente seguro",
+  "it": "praticamente certo"
+ },
+ "de grandes chances": {
+  "en": "very likely",
+  "de": "sehr wahrscheinlich",
+  "es": "muy probable",
+  "it": "molto probabile"
+ },
+ "pas certain": {
+  "en": "not certain",
+  "de": "nicht sicher",
+  "es": "no seguro",
+  "it": "non certo"
+ },
+ "3-9 septembre 2026": {
+  "en": "3-9 September 2026",
+  "de": "3.–9. September 2026",
+  "es": "3-9 de septiembre de 2026",
+  "it": "3-9 settembre 2026"
+ },
+ "Intention d'aller voter au 1er tour (note de 0 à 10)": {
+  "en": "Intention to vote in the first round (rating from 0 to 10)",
+  "de": "Absicht, im ersten Wahlgang zu wählen (Bewertung von 0 bis 10)",
+  "es": "Intención de votar en la primera vuelta (calificación de 0 a 10)",
+  "it": "Intenzione di votare al primo turno (valutazione da 0 a 10)"
+ },
+ "Parmi les électeurs certains d'aller voter, 8 % à 12 % n'expriment pas d'intention de vote selon l'hypothèse testée.": {
+  "en": "Among voters certain to vote, 8% to 12% do not express a voting intention according to the tested assumption.",
+  "de": "Unter den Wählern, die sicher wählen gehen, äußern 8 % bis 12 % keine Wahlabsicht gemäß der getesteten Annahme.",
+  "es": "Entre los votantes seguros de acudir a votar, entre el 8 % y el 12 % no expresan intención de voto según la hipótesis probada.",
+  "it": "Tra gli elettori certi di andare a votare, dall'8% al 12% non esprime un'intenzione di voto secondo l'ipotesi testata."
+ },
+ "certains d'aller voter (10/10)": {
+  "en": "certain to vote (10/10)",
+  "de": "sicher wählen zu gehen (10/10)",
+  "es": "seguros de acudir a votar (10/10)",
+  "it": "certi di andare a votare (10/10)"
+ },
+ "presque certains (9/10)": {
+  "en": "almost certain (9/10)",
+  "de": "fast sicher (9/10)",
+  "es": "casi seguros (9/10)",
+  "it": "quasi certi (9/10)"
+ },
+ "abstentionnistes potentiels (6 à 8)": {
+  "en": "potential abstainers (6 to 8)",
+  "de": "potenzielle Nichtwähler (6 bis 8)",
+  "es": "abstencionistas potenciales (6 a 8)",
+  "it": "potenziali astensionisti (da 6 a 8)"
+ },
+ "abstentionnistes probables (0 à 5)": {
+  "en": "probable abstainers (0 to 5)",
+  "de": "wahrscheinliche Nichtwähler (0 bis 5)",
+  "es": "abstencionistas probables (0 a 5)",
+  "it": "probabili astensionisti (da 0 a 5)"
+ },
+ "Elabe, 14-16 octobre 2026": {
+  "en": "Elabe, 14-16 October 2026",
+  "de": "Elabe, 14.–16. Oktober 2026",
+  "es": "Elabe, 14-16 de octubre de 2026",
+  "it": "Elabe, 14-16 ottobre 2026"
+ }
+}
