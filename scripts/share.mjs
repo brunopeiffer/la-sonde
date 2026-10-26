@@ -15,7 +15,7 @@ const MOM = D.momentum || {};
 
 export function cardSVG() {
   const W = 1200, H = 630;
-  const top = D.standings.filter(s => s.presence >= 30).slice(0, 8);
+  const top = (() => { const d = D.standings.filter(s => s.declared); const t = d.filter(s => s.v >= 5); return (t.length >= 4 ? t : d.slice(0, 4)).slice(0, 8); })(); // même règle que le site : candidats déclarés à 5 % ou plus
   const max = Math.max(...top.map(s => s.v));
   const x0 = 250, bw = 340, y0 = 168, rh = 50;
   const rows = top.map((s, i) => {

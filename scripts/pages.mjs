@@ -69,7 +69,8 @@ function page(s, rank, all, L) {
   const placeTxt = L === 'fr' ? `${T.ord(rank)}` : T.ord(rank);
   const lead = T.lead(esc(name), party, num(s.v), placeTxt, all.length, sgn(s.d30)) +
     (M.state === 'up' || M.state === 'down' ? T.leadM(stTxt, sgn(M.d14), M.state === 'up' ? M.pUp : 100 - M.pUp) : M.state === 'flat' ? T.leadF : '') +
-    `${T.pres(esc(name), Math.round(s.presence))}${s.presence < 30 ? T.presLow : ''}.`;
+    `${T.pres(esc(name), Math.round(s.presence))}${s.presence < 30 ? T.presLow : ''}.` +
+    ((D.ballot || {})[c] ? T.ballot(esc(name), num(D.ballot[c].with), esc(D.cands[D.ballot[c].rival]?.name || D.ballot[c].rival), num(D.ballot[c].without), D.ballot[c].surveys) : '');
   const url = pageUrl(L, K.slug);
   // Second tour.
   const duels = (D.duels || []).filter(d => d.a === c || d.b === c).map(d => d.a === c ? { o: d.b, v: d.va, w: d.vb, n: d.n, last: d.last } : { o: d.a, v: d.vb, w: d.va, n: d.n, last: d.last })
@@ -180,7 +181,9 @@ const urls = [];
 for (const L of LANGS) all.forEach((s, i) => {
   const K = D.cands[s.c]; if (!K || !K.slug) return;
   const dir = L === 'fr' ? P('site/candidat', K.slug) : P('site', L, 'candidat', K.slug); fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(dir, 'index.html'), page(s, i + 1, all, L));
+  // Rang parmi les candidats déclarés (un candidat non déclaré garde son rang parmi tous les candidats testés).
+  const decl = all.filter(x => x.declared), list = s.declared ? decl : all;
+  fs.writeFileSync(path.join(dir, 'index.html'), page(s, list.indexOf(s) + 1, list, L));
   urls.push(pageUrl(L, K.slug));
 });
 fs.writeFileSync(P('site/sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +

@@ -381,6 +381,37 @@ function instituteProfiles(polls) {
   }).sort((a, b) => b.surveys - a.surveys);
 }
 
+// ---------- 8 bis. Dépendance au bulletin ----------
+// Pour chaque candidat : la présence de quel autre candidat change le plus son score ? Mesuré DANS les mêmes
+// enquêtes (hypothèses avec et sans ce rival), sur les 60 derniers jours. Signalé si l'écart atteint 3 points.
+function ballotDependence(r1, lastPoll) {
+  const recent = r1.filter(p => lastPoll - p.t <= 60);
+  const bySurvey = new Map();
+  for (const p of recent) { if (!bySurvey.has(p.survey)) bySurvey.set(p.survey, []); bySurvey.get(p.survey).push(p); }
+  const cands = [...new Set(recent.flatMap(p => Object.keys(p.results)))];
+  const out = {};
+  for (const c of cands) {
+    let best = null;
+    for (const r of cands) {
+      if (r === c) continue;
+      let sw = 0, sWith = 0, sWithout = 0, k = 0;
+      for (const hs of bySurvey.values()) {
+        const withC = hs.filter(h => h.results[c] != null);
+        const a = withC.filter(h => h.results[r] != null), b = withC.filter(h => h.results[r] == null);
+        if (!a.length || !b.length) continue;
+        const m = xs => xs.reduce((x, h) => x + h.results[c], 0) / xs.length;
+        const w = Math.sqrt(Math.min(hs[0].n, 3000) / 1000);
+        sw += w; sWith += w * m(a); sWithout += w * m(b); k++;
+      }
+      if (k < 3) continue;
+      const vWith = sWith / sw, vWithout = sWithout / sw, d = vWith - vWithout;
+      if (!best || Math.abs(d) > Math.abs(best.diff)) best = { rival: r, with: round1(vWith), without: round1(vWithout), diff: round1(d), surveys: k };
+    }
+    if (best && Math.abs(best.diff) >= 3) out[c] = best;
+  }
+  return out;
+}
+
 // ---------- 9. Assemblage ----------
 function build() {
   const polls = loadPolls();
@@ -509,6 +540,7 @@ function build() {
     mc, duels: D, transfers: T, house, surveys: surveyList, events,
     ghosts: { daysBack: G.daysBack, series: G.series, round1: cfg.previousElection.round1 },
     concerns: readJSON(P('data/concerns.json')),
+    ballot: ballotDependence(FR.r1, FR.lastPoll),
     certainty: fs.existsSync(P('data/certainty.json')) ? readJSON(P('data/certainty.json')) : null,
     newsletter: { formUrl: (cfg.newsletter || {}).formUrl || '' },
     summary: null

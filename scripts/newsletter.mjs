@@ -173,7 +173,7 @@ const LANGS = ['fr', 'en', 'de', 'es', 'it'];
 const LOC = { fr: 'fr-FR', en: 'en-GB', de: 'de-DE', es: 'es-ES', it: 'it-IT' };
 const LANG_NAME = { en: 'anglais (English)', de: 'allemand (Deutsch)', es: 'espagnol (Español)', it: 'italien (Italiano)' };
 const L = {
-  fr: { brand: 'Le point du lundi', h1: 'Présidentielle 2027 : la semaine des sondages', week: (n, d) => `${n} nouveau${n > 1 ? 'x' : ''} sondage${n > 1 ? 's' : ''} cette semaine · données au ${d}`,
+  fr: { undecl: 'Testés mais non déclarés :', brand: 'Le point du lundi', h1: 'Présidentielle 2027 : la semaine des sondages', week: (n, d) => `${n} nouveau${n > 1 ? 'x' : ''} sondage${n > 1 ? 's' : ''} cette semaine · données au ${d}`,
     avg: 'La moyenne des sondages', d7: '7 J', d30: '30 J', avgNote: 'Moyenne de tous les sondages publiés, corrigée des effets instituts. Écarts en points.',
     fam: 'Les grands ensembles, de gauche à droite', famNote: 'Totaux sur un bulletin réunissant tous les candidats déclarés, regroupés selon leur position gauche-droite publiée dans la méthode de La Sonde. Aucune étiquette n\'est attribuée : la composition de chaque ensemble est affichée.',
     anK: 'L\'ANALYSE DE LA SEMAINE', anNote: 'Rédigée automatiquement à partir des seuls chiffres de La Sonde, chaque nombre étant vérifié avant envoi. Aucune information de campagne n\'y est ajoutée.',
@@ -191,7 +191,7 @@ const L = {
     foot: 'La Sonde agrège les sondages publiés (notices de la Commission des sondages) ; ces chiffres sont une moyenne, pas un sondage. Site indépendant, sans publicité. Vous recevez cette lettre parce que vous vous êtes inscrit sur la-sonde.fr.', unsub: 'Se désabonner', all: 'Tous les numéros',
     arTitle: 'Le point du lundi : la lettre hebdomadaire des sondages de la présidentielle 2027 | La Sonde', arDesc: 'Chaque lundi, la moyenne des sondages de la présidentielle 2027, les signaux de la semaine et les nouveaux sondages. Gratuit, indépendant, sans publicité.',
     arIntro: 'Chaque lundi matin : la moyenne des sondages de la présidentielle 2027, ce qui a bougé, et les sondages de la semaine. Gratuit, sans publicité, désinscription en un clic.', sub: 'S\'abonner gratuitement', first: 'Le premier numéro paraîtra lundi prochain.', back: '← La Sonde' },
-  en: { brand: 'The Monday Briefing', h1: 'France 2027 presidential election: the week in polls', week: (n, d) => `${n} new poll${n > 1 ? 's' : ''} this week · data as of ${d}`,
+  en: { undecl: 'Tested but not declared:', brand: 'The Monday Briefing', h1: 'France 2027 presidential election: the week in polls', week: (n, d) => `${n} new poll${n > 1 ? 's' : ''} this week · data as of ${d}`,
     avg: 'The polling average', d7: '7 D', d30: '30 D', avgNote: 'Average of all published polls, adjusted for pollster house effects. Changes in percentage points.',
     fam: 'The broad groupings, from left to right', famNote: 'Totals on a ballot including every declared candidate, grouped by the left–right position published in La Sonde\'s methodology. No label is assigned: the make-up of each grouping is shown.',
     anK: 'THIS WEEK\'S ANALYSIS', anNote: 'Written automatically from La Sonde\'s figures only, each number being checked before sending, then translated from French. No campaign information is added.',
@@ -209,7 +209,7 @@ const L = {
     foot: 'La Sonde aggregates published polls (official notices of the French Commission des sondages); these figures are an average, not a poll. Independent website, no advertising. You are receiving this letter because you signed up on la-sonde.fr.', unsub: 'Unsubscribe', all: 'All issues',
     arTitle: 'The Monday Briefing: the weekly letter on 2027 French presidential polls | La Sonde', arDesc: 'Every Monday: the average of 2027 French presidential polls, the week\'s signals and the new polls. Free, independent, no advertising.',
     arIntro: 'Every Monday morning: the average of 2027 French presidential polls, what moved, and the week\'s polls. Free, no advertising, unsubscribe in one click. When signing up, choose “English” as the language.', sub: 'Subscribe for free', first: 'The first issue will be published next Monday.', back: '← La Sonde' },
-  de: { brand: 'Der Montagsüberblick', h1: 'Präsidentschaftswahl 2027 in Frankreich: die Umfragewoche', week: (n, d) => `${n} neue Umfrage${n > 1 ? 'n' : ''} diese Woche · Daten vom ${d}`,
+  de: { undecl: 'Getestet, aber nicht erklärt:', brand: 'Der Montagsüberblick', h1: 'Präsidentschaftswahl 2027 in Frankreich: die Umfragewoche', week: (n, d) => `${n} neue Umfrage${n > 1 ? 'n' : ''} diese Woche · Daten vom ${d}`,
     avg: 'Der Umfragedurchschnitt', d7: '7 T', d30: '30 T', avgNote: 'Durchschnitt aller veröffentlichten Umfragen, bereinigt um Instituts-Effekte. Veränderungen in Prozentpunkten.',
     fam: 'Die großen Lager, von links nach rechts', famNote: 'Summen auf einem Stimmzettel mit allen erklärten Kandidaten, gruppiert nach der in der Methodik von La Sonde veröffentlichten Links-rechts-Position. Es wird kein Etikett vergeben: Die Zusammensetzung jedes Lagers wird angezeigt.',
     anK: 'DIE ANALYSE DER WOCHE', anNote: 'Automatisch und ausschließlich auf Grundlage der Zahlen von La Sonde verfasst, jede Zahl wird vor dem Versand geprüft; aus dem Französischen übersetzt. Es werden keine Wahlkampfinformationen hinzugefügt.',
@@ -227,7 +227,7 @@ const L = {
     foot: 'La Sonde fasst veröffentlichte Umfragen zusammen (amtliche Mitteilungen der französischen Commission des sondages); diese Zahlen sind ein Durchschnitt, keine Umfrage. Unabhängige Website, ohne Werbung. Sie erhalten diesen Brief, weil Sie sich auf la-sonde.fr angemeldet haben.', unsub: 'Abmelden', all: 'Alle Ausgaben',
     arTitle: 'Der Montagsüberblick: der wöchentliche Brief zu den Umfragen der französischen Präsidentschaftswahl 2027 | La Sonde', arDesc: 'Jeden Montag: der Umfragedurchschnitt zur französischen Präsidentschaftswahl 2027, die Signale der Woche und die neuen Umfragen. Kostenlos, unabhängig, ohne Werbung.',
     arIntro: 'Jeden Montagmorgen: der Umfragedurchschnitt zur französischen Präsidentschaftswahl 2027, was sich bewegt hat, und die Umfragen der Woche. Kostenlos, ohne Werbung, Abmeldung mit einem Klick. Wählen Sie bei der Anmeldung „Deutsch“ als Sprache.', sub: 'Kostenlos abonnieren', first: 'Die erste Ausgabe erscheint nächsten Montag.', back: '← La Sonde' },
-  es: { brand: 'El resumen del lunes', h1: 'Presidenciales francesas de 2027: la semana de las encuestas', week: (n, d) => `${n} encuesta${n > 1 ? 's' : ''} nueva${n > 1 ? 's' : ''} esta semana · datos a ${d}`,
+  es: { undecl: 'Probados pero no declarados:', brand: 'El resumen del lunes', h1: 'Presidenciales francesas de 2027: la semana de las encuestas', week: (n, d) => `${n} encuesta${n > 1 ? 's' : ''} nueva${n > 1 ? 's' : ''} esta semana · datos a ${d}`,
     avg: 'La media de las encuestas', d7: '7 D', d30: '30 D', avgNote: 'Media de todas las encuestas publicadas, corregida del efecto de cada instituto. Variaciones en puntos.',
     fam: 'Los grandes bloques, de izquierda a derecha', famNote: 'Totales en una papeleta con todos los candidatos declarados, agrupados según la posición izquierda-derecha publicada en la metodología de La Sonde. No se asigna ninguna etiqueta: se muestra la composición de cada bloque.',
     anK: 'EL ANÁLISIS DE LA SEMANA', anNote: 'Redactado automáticamente solo a partir de las cifras de La Sonde, con cada número verificado antes del envío, y traducido del francés. No se añade ninguna información de campaña.',
@@ -245,7 +245,7 @@ const L = {
     foot: 'La Sonde agrega las encuestas publicadas (fichas oficiales de la Commission des sondages francesa); estas cifras son una media, no una encuesta. Sitio independiente, sin publicidad. Recibe esta carta porque se inscribió en la-sonde.fr.', unsub: 'Darse de baja', all: 'Todos los números',
     arTitle: 'El resumen del lunes: la carta semanal de las encuestas de las presidenciales francesas de 2027 | La Sonde', arDesc: 'Cada lunes: la media de las encuestas de las presidenciales francesas de 2027, las señales de la semana y las nuevas encuestas. Gratis, independiente, sin publicidad.',
     arIntro: 'Cada lunes por la mañana: la media de las encuestas de las presidenciales francesas de 2027, lo que se ha movido y las encuestas de la semana. Gratis, sin publicidad, baja en un clic. Al inscribirse, elija «Español» como idioma.', sub: 'Suscribirse gratis', first: 'El primer número se publicará el próximo lunes.', back: '← La Sonde' },
-  it: { brand: 'Il punto del lunedì', h1: 'Presidenziali francesi 2027: la settimana dei sondaggi', week: (n, d) => `${n} nuov${n > 1 ? 'i' : 'o'} sondagg${n > 1 ? 'i' : 'io'} questa settimana · dati al ${d}`,
+  it: { undecl: 'Testati ma non dichiarati:', brand: 'Il punto del lunedì', h1: 'Presidenziali francesi 2027: la settimana dei sondaggi', week: (n, d) => `${n} nuov${n > 1 ? 'i' : 'o'} sondagg${n > 1 ? 'i' : 'io'} questa settimana · dati al ${d}`,
     avg: 'La media dei sondaggi', d7: '7 G', d30: '30 G', avgNote: 'Media di tutti i sondaggi pubblicati, corretta per l’effetto istituto. Variazioni in punti.',
     fam: 'I grandi schieramenti, da sinistra a destra', famNote: 'Totali su una scheda con tutti i candidati dichiarati, raggruppati secondo la posizione sinistra-destra pubblicata nella metodologia di La Sonde. Nessuna etichetta viene attribuita: è indicata la composizione di ogni schieramento.',
     anK: 'L’ANALISI DELLA SETTIMANA', anNote: 'Redatta automaticamente a partire dai soli dati di La Sonde, con ogni numero verificato prima dell’invio, e tradotta dal francese. Nessuna informazione di campagna viene aggiunta.',
@@ -330,7 +330,10 @@ function issue(F, A, lang, cache = {}) {
   const sg = x => (x > 0 ? '+' : x < 0 ? '−' : '±') + f1(Math.abs(x));
   const fdate = (d, o = { day: 'numeric', month: 'long', year: 'numeric' }) => new Date(d + 'T12:00:00Z').toLocaleDateString(loc, o);
   const tx = s => lang === 'fr' ? s : (cache[s]?.[lang] || s);
-  const top = D.standings.filter(s => s.presence >= 30).slice(0, 8);
+  // Même règle que le site : barres pour les candidats déclarés à 5 % ou plus ; les non-déclarés en simple mention.
+  const declS = D.standings.filter(s => s.declared);
+  let top = declS.filter(s => s.v >= 5); if (top.length < 4) top = declS.slice(0, 4);
+  const undecl = D.standings.filter(s => !s.declared && s.v >= 1);
   const subject = A ? `${T.brand} · ${A.titre}` : `${T.brand} · ${top.slice(0, 3).map(s => `${C(s.c).short} ${Math.round(s.v)}${pc}`).join(', ')}`;
   const max = Math.max(...top.map(s => s.v));
   const row = s => `<tr><td style="padding:7px 0;font:600 15px Arial,sans-serif;color:#15131f;width:150px"><span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${C(s.c).color};margin-right:7px"></span>${esc(C(s.c).short)}</td>
@@ -396,7 +399,7 @@ function issue(F, A, lang, cache = {}) {
 ${keys}${an}${img}
 ${h2(T.avg)}
 <table role="presentation" style="width:100%;border-collapse:collapse"><tr><td></td><td></td><td></td><td style="font:700 11px Arial,sans-serif;color:#7d788c;text-align:right">${T.d7}</td><td style="font:700 11px Arial,sans-serif;color:#7d788c;text-align:right">${T.d30}</td></tr>${top.map(row).join('')}</table>
-${note(T.avgNote)}
+${note(T.avgNote + (undecl.length ? ' ' + T.undecl + ' ' + undecl.map(s => `${C(s.c).short} ${f1(s.v)}${pc}`).join(', ') + '.' : ''))}
 ${blocs}${qual}${bas}${liHtml}${ecHtml}${so}${pa}${r2}${y}
 ${h2(T.polls(polls.length))}
 ${polls.length ? `<ul style="padding-left:20px;margin:0">${polls.map(s => `<li style="margin:0 0 6px">${T.poll(esc(s.institut), esc(s.commanditaire), esc(fdate(s.terrain.slice(0, 10), { day: 'numeric', month: 'short' })), esc(fdate(s.terrain.slice(-10), { day: 'numeric', month: 'short' })), s.echantillon.toLocaleString(loc), s.hypotheses)}</li>`).join('')}</ul>` : `<p style="margin:0">${esc(T.none)}</p>`}

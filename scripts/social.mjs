@@ -52,11 +52,11 @@ export function buildPosts(D, now = new Date()) {
 
   // 1. Lundi — le classement (image = carte du jour déjà produite par share.mjs)
   {
-    const top = D.standings.filter(s => s.presence >= 30).slice(0, 4).map(s => `${C(s.c).short} ${f1(s.v)} %`).join(' · ');
+    const top = (() => { const d = D.standings.filter(s => s.declared); const t = d.filter(s => s.v >= 5); return (t.length >= 4 ? t : d.slice(0, 4)).slice(0, 8); })().slice(0, 4).map(s => `${C(s.c).short} ${f1(s.v)} %`).join(' · ');
     const head = (D.changes?.fr || [])[0]?.t || '';
     posts.classement = {
       text: `📊 Présidentielle 2027, moyenne des sondages :\n${top}\n\n${head}`, link: `${base}/`, png: 'site/share/carte-du-jour.png',
-      alt: `Moyenne des sondages de la présidentielle 2027 au ${asOf} : ` + D.standings.filter(x => x.presence >= 30).slice(0, 8).map(x => `${C(x.c).name} ${f1(x.v)} %`).join(', ') + '.'
+      alt: `Moyenne des sondages de la présidentielle 2027 au ${asOf} : ` + (() => { const d = D.standings.filter(s => s.declared); const t = d.filter(s => s.v >= 5); return (t.length >= 4 ? t : d.slice(0, 4)).slice(0, 8); })().map(x => `${C(x.c).name} ${f1(x.v)} %`).join(', ') + '.'
     };
   }
 
