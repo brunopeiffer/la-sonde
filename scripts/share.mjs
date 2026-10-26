@@ -2,7 +2,7 @@
 // Rendu PNG avec @resvg/resvg-js (installé à la volée par le workflow). Sans lui, seul le SVG est produit.
 import fs from 'node:fs';
 import path from 'node:path';
-import { readJSON } from './lib.mjs';
+import { readJSON, themeSvg } from './lib.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const P = (...a) => path.join(ROOT, ...a);
@@ -56,7 +56,8 @@ export function cardSVG() {
 </svg>`;
 }
 
-const svg = cardSVG();
+const CFG = readJSON(P('config.json'));
+const svg = themeSvg(cardSVG(), readJSON(P('data/candidates.json')), (CFG.bluesky || {}).style || 'dark');
 fs.mkdirSync(P('site/share'), { recursive: true });
 fs.writeFileSync(P('site/share/carte-du-jour.svg'), svg);
 try {

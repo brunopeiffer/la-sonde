@@ -5,7 +5,9 @@
 //   mercredi : qui ira au second tour ? (probabilités) dimanche : effet institut (rotation hebdomadaire)
 //   jeudi    : où iraient ses électeurs ? (reports mesurés, rotation)
 // Un format sans données (ou dont le texte a déjà été publié récemment) cède la place au suivant.
-import { readJSON } from './lib.mjs';
+import { readJSON, themeSvg } from './lib.mjs';
+const CFG = (() => { try { return readJSON(new URL('../config.json', import.meta.url).pathname); } catch { return {}; } })();
+const CANDS = (() => { try { return readJSON(new URL('../data/candidates.json', import.meta.url).pathname); } catch { return {}; } })();
 
 const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const f1 = x => (Math.round(x * 10) / 10).toFixed(1).replace('.', ',');
@@ -15,15 +17,16 @@ const pc = p => p < 1 ? '< 1 %' : p > 99 ? '> 99 %' : `${Math.round(p)} %`;
 const NB = s => s.replace(/ (%|pts?\b)/g, ' $1');
 
 // Cadre commun des images : même en-tête et même pied que la carte du jour.
-function frame({ kicker, title, body, note }) {
+function frame(o) { return themeSvg(frame0(o), CANDS, (CFG.bluesky || {}).style || 'dark'); }
+function frame0({ kicker, title, body, note }) {
   return `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="Inter">
   <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#5b2cff"/><stop offset=".6" stop-color="#ff3d7f"/><stop offset="1" stop-color="#ff8a00"/></linearGradient></defs>
   <rect width="1200" height="630" fill="#fbf7f1"/><rect width="1200" height="10" fill="url(#g)"/>
   <rect x="56" y="44" width="52" height="52" rx="15" fill="url(#g)"/>
   <circle cx="82" cy="70" r="5.5" fill="#fff"/><circle cx="82" cy="70" r="13" fill="none" stroke="#fff" stroke-width="3.5" opacity=".85"/><circle cx="82" cy="70" r="20.5" fill="none" stroke="#fff" stroke-width="3" opacity=".45"/>
   <text x="124" y="82" font-size="36" font-weight="800" fill="#15131f">La Sonde</text>
-  <text x="1144" y="80" font-size="18" font-weight="800" fill="#5b2cff" letter-spacing="2" text-anchor="end">${esc(kicker.toUpperCase())}</text>
-  <text x="56" y="146" font-size="30" font-weight="800" fill="#15131f">${esc(title)}</text>
+  <text x="1144" y="80" font-size="20" font-weight="800" fill="#5b2cff" letter-spacing="2" text-anchor="end">${esc(kicker.toUpperCase())}</text>
+  <text x="56" y="148" font-size="36" font-weight="800" fill="#15131f" letter-spacing="-0.5">${esc(title)}</text>
   ${body}
   <text x="56" y="600" font-size="17" font-weight="600" fill="#7d788c">${esc(note)}</text>
   <text x="1144" y="600" font-size="22" font-weight="800" fill="#5b2cff" text-anchor="end">la-sonde.fr</text>

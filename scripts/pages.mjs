@@ -5,6 +5,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { readJSON } from './lib.mjs';
 import { TXT, LOCALE } from './pages-i18n.mjs';
+import { refreshSocials, attention, URLS } from './socials.mjs';
+// Comptes officiels et consultations Wikipédia (relevés au plus une fois par jour ; en cas d'échec, dernière version connue).
+const SOC_P = () => refreshSocials();
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const P = (...a) => path.join(ROOT, ...a);
@@ -15,6 +18,7 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': 
 const f1 = x => x == null ? '–' : x.toFixed(1).replace('.', ',');
 const fdate = s => new Date(s + 'T12:00:00Z').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
 const ARROW = { up: ['▲', 'up'], down: ['▼', 'down'], flat: ['→', 'flat'], nd: ['–', 'flat'] };
+const SOC = await SOC_P().catch(e => { console.log('[réseaux] indisponible :', e.message); return fs.existsSync(P('data/socials.json')) ? readJSON(P('data/socials.json')) : { cands: {} }; });
 const pageUrl = (L, slug) => `${BASE}/${L === 'fr' ? '' : L + '/'}candidat/${slug}/`;
 
 function chart(c, L) {
@@ -91,6 +95,27 @@ function page(s, rank, all, L) {
     it: { in: n => `${n} annuncia la sua candidatura`, out: n => `${n} ritira la sua candidatura` } };
   const evText = e => e[L] || (EVK[L] && EVK[L][e.kind] ? EVK[L][e.kind](name) : e.en || e.fr);
   const evHtml = ev.length ? `<ul class="cev">${ev.map(e => `<li><b>${fdL(e.date)}</b> · ${esc(evText(e))}</li>`).join('')}</ul>` : '';
+  // Comptes officiels et curiosité du public (Wikipédia).
+  const SC = (SOC.cands || {})[c] || {};
+  const NETS = [['site', T.siteL], ['x', 'X'], ['instagram', 'Instagram'], ['tiktok', 'TikTok'], ['facebook', 'Facebook'], ['youtube', 'YouTube'], ['bluesky', 'Bluesky']];
+  const lk = NETS.filter(([k]) => SC.links && SC.links[k]).map(([k, lab]) => `<a href="${esc(URLS[k](SC.links[k]))}" target="_blank" rel="noopener nofollow">${esc(lab)}</a>`).join('');
+  const linksHtml = lk ? `<div class="clinks"><span>${T.linksT}</span>${lk}</div>` : '';
+  const A = attention(SC.views, D.events || [], c);
+  const attHtml = A ? (() => {
+    const W = 640, H = 170, pl = 6, pr = 6, pt = 14, pb = 22, n = A.days.length, mx = Math.max(...A.days.map(d => d[1]), 1);
+    const X = i => pl + i / (n - 1) * (W - pl - pr), Y = v => pt + (1 - v / mx) * (H - pt - pb);
+    const bars = A.days.map((d, i) => `<rect x="${(X(i) - 2).toFixed(1)}" y="${Y(d[1]).toFixed(1)}" width="4" height="${(H - pb - Y(d[1])).toFixed(1)}" fill="${K.color}" opacity=".18"/>`).join('');
+    const line = A.days.map((d, i) => `${i ? 'L' : 'M'}${X(i).toFixed(1)},${Y(d[2]).toFixed(1)}`).join('');
+    const pk = A.peaks.map((p, k) => { const i = A.days.findIndex(d => d[0] === p.date); return i < 0 ? '' : `<circle cx="${X(i).toFixed(1)}" cy="${Y(p.v).toFixed(1)}" r="9" fill="${K.color}"/><text x="${X(i).toFixed(1)}" y="${(Y(p.v) + 4).toFixed(1)}" font-size="11" font-weight="800" fill="#fff" text-anchor="middle">${k + 1}</text>`; }).join('');
+    const ticks = [0, 30, 60, n - 1].map(i => `<text x="${X(i).toFixed(1)}" y="${H - 5}" font-size="11" fill="currentColor" opacity=".6" text-anchor="${i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle'}">${new Date(A.days[i][0] + 'T12:00:00Z').toLocaleDateString(LOCALE[L], { day: 'numeric', month: 'short' })}</text>`).join('');
+    const nf = x => x.toLocaleString(LOCALE[L]);
+    const chg = A.chg == null ? '' : `<div class="attk"><b class="num ${A.chg >= 15 ? 'up' : A.chg <= -15 ? 'down' : 'flat'}">${T.attChg(A.chg)}</b><small>${T.attChgL}</small></div>`;
+    return `<section class="card" style="margin-top:18px"><h2>${T.attT}</h2><p class="note">${esc(T.attN(name))}</p>
+      <div class="attrow">${chg}<div class="attk"><b class="num">${nf(A.last30)}</b><small>${T.attAvg('').trim()}</small></div></div>
+      <svg viewBox="0 0 ${W} ${H}" class="attsvg" role="img" aria-label="${esc(T.attT)}">${bars}<path d="${line}" fill="none" stroke="${K.color}" stroke-width="2.5"/>${pk}${ticks}</svg>
+      ${A.peaks.length ? `<h3 class="atth">${T.attPeaks}</h3><ol class="attpk">${A.peaks.map(p => `<li><b>${fdL(p.date)}</b> · ${nf(p.v)} ${T.attViews}${p.ev ? ` · ${esc(evText(p.ev))}` : ''}</li>`).join('')}</ol>` : ''}
+      <p class="note" style="margin-top:8px">${T.attSrc} <a href="https://fr.wikipedia.org/wiki/${esc(encodeURIComponent((SC.wiki || '').replace(/ /g, '_')))}" target="_blank" rel="noopener">Wikipédia</a></p></section>`;
+  })() : '';
   const msg = T.msg(name, num(s.v)), enc = encodeURIComponent;
   const share = `<div class="sharerow"><span>${T.share}</span>
       <a target="_blank" rel="noopener" href="https://bsky.app/intent/compose?text=${enc(msg + ' ' + url)}">Bluesky</a>
@@ -138,6 +163,7 @@ function page(s, rank, all, L) {
       <div class="tag"><i style="background:${K.color}"></i>${esc(K.party || T.cand)}</div>
       <h1>${esc(T.h1(name))}<span>${T.h1b}</span></h1>
       <p class="lead">${lead}</p>
+      ${linksHtml}
     </div>
     <div class="cstats">
       <div><span>${T.sAvg}</span><b class="num" style="color:${K.color}">${pc(s.v)}</b><small>± ${num(s.band)} pt</small></div>
@@ -164,6 +190,7 @@ function page(s, rank, all, L) {
       ${he.length ? `<div class="helist">${he.map(([i, v]) => `<div><span>${esc(i)}</span><i class="hb"><b class="${v >= 0 ? 'pos' : 'neg'}" style="width:${Math.min(50, Math.abs(v) / 4 * 50)}%;${v >= 0 ? 'left:50%' : `right:50%`}"></b></i><em class="num">${sgn(v)}</em></div>`).join('')}</div>` : `<p class="note">${T.heNo}</p>`}
     </section>
   </div>
+  ${attHtml}
   <section class="card" style="margin-top:18px"><h2>${T.othT}</h2><div class="olist">${others}</div>
     <p style="margin:16px 0 0"><a class="cta" href="${home}#course">${T.othBtn}</a></p></section>
   <p class="note" style="margin:22px 0">${T.foot(fdL(D.asOf)).replace('ROOT', home)}</p>

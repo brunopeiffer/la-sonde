@@ -48,3 +48,22 @@ export function normCdf(x) {
   const p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
   return x > 0 ? 1 - p : p;
 }
+
+// Style des images partagées (Bluesky, carte du jour) : thème sombre par défaut.
+// config.json → bluesky.style : "dark" (défaut) ou "light" (ancien fond beige).
+export function themeSvg(svg, cands = {}, style = 'dark') {
+  if (style === 'light') return svg;
+  const map = { '#fbf7f1': '#14121c', '#15131f': '#f5f3fb', '#7d788c': '#a59fba', '#4a4659': '#d4cfe3', '#e6dfd4': '#2f2b3d',
+    '#5b2cff': '#a48bff', '#d23a5f': '#ff6b8e', '#0f8a5f': '#3ddc97' };
+  let out = svg;
+  // Couleurs des candidats : version plus lumineuse prévue pour les fonds sombres.
+  for (const k of Object.values(cands)) if (k && k.color && k.colorDark) out = out.split(`"${k.color}"`).join(`"${k.colorDark}"`);
+  for (const [a, b] of Object.entries(map)) out = out.replace(new RegExp(`"${a}"`, 'gi'), `"${b}"`);
+  // Fond : halo discret aux couleurs de la marque + liseré dégradé plus épais.
+  out = out.replace(/<rect width="1200" height="630" fill="#14121c"\/>/,
+    `<defs><radialGradient id="glow1" cx="1" cy="0" r=".9"><stop offset="0" stop-color="#5b2cff" stop-opacity=".32"/><stop offset="1" stop-color="#5b2cff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="glow2" cx="0" cy="1" r=".8"><stop offset="0" stop-color="#ff3d7f" stop-opacity=".18"/><stop offset="1" stop-color="#ff3d7f" stop-opacity="0"/></radialGradient></defs>
+    <rect width="1200" height="630" fill="#14121c"/><rect width="1200" height="630" fill="url(#glow1)"/><rect width="1200" height="630" fill="url(#glow2)"/>`)
+    .replace(/<rect width="1200" height="10" fill="url\(#g\)"\/>/, '<rect width="1200" height="12" fill="url(#g)"/>');
+  return out;
+}
