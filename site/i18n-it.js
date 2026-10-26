@@ -159,3 +159,7 @@ Object.assign(window.I18N.it, {"po.new": "Nuovo"});
 Object.assign(window.I18N.it, {"hero.kickerS": "2027 · in diretta", "hero.fresh": "Aggiornato {a}", "hero.last": "ultimo sondaggio: {i} ({s}), {d}", "sh.btn": "Condividi"});
 
 Object.assign(window.I18N.it, {"nl.title": "Il punto del lunedì", "nl.text": "Ogni lunedì mattina: la media dei sondaggi, cosa si è mosso e i sondaggi della settimana, via email (in francese). Gratis, disiscrizione in un clic.", "nl.cta": "Ricevi la newsletter", "nl.archive": "Numeri precedenti", "ft.whoLink": "Chi siamo"});
+
+Object.assign(window.I18N.it, {"pod.ballot": "{w} con {r} · {wo} senza {r}", "pod.ballotN": "Risultato molto dipendente dalla lista testata: media degli stessi sondaggi con e senza quel candidato, su 60 giorni. La media generale mescola i due casi."});
+
+Object.assign(window.I18N.it, {"pod.undecl": "Testati ma non dichiarati", "pod.tie": "Alla pari entro il margine: {g}.", "pod.tieT": "Alla pari entro il margine di errore con un candidato vicino"});

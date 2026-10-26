@@ -340,3 +340,11 @@ Object.assign(window.I18N.en, {"hero.kickerS": "2027 · live", "hero.fresh": "Up
 Object.assign(window.I18N.fr, {"nl.title": "Le point du lundi", "nl.text": "Chaque lundi matin, la moyenne des sondages, ce qui a bougé et les sondages de la semaine, dans votre boîte mail. Gratuit, désinscription en un clic.", "nl.cta": "Recevoir la lettre", "nl.archive": "Lire les anciens numéros", "ft.whoLink": "Qui sommes-nous ?"});
 
 Object.assign(window.I18N.en, {"nl.title": "The Monday briefing", "nl.text": "Every Monday morning: the poll average, what moved and the week's polls, in your inbox (in French). Free, unsubscribe in one click.", "nl.cta": "Get the newsletter", "nl.archive": "Past issues", "ft.whoLink": "About us"});
+
+Object.assign(window.I18N.fr, {"pod.ballot": "{w} avec {r} · {wo} sans {r}", "pod.ballotN": "Score très dépendant du bulletin testé : moyenne des mêmes enquêtes avec et sans ce candidat, sur 60 jours. La moyenne générale mélange les deux cas."});
+
+Object.assign(window.I18N.en, {"pod.ballot": "{w} with {r} · {wo} without {r}", "pod.ballotN": "Score highly dependent on the line-up tested: average of the same surveys with and without that candidate, over 60 days. The overall average blends both cases."});
+
+Object.assign(window.I18N.fr, {"pod.undecl": "Testés mais non déclarés", "pod.tie": "À égalité dans la marge : {g}.", "pod.tieT": "À égalité dans la marge d’erreur avec un candidat voisin"});
+
+Object.assign(window.I18N.en, {"pod.undecl": "Tested but not declared", "pod.tie": "Tied within the margin: {g}.", "pod.tieT": "Tied within the margin of error with a neighbouring candidate"});

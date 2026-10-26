@@ -159,3 +159,7 @@ Object.assign(window.I18N.de, {"po.new": "Neu"});
 Object.assign(window.I18N.de, {"hero.kickerS": "2027 · live", "hero.fresh": "Aktualisiert {a}", "hero.last": "letzte Umfrage: {i} ({s}), {d}", "sh.btn": "Teilen"});
 
 Object.assign(window.I18N.de, {"nl.title": "Der Montags-Überblick", "nl.text": "Jeden Montagmorgen: Umfragedurchschnitt, Bewegungen und die Umfragen der Woche per E-Mail (auf Französisch). Kostenlos, jederzeit abbestellbar.", "nl.cta": "Newsletter erhalten", "nl.archive": "Frühere Ausgaben", "ft.whoLink": "Über uns"});
+
+Object.assign(window.I18N.de, {"pod.ballot": "{w} mit {r} · {wo} ohne {r}", "pod.ballotN": "Wert stark abhängig von der getesteten Kandidatenliste: Durchschnitt derselben Umfragen mit und ohne diesen Kandidaten, über 60 Tage. Der Gesamtdurchschnitt mischt beide Fälle."});
+
+Object.assign(window.I18N.de, {"pod.undecl": "Getestet, aber nicht erklärt", "pod.tie": "Gleichauf innerhalb der Fehlermarge: {g}.", "pod.tieT": "Innerhalb der Fehlermarge gleichauf mit einem benachbarten Kandidaten"});

@@ -159,3 +159,7 @@ Object.assign(window.I18N.es, {"po.new": "Nuevo"});
 Object.assign(window.I18N.es, {"hero.kickerS": "2027 · en directo", "hero.fresh": "Actualizado {a}", "hero.last": "última encuesta: {i} ({s}), {d}", "sh.btn": "Compartir"});
 
 Object.assign(window.I18N.es, {"nl.title": "El resumen del lunes", "nl.text": "Cada lunes por la mañana: la media de encuestas, lo que se ha movido y las encuestas de la semana, en su correo (en francés). Gratis, baja en un clic.", "nl.cta": "Recibir el boletín", "nl.archive": "Números anteriores", "ft.whoLink": "Quiénes somos"});
+
+Object.assign(window.I18N.es, {"pod.ballot": "{w} con {r} · {wo} sin {r}", "pod.ballotN": "Resultado muy dependiente de la lista probada: media de las mismas encuestas con y sin ese candidato, en 60 días. La media general mezcla ambos casos."});
+
+Object.assign(window.I18N.es, {"pod.undecl": "Probados pero no declarados", "pod.tie": "Empate dentro del margen: {g}.", "pod.tieT": "Empate dentro del margen de error con un candidato vecino"});

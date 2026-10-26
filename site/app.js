@@ -88,19 +88,37 @@
       const L = [...D.surveys].sort((a, b) => b.end.localeCompare(a.end))[0];
       $('#fresh').innerHTML = `<span class="fr-dot"></span>${t('hero.fresh', { a: ago })}${L ? ` · ${t('hero.last', { i: esc(L.inst), s: esc(L.sponsor), d: fdate(L.end, { day: 'numeric', month: 'short' }) })}` : ''}`;
     }
-    const top = D.standings.slice(0, 6), max = Math.max(...top.map(s => s.v)) * 1.08;
+    // Barres : candidats DÉCLARÉS à 5 % ou plus (au moins 4). Les non-déclarés n'apparaissent qu'en pastille.
+    const declS = D.standings.filter(s => s.declared);
+    let top = declS.filter(s => s.v >= 5); if (top.length < 4) top = declS.slice(0, 4);
+    const max = Math.max(...top.map(s => s.v)) * 1.08;
+    const BAL = c => { const b = (D.ballot || {})[c]; return b ? t('pod.ballot', { w: fmt(b.with, 0) + pct, r: sh(b.rival), wo: fmt(b.without, 0) + pct }) : ''; };
+    // Égalités dans la marge : candidats voisins dont les fourchettes se chevauchent.
+    const ties = []; let grp = [top[0]];
+    for (let i = 1; i < top.length; i++) {
+      const a = top[i - 1], b = top[i];
+      if (a.v - (a.band || 0) <= b.v + (b.band || 0)) grp.push(b); else { if (grp.length > 1) ties.push(grp); grp = [b]; }
+    }
+    if (grp.length > 1) ties.push(grp);
+    const tied = new Set(ties.flat().map(s => s.c));
+    const chip = s => `<a class="pchip" href="${page(s.c)}" title="${esc(nm(s.c))}${BAL(s.c) ? ' · ' + esc(BAL(s.c)) : ''}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num">${fmt(s.v, 0)}${pct}</b>${s.presence < 30 ? '<sup>*</sup>' : ''}${BAL(s.c) ? '<sup>†</sup>' : ''}</a>`;
     $('#podium').innerHTML = `<h2><span>${t('pod.title')}</span><span>${t('pod.d30')}</span></h2>` + top.map(s => {
       const cls = s.d30 > 0.4 ? 'up' : s.d30 < -0.4 ? 'down' : 'flat', ar = s.d30 > 0.4 ? '▲' : s.d30 < -0.4 ? '▼' : '•';
-      return `<div class="prow"><a class="nm" href="${page(s.c)}"><i style="background:${col(s.c)}"></i><span>${esc(nm(s.c))}</span></a>
+      return `<div class="prow"><a class="nm" href="${page(s.c)}"><i style="background:${col(s.c)}"></i><span>${esc(nm(s.c))}</span>${s.presence < 30 ? '<sup>*</sup>' : ''}${tied.has(s.c) ? `<em class="ptie" title="${esc(t('pod.tieT'))}">≈</em>` : ''}</a>
         <div class="v num">${fmt(s.v, 0)}<small style="font-size:12px">${pct}</small></div><div class="delta ${cls} num">${ar} ${sgn(s.d30)}</div>
-        <div class="bar"><i style="width:${s.v / max * 100}%;background:${col(s.c)}"></i></div></div>`;
+        <div class="bar"><i style="width:${s.v / max * 100}%;background:${col(s.c)}"></i></div>${BAL(s.c) ? `<div class="pvar">† ${BAL(s.c)}</div>` : ''}</div>`;
     }).join('') + (() => {
       const shown = new Set(top.map(s => s.c));
-      const rest = D.standings.filter(s => s.declared && !shown.has(s.c));
-      if (!rest.length) return '';
-      return `<div class="pothers"><h3>${t('pod.others')}</h3><div class="pchips">` + rest.map(s =>
-        `<a class="pchip" href="${page(s.c)}" title="${esc(nm(s.c))}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num">${fmt(s.v, 0)}${pct}</b>${s.presence < 30 ? '<sup>*</sup>' : ''}</a>`).join('') +
-        `</div>${rest.some(s => s.presence < 30) ? `<p class="pnote">* ${t('pod.few')}</p>` : ''}<p class="pnote"><a href="#candidats">${t('cf.hint')} →</a></p></div>`;
+      const rest = declS.filter(s => !shown.has(s.c));
+      const undecl = D.standings.filter(s => !s.declared && s.v >= 1);
+      const all = [...rest, ...undecl];
+      let h = '<div class="pothers">';
+      if (rest.length) h += `<h3>${t('pod.others')}</h3><div class="pchips">${rest.map(chip).join('')}</div>`;
+      if (undecl.length) h += `<h3>${t('pod.undecl')}</h3><div class="pchips">${undecl.map(chip).join('')}</div>`;
+      if (ties.length) h += `<p class="pnote">≈ ${t('pod.tie', { g: ties.map(g => g.map(s => sh(s.c)).join(', ')).join(' ; ') })}</p>`;
+      if ([...top, ...all].some(s => s.presence < 30)) h += `<p class="pnote">* ${t('pod.few')}</p>`;
+      if ([...top, ...all].some(s => BAL(s.c))) h += `<p class="pnote">† ${t('pod.ballotN')}</p>`;
+      return h + `<p class="pnote"><a href="#candidats">${t('cf.hint')} →</a></p></div>`;
     })();
     // Première ouverture : les chiffres défilent jusqu'à leur valeur, les barres se remplissent.
     if (!heroDone && !RM) {
