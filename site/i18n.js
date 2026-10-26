@@ -348,3 +348,11 @@ Object.assign(window.I18N.en, {"pod.ballot": "{w} with {r} · {wo} without {r}",
 Object.assign(window.I18N.fr, {"pod.undecl": "Testés mais non déclarés", "pod.tie": "À égalité dans la marge : {g}.", "pod.tieT": "À égalité dans la marge d’erreur avec un candidat voisin"});
 
 Object.assign(window.I18N.en, {"pod.undecl": "Tested but not declared", "pod.tie": "Tied within the margin: {g}.", "pod.tieT": "Tied within the margin of error with a neighbouring candidate"});
+
+Object.assign(window.I18N.fr, {"pod.read": "Comment lire ce classement", "pod.undeclShort": "non déclaré", "hw.title": "Ces 14 derniers jours", "hw.polls": "{n} sondage(s) en 7 jours", "hw.up": "Hausse nette", "hw.down": "Baisse nette", "hw.none": "Aucun mouvement net : tout reste dans la marge.", "hw.more": "Les signaux du jour", "nl.heroCta": "La lettre du lundi"});
+
+Object.assign(window.I18N.en, {"pod.read": "How to read this ranking", "pod.undeclShort": "not declared", "hw.title": "Last 14 days", "hw.polls": "{n} poll(s) in 7 days", "hw.up": "Clear rise", "hw.down": "Clear fall", "hw.none": "No clear movement: everything is within the margin.", "hw.more": "Today's signals", "nl.heroCta": "The Monday letter"});
+
+Object.assign(window.I18N.fr, {"hw.polls": "Nouveaux sondages en 7 jours : {n}"});
+
+Object.assign(window.I18N.en, {"hw.polls": "New polls in 7 days: {n}"});

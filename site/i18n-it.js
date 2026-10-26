@@ -163,3 +163,7 @@ Object.assign(window.I18N.it, {"nl.title": "Il punto del lunedì", "nl.text": "O
 Object.assign(window.I18N.it, {"pod.ballot": "{w} con {r} · {wo} senza {r}", "pod.ballotN": "Risultato molto dipendente dalla lista testata: media degli stessi sondaggi con e senza quel candidato, su 60 giorni. La media generale mescola i due casi."});
 
 Object.assign(window.I18N.it, {"pod.undecl": "Testati ma non dichiarati", "pod.tie": "Alla pari entro il margine: {g}.", "pod.tieT": "Alla pari entro il margine di errore con un candidato vicino"});
+
+Object.assign(window.I18N.it, {"pod.read": "Come leggere questa classifica", "pod.undeclShort": "non dichiarato", "hw.title": "Ultimi 14 giorni", "hw.polls": "{n} sondaggi in 7 giorni", "hw.up": "Crescita netta", "hw.down": "Calo netto", "hw.none": "Nessun movimento netto: tutto entro il margine.", "hw.more": "I segnali del giorno", "nl.heroCta": "La lettera del lunedì"});
+
+Object.assign(window.I18N.it, {"hw.polls": "Nuovi sondaggi in 7 giorni: {n}"});

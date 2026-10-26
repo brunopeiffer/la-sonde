@@ -101,25 +101,39 @@
     }
     if (grp.length > 1) ties.push(grp);
     const tied = new Set(ties.flat().map(s => s.c));
-    const chip = s => `<a class="pchip" href="${page(s.c)}" title="${esc(nm(s.c))}${BAL(s.c) ? ' · ' + esc(BAL(s.c)) : ''}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num">${fmt(s.v, 0)}${pct}</b>${s.presence < 30 ? '<sup>*</sup>' : ''}${BAL(s.c) ? '<sup>†</sup>' : ''}</a>`;
+    const chip = (s, nd) => `<a class="pchip${nd ? ' nd' : ''}" href="${page(s.c)}" title="${esc(nm(s.c))}${nd ? ' · ' + esc(t('pod.undeclShort')) : ''}${BAL(s.c) ? ' · ' + esc(BAL(s.c)) : ''}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num">${fmt(s.v, 0)}${pct}</b>${s.presence < 30 ? '<sup>*</sup>' : ''}${BAL(s.c) ? '<sup>†</sup>' : ''}</a>`;
     $('#podium').innerHTML = `<h2><span>${t('pod.title')}</span><span>${t('pod.d30')}</span></h2>` + top.map(s => {
       const cls = s.d30 > 0.4 ? 'up' : s.d30 < -0.4 ? 'down' : 'flat', ar = s.d30 > 0.4 ? '▲' : s.d30 < -0.4 ? '▼' : '•';
-      return `<div class="prow"><a class="nm" href="${page(s.c)}"><i style="background:${col(s.c)}"></i><span>${esc(nm(s.c))}</span>${s.presence < 30 ? '<sup>*</sup>' : ''}${tied.has(s.c) ? `<em class="ptie" title="${esc(t('pod.tieT'))}">≈</em>` : ''}</a>
+      return `<div class="prow"><a class="nm" href="${page(s.c)}"><i style="background:${col(s.c)}"></i><span>${esc(nm(s.c))}</span>${s.presence < 30 ? '<sup class="pmark">*</sup>' : ''}${BAL(s.c) ? `<sup class="pmark" title="${esc(BAL(s.c))}">†</sup>` : ''}${tied.has(s.c) ? `<em class="ptie" title="${esc(t('pod.tieT'))}">≈</em>` : ''}</a>
         <div class="v num">${fmt(s.v, 0)}<small style="font-size:12px">${pct}</small></div><div class="delta ${cls} num">${ar} ${sgn(s.d30)}</div>
-        <div class="bar"><i style="width:${s.v / max * 100}%;background:${col(s.c)}"></i></div>${BAL(s.c) ? `<div class="pvar">† ${BAL(s.c)}</div>` : ''}</div>`;
+        <div class="bar"><i style="width:${s.v / max * 100}%;background:${col(s.c)}"></i></div></div>`;
     }).join('') + (() => {
       const shown = new Set(top.map(s => s.c));
       const rest = declS.filter(s => !shown.has(s.c));
       const undecl = D.standings.filter(s => !s.declared && s.v >= 1);
       const all = [...rest, ...undecl];
-      let h = '<div class="pothers">';
-      if (rest.length) h += `<h3>${t('pod.others')}</h3><div class="pchips">${rest.map(chip).join('')}</div>`;
-      if (undecl.length) h += `<h3>${t('pod.undecl')}</h3><div class="pchips">${undecl.map(chip).join('')}</div>`;
-      if (ties.length) h += `<p class="pnote">≈ ${t('pod.tie', { g: ties.map(g => g.map(s => sh(s.c)).join(', ')).join(' ; ') })}</p>`;
-      if ([...top, ...all].some(s => s.presence < 30)) h += `<p class="pnote">* ${t('pod.few')}</p>`;
-      if ([...top, ...all].some(s => BAL(s.c))) h += `<p class="pnote">† ${t('pod.ballotN')}</p>`;
-      return h + `<p class="pnote"><a href="#candidats">${t('cf.hint')} →</a></p></div>`;
+      let h = `<div class="pothers"><div class="pchips">${rest.map(s => chip(s)).join('')}${undecl.length ? `<span class="pchlab">${t('pod.undecl')}</span>${undecl.map(s => chip(s, true)).join('')}` : ''}</div>`;
+      const notes = [];
+      if (ties.length) notes.push(`≈ ${t('pod.tie', { g: ties.map(g => g.map(s => sh(s.c)).join(', ')).join(' ; ') })}`);
+      const balL = [...top, ...all].filter(s => BAL(s.c));
+      if (balL.length) notes.push(`† ${t('pod.ballotN')} ${balL.map(s => `${esc(sh(s.c))} : ${BAL(s.c)}`).join(' ; ')}.`);
+      if ([...top, ...all].some(s => s.presence < 30)) notes.push(`* ${t('pod.few')}`);
+      if (notes.length) h += `<details class="pread"><summary>${t('pod.read')}</summary>${notes.map(n => `<p class="pnote">${n}</p>`).join('')}</details>`;
+      return h + `<p class="pnote plink"><a href="#candidats">${t('cf.hint')} →</a></p></div>`;
     })();
+    // Colonne de gauche : ce qui a bougé (tendances nettes sur 14 jours, candidats déclarés), sans commentaire.
+    if ($('#hweek')) {
+      const MOMh = D.momentum || {}, dc = D.standings.filter(s => s.declared && MOMh[s.c]);
+      const ups = dc.filter(s => MOMh[s.c].state === 'up').sort((a, b) => MOMh[b.c].d14 - MOMh[a.c].d14).slice(0, 3);
+      const dns = dc.filter(s => MOMh[s.c].state === 'down').sort((a, b) => MOMh[a.c].d14 - MOMh[b.c].d14).slice(0, 3);
+      const seen = new Set(), nNew = D.surveys.filter(s => { const k = s.inst + s.end; if (seen.has(k)) return false; seen.add(k); return (Date.now() - Date.parse(s.end)) / 864e5 <= 7.5; }).length;
+      const li = (arr, cls, ar) => arr.map(s => `<a class="hw-c" href="${page(s.c)}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num ${cls}">${ar} ${sgn(MOMh[s.c].d14)}</b></a>`).join('');
+      $('#hweek').innerHTML = `<div class="hw-h"><span>${t('hw.title')}</span><span>${t('hw.polls', { n: nNew })}</span></div>
+        ${ups.length ? `<div class="hw-r"><span class="hw-l">${t('hw.up')}</span>${li(ups, 'up', '▲')}</div>` : ''}
+        ${dns.length ? `<div class="hw-r"><span class="hw-l">${t('hw.down')}</span>${li(dns, 'down', '▼')}</div>` : ''}
+        ${!ups.length && !dns.length ? `<div class="hw-r">${t('hw.none')}</div>` : ''}
+        <a class="hw-more" href="#resume">${t('hw.more')} ↓</a>`;
+    }
     // Première ouverture : les chiffres défilent jusqu'à leur valeur, les barres se remplissent.
     if (!heroDone && !RM) {
       heroDone = true;
@@ -751,7 +765,8 @@
 
   // ---------- V2 : soutien, liens ----------
   function renderNewsletter() { const u = D.newsletter && D.newsletter.formUrl; if (u && $('#nlBtn')) { $('#nlBtn').href = u; $('#nlBtn').target = '_blank'; $('#nlBtn').rel = 'noopener'; }
-    document.querySelectorAll('a[href$="lettre/"]:not(#nlBtn)').forEach(a => { a.setAttribute('href', (lang === 'fr' ? '' : lang + '/') + 'lettre/'); }); }
+    document.querySelectorAll('a[href$="lettre/"]:not(#nlBtn):not(#nlHero)').forEach(a => { a.setAttribute('href', (lang === 'fr' ? '' : lang + '/') + 'lettre/'); });
+    const nh = $('#nlHero'); if (nh) { if (u) { nh.href = u; nh.target = '_blank'; nh.rel = 'noopener'; } else nh.href = (lang === 'fr' ? '' : lang + '/') + 'lettre/'; } }
   function renderSupport() {
     renderNewsletter();
     ['#donateTop', '#donateBtn', '#donateHero'].forEach(sel => { const a = $(sel); if (a) a.href = D.site.donate; });

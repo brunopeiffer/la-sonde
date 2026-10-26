@@ -163,3 +163,7 @@ Object.assign(window.I18N.es, {"nl.title": "El resumen del lunes", "nl.text": "C
 Object.assign(window.I18N.es, {"pod.ballot": "{w} con {r} · {wo} sin {r}", "pod.ballotN": "Resultado muy dependiente de la lista probada: media de las mismas encuestas con y sin ese candidato, en 60 días. La media general mezcla ambos casos."});
 
 Object.assign(window.I18N.es, {"pod.undecl": "Probados pero no declarados", "pod.tie": "Empate dentro del margen: {g}.", "pod.tieT": "Empate dentro del margen de error con un candidato vecino"});
+
+Object.assign(window.I18N.es, {"pod.read": "Cómo leer esta clasificación", "pod.undeclShort": "no declarado", "hw.title": "Últimos 14 días", "hw.polls": "{n} encuesta(s) en 7 días", "hw.up": "Subida neta", "hw.down": "Bajada neta", "hw.none": "Ningún movimiento neto: todo dentro del margen.", "hw.more": "Señales del día", "nl.heroCta": "La carta del lunes"});
+
+Object.assign(window.I18N.es, {"hw.polls": "Nuevas encuestas en 7 días: {n}"});

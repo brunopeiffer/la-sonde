@@ -163,3 +163,7 @@ Object.assign(window.I18N.de, {"nl.title": "Der Montags-Überblick", "nl.text": 
 Object.assign(window.I18N.de, {"pod.ballot": "{w} mit {r} · {wo} ohne {r}", "pod.ballotN": "Wert stark abhängig von der getesteten Kandidatenliste: Durchschnitt derselben Umfragen mit und ohne diesen Kandidaten, über 60 Tage. Der Gesamtdurchschnitt mischt beide Fälle."});
 
 Object.assign(window.I18N.de, {"pod.undecl": "Getestet, aber nicht erklärt", "pod.tie": "Gleichauf innerhalb der Fehlermarge: {g}.", "pod.tieT": "Innerhalb der Fehlermarge gleichauf mit einem benachbarten Kandidaten"});
+
+Object.assign(window.I18N.de, {"pod.read": "So lesen Sie diese Rangliste", "pod.undeclShort": "nicht erklärt", "hw.title": "Letzte 14 Tage", "hw.polls": "{n} Umfrage(n) in 7 Tagen", "hw.up": "Deutlicher Anstieg", "hw.down": "Deutlicher Rückgang", "hw.none": "Keine deutliche Bewegung: alles innerhalb der Marge.", "hw.more": "Signale des Tages", "nl.heroCta": "Der Montagsbrief"});
+
+Object.assign(window.I18N.de, {"hw.polls": "Neue Umfragen in 7 Tagen: {n}"});
