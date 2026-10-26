@@ -393,7 +393,8 @@
     const seg = $('#rangeSeg');
     seg.innerHTML = ['3m', '6m', '1y', 'all'].map(r => `<button aria-pressed="${race.range === r}" data-r="${r}">${t('range.' + r)}</button>`).join('');
     seg.onclick = e => { const b = e.target.closest('button'); if (!b) return; race.range = b.dataset.r; store.set('range', race.range); renderRaceControls(); drawRace(); };
-    if (!race.on) race.on = new Set(D.standings.filter(s => s.presence >= 30).slice(0, 8).map(s => s.c));
+    // Présélection : même règle que le classement (candidats déclarés à 5 % ou plus, au moins 4).
+    if (!race.on) { const d = D.standings.filter(s => s.declared), t5 = d.filter(s => s.v >= 5); race.on = new Set((t5.length >= 4 ? t5 : d.slice(0, 4)).map(s => s.c)); }
     const ids = D.standings.map(s => s.c);
     $('#chips').innerHTML = ids.map(c => `<button class="chip" aria-pressed="${race.on.has(c)}" data-c="${c}" style="color:${col(c)}"><i style="background:${col(c)}"></i><span style="color:var(--ink)">${esc(sh(c))}</span></button>`).join('');
     $('#chips').onclick = e => { const b = e.target.closest('.chip'); if (!b) return; const c = b.dataset.c; race.on.has(c) ? race.on.delete(c) : race.on.add(c); renderRaceControls(); drawRace(); };
