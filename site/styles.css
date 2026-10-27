@@ -695,3 +695,27 @@ main section[data-view]{scroll-margin-top:130px}
 .seolinks a:hover { color: var(--accent); border-color: var(--accent); }
 body.cpage.seo .chero h1 span { display: block; }
 .hweek:empty{display:none}
+
+/* Tuiles « Explorer » plus visibles (oct. 2026) : icône colorée, liseré, flèche toujours visible ; « vu » discret */
+.tile{padding:18px 18px 16px;box-shadow:0 6px 18px -12px rgba(30,0,80,.35);border-top:3px solid var(--tc,var(--accent))}
+.tile .tic{position:relative;z-index:1;display:inline-grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--tc,var(--accent));color:#fff;font:800 19px/1 var(--display);font-style:normal;margin-bottom:10px;box-shadow:0 6px 14px -8px var(--tc,var(--accent));transition:background .18s ease}
+.tile::after{opacity:.9;transform:none;color:var(--tc,var(--accent))}
+.tile:hover::after,.tile:focus-visible::after,.tile.pressed::after{color:#fff}
+.tile:hover .tic,.tile:focus-visible .tic,.tile.pressed .tic{background:rgba(255,255,255,.22)}
+.tile.seen{border-color:var(--line);border-top-color:var(--tc,var(--accent))}
+.tile.seen::before{opacity:0}
+.tile.seen b{color:var(--ink)}.tile.seen span{color:var(--ink-2)}
+.tile.seen::after{content:"✓ vu";font:700 12px var(--font);color:var(--muted);top:18px}
+.tile.seen:hover::before,.tile.seen:focus-visible::before{opacity:1}
+.tile.seen:hover b,.tile.seen:hover span{color:#fff}
+.tile.seen:hover::after,.tile.seen:focus-visible::after{content:"→";font:800 20px var(--display);color:#fff;top:14px}
+@media (hover:hover){.tiles:hover .tile:not(:hover){opacity:.75}}
+/* Couleurs renforcées : tuiles « Explorer » et fiches candidats teintées de leur couleur */
+.tile{background:color-mix(in srgb,var(--tc,var(--accent)) 11%,var(--surface));border-color:color-mix(in srgb,var(--tc,var(--accent)) 30%,var(--line));box-shadow:0 8px 20px -12px color-mix(in srgb,var(--tc,var(--accent)) 60%,transparent)}
+.tile b{color:color-mix(in srgb,var(--tc,var(--accent)) 55%,var(--ink))}
+.tile.seen{background:color-mix(in srgb,var(--tc,var(--accent)) 6%,var(--surface));border-color:color-mix(in srgb,var(--tc,var(--accent)) 22%,var(--line))}
+.tile.seen b{color:color-mix(in srgb,var(--tc,var(--accent)) 55%,var(--ink))}
+.cfiche{background:color-mix(in srgb,var(--c) 11%,var(--surface));border-color:color-mix(in srgb,var(--c) 30%,var(--line));box-shadow:0 8px 20px -12px color-mix(in srgb,var(--c) 60%,transparent)}
+.cfiche b{color:var(--c)}
+.cfiche .cf-go{color:color-mix(in srgb,var(--c) 70%,var(--ink));font-weight:700}
+@media (hover:hover){.cfiches:hover .cfiche:not(:hover){opacity:.75}}

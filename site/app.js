@@ -926,15 +926,18 @@
       .forEach((el, i) => { el.classList.add('rv'); if (el.classList.contains('tile')) el.style.transitionDelay = `${(i % 5) * 60}ms`; io.observe(el); });
   }
   // Tuiles « Explorer » : la tuile touchée s'allume un court instant avant d'ouvrir le thème
-  // (sinon, sur téléphone, on part avant de voir l'effet) ; les tuiles déjà visitées restent colorées.
-  const seenTiles = new Set((store.get('tilesSeen') || '').split('|').filter(Boolean));
+  // (sinon, sur téléphone, on part avant de voir l'effet) ; les tuiles ouvertes pendant la visite portent un « ✓ ».
+  // Tuiles déjà ouvertes : mémorisées pour la visite en cours seulement (elles redeviennent neutres à la visite suivante).
+  const ss = { get(k) { try { return sessionStorage.getItem(k); } catch { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch { /* indisponible */ } } };
+  store.set('tilesSeen', '');
+  const seenTiles = new Set((ss.get('tilesSeen') || '').split('|').filter(Boolean));
   document.querySelectorAll('a.tile').forEach(a => {
     const h = a.getAttribute('href');
     if (seenTiles.has(h)) a.classList.add('seen');
     a.addEventListener('click', e => {
       e.preventDefault();
       a.classList.add('pressed', 'seen');
-      seenTiles.add(h); store.set('tilesSeen', [...seenTiles].join('|'));
+      seenTiles.add(h); ss.set('tilesSeen', [...seenTiles].join('|'));
       setTimeout(() => { a.classList.remove('pressed'); if (location.hash === h) route(true); else location.hash = h; }, 260);
     });
   });
