@@ -6,6 +6,7 @@ import path from 'node:path';
 import { readJSON } from './lib.mjs';
 import { TXT, LOCALE } from './pages-i18n.mjs';
 import { refreshSocials, attention, URLS } from './socials.mjs';
+import { buildSEO } from './seo.mjs';
 // Comptes officiels et consultations Wikipédia (relevés au plus une fois par jour ; en cas d'échec, dernière version connue).
 const SOC_P = () => refreshSocials();
 
@@ -55,7 +56,7 @@ function chart(c, L) {
 function page(s, rank, all, L) {
   const T = TXT[L], loc = LOCALE[L];
   const R = L === 'fr' ? '../../' : '../../../';           // racine du site
-  const home = L === 'fr' ? R : `${R}?lang=${L}`;
+  const home = L === 'fr' ? R : `${R}${L}/`;
   const num = x => x == null ? '–' : x.toFixed(1).replace('.', T.dec);
   const sgn = x => x == null ? '–' : (x > 0 ? '+' : x < 0 ? '−' : '±') + num(Math.abs(x));
   const pc = x => L === 'en' ? `${num(x)}%` : `${num(x)} %`;
@@ -214,7 +215,7 @@ for (const L of LANGS) all.forEach((s, i) => {
   urls.push(pageUrl(L, K.slug));
 });
 fs.writeFileSync(P('site/sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  [`${BASE}/`, ...["en", "de", "es", "it"].map(l => `${BASE}/?lang=${l}`), `${BASE}/a-propos/`, `${BASE}/lettre/`, ...urls].map((u, i) => `  <url><loc>${u.replace(/&/g, "&amp;")}</loc><lastmod>${D.asOf}</lastmod><changefreq>daily</changefreq><priority>${i < 5 ? '1.0' : '0.8'}</priority></url>`).join('\n') + '\n</urlset>\n');
+  [`${BASE}/`, `${BASE}/a-propos/`, `${BASE}/lettre/`, ...urls].map((u, i) => `  <url><loc>${u.replace(/&/g, "&amp;")}</loc><lastmod>${D.asOf}</lastmod><changefreq>daily</changefreq><priority>${i < 5 ? '1.0' : '0.8'}</priority></url>`).join('\n') + '\n</urlset>\n');
 console.log(`Pages candidats : ${urls.length} (${LANGS.length} langues)`);
 
 // ---------- Page d'accueil : contenu lisible sans JavaScript (Google, aperçus de liens) ----------
@@ -274,4 +275,12 @@ ${posts.map(card).join('')}
 </main></body></html>`;
   fs.mkdirSync(P('site/partager'), { recursive: true });
   fs.writeFileSync(P('site/partager/index.html'), html);
+}
+
+// ---------- Référencement : accueil statique (5 langues) et pages thématiques ----------
+{
+  const extra = buildSEO({ D, P, BASE });
+  const sm = P('site/sitemap.xml'), xml = fs.readFileSync(sm, 'utf8');
+  fs.writeFileSync(sm, xml.replace('</urlset>', extra.map(u => `  <url><loc>${u}</loc><lastmod>${D.asOf}</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>`).join('\n') + '\n</urlset>'));
+  console.log(`Pages référencement : ${extra.length}`);
 }

@@ -350,7 +350,7 @@ function issue(F, A, lang, cache = {}) {
     ${tbl(null, FA.map((f, i) => [`<span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${fcol[i]};margin-right:6px"></span>${esc(f.candidats.join(', '))}`, `<b>${Math.round(f.total)}${pc}</b>`]))}` + note(T.famNote) : '';
   // Analyse
   const keys = A && Array.isArray(A.chiffres_cles) && A.chiffres_cles.length ? `<table role="presentation" style="width:100%;border-collapse:separate;border-spacing:8px 0;margin:22px -8px 0"><tr>${A.chiffres_cles.slice(0, 3).map(k => `<td style="width:33%;vertical-align:top;padding:14px;border-radius:14px;background:#5b2cff;color:#fff"><div style="font:800 26px/1.1 Arial,sans-serif">${esc(k.chiffre)}</div><div style="font:13px/1.4 Arial,sans-serif;margin-top:6px">${esc(k.legende)}</div></td>`).join('')}</tr></table>` : '';
-  const img = `<p style="margin:22px 0 0"><a href="${BASE}/${lang === 'fr' ? '' : '?lang=' + lang}"><img src="${BASE}/share/carte-du-jour.png" alt="${esc(T.imgAlt(fdate(D.asOf)))}" width="604" style="width:100%;height:auto;border-radius:12px;border:1px solid #e6dfd4"></a></p>${note(esc(T.imgNote))}`;
+  const img = `<p style="margin:22px 0 0"><a href="${BASE}/${lang === 'fr' ? '' : lang + '/'}"><img src="${BASE}/share/carte-du-jour.png" alt="${esc(T.imgAlt(fdate(D.asOf)))}" width="604" style="width:100%;height:auto;border-radius:12px;border:1px solid #e6dfd4"></a></p>${note(esc(T.imgNote))}`;
   const an = A ? `<div style="margin:26px 0 0;padding:22px 24px;border-radius:16px;background:#fff;border:1px solid #e6dfd4">
     <p style="margin:0 0 6px;font:800 12px Arial,sans-serif;letter-spacing:.12em;color:#5b2cff">${esc(T.anK)}</p>
     <h2 style="font:800 22px/1.25 Arial,sans-serif;color:#15131f;margin:0 0 12px">${esc(A.titre)}</h2>
@@ -389,7 +389,7 @@ function issue(F, A, lang, cache = {}) {
     Y.candidats.slice(0, 6).map(x => [esc(x.candidat), `${f1(x.sondages_a_cette_date)}${pc}`, `<b>${f1(x.resultat_final)}${pc}</b>`, sg(x.ecart)]))
     + note(esc(T.yNote(`${Y.plus_forte_hausse_ensuite.candidat} (${sg(Y.plus_forte_hausse_ensuite.ecart)} ${T.pts})`, `${Y.plus_forte_baisse_ensuite.candidat} (${sg(Y.plus_forte_baisse_ensuite.ecart)} ${T.pts})`))) : '';
   const polls = F.sondages_de_la_semaine;
-  const home = `${BASE}/${lang === 'fr' ? '' : '?lang=' + lang}`;
+  const home = `${BASE}/${lang === 'fr' ? '' : lang + '/'}`;
   const html = `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(subject)}</title></head>
 <body style="margin:0;background:#fbf7f1"><div style="max-width:640px;margin:0 auto;padding:24px 18px;font:16px/1.6 Arial,sans-serif;color:#2a2733">
 <div style="height:8px;border-radius:4px;background:linear-gradient(90deg,#5b2cff,#ff3d7f,#ff8a00);background-color:#ff3d7f"></div>
@@ -432,7 +432,7 @@ function archive() {
 <meta name="description" content="${esc(T.arDesc)}">
 <link rel="canonical" href="${BASE}/${lp(lang)}lettre/">${alt}</head>
 <body style="margin:0;background:#fbf7f1;font:16px/1.6 Arial,sans-serif;color:#2a2733"><div style="max-width:680px;margin:0 auto;padding:32px 18px">
-<p style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><a href="${BASE}/${lang === 'fr' ? '' : '?lang=' + lang}" style="color:#5b2cff;font-weight:800;text-decoration:none">${esc(T.back)}</a><span style="font-size:14px">${langNav}</span></p>
+<p style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap"><a href="${BASE}/${lang === 'fr' ? '' : lang + '/'}" style="color:#5b2cff;font-weight:800;text-decoration:none">${esc(T.back)}</a><span style="font-size:14px">${langNav}</span></p>
 <h1 style="font:800 32px/1.15 Arial,sans-serif;color:#15131f">${esc(T.brand)}</h1>
 <p>${esc(T.arIntro)}</p>${form}
 <h2 style="font:800 20px Arial,sans-serif;margin-top:30px">${esc(T.all)}</h2>
