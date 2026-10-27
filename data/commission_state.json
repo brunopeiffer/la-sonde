@@ -147,6 +147,14 @@
       "tries": 0,
       "status": "déjà dans la base"
     },
+    "10306": {
+      "fid": "2360",
+      "title": "10306 Pres evolutions carrieres IFOP 13 octobre",
+      "pub": "2026-10-13",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
     "10307": {
       "fid": "2323",
       "title": "10307 Pres pouvoir achat IFOP Le Figaro 12 octobre",
@@ -422,5 +430,5 @@
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10340-pres-barometre-politique-odoxa-27-octobre.pdf"
     }
   },
-  "checked": "2026-10-27T11:47:24.329Z"
+  "checked": "2026-10-27T17:53:54.420Z"
 }
