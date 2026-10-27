@@ -1,7 +1,9 @@
 /* La Sonde — application. Données : data/site.json (ou window.SITE_DATA pour l'aperçu autonome). */
 (async function () {
   'use strict';
-  const D = window.SITE_DATA || await fetch('data/site.json', { cache: 'no-cache' }).then(r => r.json());
+  // Racine du site : '' à l'accueil, '../' sur les accueils /en/ /de/ /es/ /it/.
+  const ROOT = window.SITE_ROOT || '';
+  const D = window.SITE_DATA || await fetch(ROOT + 'data/site.json', { cache: 'no-cache' }).then(r => r.json());
   const $ = s => document.querySelector(s);
   // Animations : coupées si le visiteur a demandé de réduire les animations.
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -15,7 +17,11 @@
   const qs = new URLSearchParams(location.search);
   const LANGS = { fr: 'fr-FR', en: 'en-GB', de: 'de-DE', es: 'es-ES', it: 'it-IT' };
   const nav0 = (navigator.language || 'fr').slice(0, 2).toLowerCase();
-  let lang = qs.get('lang') || store.get('lang') || (LANGS[nav0] ? nav0 : 'en');
+  // Langue : celle de la page (/en/…), sinon ?lang=, sinon le choix enregistré ; l'accueil racine est en français.
+  const BOT = /bot|crawl|spider|slurp|lighthouse|preview/i.test(navigator.userAgent);
+  let lang = window.PAGE_LANG || qs.get('lang') || store.get('lang') || (BOT ? 'fr' : LANGS[nav0] ? nav0 : 'en');
+  // Visiteur étranger arrivant sur l'accueil français : on l'emmène vers l'accueil de sa langue (jamais les robots, jamais en intégration).
+  if (!window.PAGE_LANG && !qs.get('lang') && !qs.get('embed') && !BOT && lang !== 'fr' && LANGS[lang] && !window.SITE_DATA) { location.replace(ROOT + lang + '/' + location.hash); return; }
   if (!window.I18N[lang] || !LANGS[lang]) lang = 'fr';
   const loc = () => LANGS[lang];
   // Textes des données : { fr, en, de… } → langue courante, sinon anglais, sinon français.
@@ -259,7 +265,7 @@
   }
 
   // ---------- V2 : ce qui a changé ----------
-  const page = c => (D.cands[c] && D.cands[c].slug) ? `${lang === 'fr' ? '' : lang + '/'}candidat/${D.cands[c].slug}/` : '#course';
+  const page = c => (D.cands[c] && D.cands[c].slug) ? `${ROOT}${lang === 'fr' ? '' : lang + '/'}candidat/${D.cands[c].slug}/` : '#course';
   const ICON = { up: '▲', down: '▼', flat: '●', poll: '◆', proba: '%', swap: '⇅', transfer: '⇢', ghost: '◷' };
   // Boutons de partage pour les visiteurs : le texte du premier signal + le lien du site.
   function shareRow(txt) {
@@ -273,7 +279,7 @@
         <a target="_blank" rel="noopener" href="https://twitter.com/intent/tweet?text=${enc(msg)}&url=${enc(url)}">X</a>
         <a target="_blank" rel="noopener" href="https://www.linkedin.com/sharing/share-offsite/?url=${enc(url)}">LinkedIn</a>
         <button type="button" class="sharecopy" data-u="${esc(url)}">${t('sh.copy')}</button>
-        <a href="share/carte-du-jour.png" target="_blank" rel="noopener">${t('chg.card')}</a></div></div>`;
+        <a href="${ROOT}share/carte-du-jour.png" target="_blank" rel="noopener">${t('chg.card')}</a></div></div>`;
   }
   // Partager : menu natif du téléphone s'il existe, sinon petite liste.
   document.addEventListener('click', async e => {
@@ -765,8 +771,8 @@
 
   // ---------- V2 : soutien, liens ----------
   function renderNewsletter() { const u = D.newsletter && D.newsletter.formUrl; if (u && $('#nlBtn')) { $('#nlBtn').href = u; $('#nlBtn').target = '_blank'; $('#nlBtn').rel = 'noopener'; }
-    document.querySelectorAll('a[href$="lettre/"]:not(#nlBtn):not(#nlHero)').forEach(a => { a.setAttribute('href', (lang === 'fr' ? '' : lang + '/') + 'lettre/'); });
-    const nh = $('#nlHero'); if (nh) { if (u) { nh.href = u; nh.target = '_blank'; nh.rel = 'noopener'; } else nh.href = (lang === 'fr' ? '' : lang + '/') + 'lettre/'; } }
+    document.querySelectorAll('a[href$="lettre/"]:not(#nlBtn):not(#nlHero)').forEach(a => { a.setAttribute('href', ROOT + (lang === 'fr' ? '' : lang + '/') + 'lettre/'); });
+    const nh = $('#nlHero'); if (nh) { if (u) { nh.href = u; nh.target = '_blank'; nh.rel = 'noopener'; } else nh.href = ROOT + (lang === 'fr' ? '' : lang + '/') + 'lettre/'; } }
   function renderSupport() {
     renderNewsletter();
     ['#donateTop', '#donateBtn', '#donateHero'].forEach(sel => { const a = $(sel); if (a) a.href = D.site.donate; });
@@ -871,7 +877,10 @@
     if (window.Debate) window.Debate.render({ D, lang, t, tr, loc, pct: () => pct, col, nm, sh, fmt, esc, css, tipFor });
     if (typeof moveInd === 'function') setTimeout(moveInd, 0);
   }
-  $('#langSel').onchange = e => { lang = e.target.value; store.set('lang', lang); const u = new URL(location.href); u.searchParams.delete('lang'); history.replaceState(null, '', u); renderAll(); };
+  $('#langSel').onchange = e => { lang = e.target.value; store.set('lang', lang);
+    // Hors intégration : chaque langue a sa propre adresse (/en/, /de/…), meilleure pour Google et pour partager.
+    if (!embedId && !window.SITE_DATA) { location.href = ROOT + (lang === 'fr' ? '' : lang + '/') + location.hash; return; }
+    const u = new URL(location.href); u.searchParams.delete('lang'); history.replaceState(null, '', u); renderAll(); };
   $('#themeBtn').onclick = () => {
     const next = isDark() ? 'light' : 'dark'; document.documentElement.dataset.theme = next; store.set('theme', next); renderAll();
   };

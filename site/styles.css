@@ -688,3 +688,10 @@ main section[data-view]{scroll-margin-top:130px}
 .atth { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 12px 0 6px; }
 .attpk { margin: 0; padding-left: 20px; font-size: 14px; }
 .attpk li { margin: 2px 0; }
+
+/* Liens « Explorer » (référencement) */
+.seolinks { display: flex; flex-wrap: wrap; gap: 8px; padding: 18px 16px 6px; }
+.seolinks a { font-size: 13px; font-weight: 600; color: var(--ink-2); text-decoration: none; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); }
+.seolinks a:hover { color: var(--accent); border-color: var(--accent); }
+body.cpage.seo .chero h1 span { display: block; }
+.hweek:empty{display:none}
