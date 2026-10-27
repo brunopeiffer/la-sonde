@@ -892,6 +892,65 @@
           }
         }
       ]
+    },
+    {
+      "survey": "20261019_1022_cl_ag1",
+      "institute": "Cluster17",
+      "sponsor": "Politico",
+      "start": "2026-10-19",
+      "end": "2026-10-22",
+      "n": 2817,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10339-pres-iv-cluster17-politico-26-octobre.pdf",
+      "foundAt": "2026-10-27",
+      "hypotheses": [
+        {
+          "label": "Hypothèse 1",
+          "results": {
+            "BR": 8,
+            "EP": 16,
+            "EZ": 4,
+            "FRo": 2,
+            "JLM": 18.5,
+            "MLP": 33,
+            "MT": 2,
+            "NA": 0.5,
+            "NDA": 3,
+            "RG": 13
+          }
+        },
+        {
+          "label": "Hypothèse 2 : avec Gabriel Attal",
+          "results": {
+            "BR": 10,
+            "EZ": 4,
+            "FRo": 2,
+            "GA": 12,
+            "JLM": 19.5,
+            "MLP": 32.5,
+            "MT": 2,
+            "NA": 0.5,
+            "NDA": 3.5,
+            "RG": 14
+          }
+        },
+        {
+          "label": "Hypothèse 3 : avec David Lisnard et François Hollande, sans Raphaël Glucksmann",
+          "results": {
+            "BR": 7,
+            "DL": 8,
+            "EP": 17,
+            "FRo": 2,
+            "FH": 6.5,
+            "JLM": 19.5,
+            "MLP": 30.5,
+            "MT": 2.5,
+            "NA": 0.5,
+            "NDA": 3,
+            "EZ": 3.5
+          }
+        }
+      ]
     }
   ]
 }

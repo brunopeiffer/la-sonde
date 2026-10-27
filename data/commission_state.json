@@ -402,7 +402,25 @@
       "tries": 0,
       "status": "relevée (1 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10338-pres-iv-ipsos-bva-le-parisien-24-octobre.pdf"
+    },
+    "10339": {
+      "fid": "2358",
+      "title": "10339 Pres IV CLUSTER17 Politico 26 octobre",
+      "pub": "2026-10-26",
+      "inst": "Cluster17",
+      "tries": 0,
+      "status": "relevée (1 sondage(s) ajouté(s))",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10339-pres-iv-cluster17-politico-26-octobre.pdf"
+    },
+    "10340": {
+      "fid": "2359",
+      "title": "10340 Pres Barometre politique ODOXA 27 octobre",
+      "pub": "2026-10-27",
+      "inst": "ODOXA",
+      "tries": 0,
+      "status": "sans intentions de vote",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10340-pres-barometre-politique-odoxa-27-octobre.pdf"
     }
   },
-  "checked": "2026-10-27T05:39:06.868Z"
+  "checked": "2026-10-27T11:47:24.329Z"
 }
