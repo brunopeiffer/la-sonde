@@ -428,7 +428,15 @@
       "tries": 0,
       "status": "sans intentions de vote",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10340-pres-barometre-politique-odoxa-27-octobre.pdf"
+    },
+    "10342": {
+      "fid": "2362",
+      "title": "10342 Pres revendications mobilisations sociales ELABE 28 octobre",
+      "pub": "2026-10-28",
+      "inst": "ELABE",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-10-28T11:53:43.370Z"
+  "checked": "2026-10-28T17:55:07.998Z"
 }
