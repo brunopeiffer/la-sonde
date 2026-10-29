@@ -444,7 +444,15 @@
       "inst": "Ipsos BVA",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10344": {
+      "fid": "2364",
+      "title": "10344 Pres Mobilisation lycéens annonces du gouvernement ODOXA 29 octobre",
+      "pub": "2026-10-29",
+      "inst": "ODOXA",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-10-29T11:53:45.222Z"
+  "checked": "2026-10-29T17:57:26.901Z"
 }
