@@ -436,7 +436,15 @@
       "inst": "ELABE",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10343": {
+      "fid": "2363",
+      "title": "10343 Pres Logement IPSOS BVA Le Figaro immobilier 29 octobre",
+      "pub": "2026-10-29",
+      "inst": "Ipsos BVA",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-10-29T05:49:53.824Z"
+  "checked": "2026-10-29T11:53:45.222Z"
 }
