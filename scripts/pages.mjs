@@ -150,12 +150,13 @@ function page(s, rank, all, L) {
 <script data-goatcounter="https://lasonde.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 <script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'La Sonde', item: BASE + '/' }, { '@type': 'ListItem', position: 2, name: T.crumb(name), item: url }] })}</script>
+<script>try{var t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t}catch(e){}</script>
 </head>
 <body class="cpage">
 <header class="top"><div class="wrap">
   <a class="brand" href="${home}"><svg width="30" height="30" viewBox="0 0 32 32" aria-hidden="true"><defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#5b2cff"/><stop offset=".6" stop-color="#ff3d7f"/><stop offset="1" stop-color="#ff8a00"/></linearGradient></defs><rect width="32" height="32" rx="9" fill="url(#lg)"/><circle cx="16" cy="16" r="3.4" fill="#fff"/><circle cx="16" cy="16" r="8" fill="none" stroke="#fff" stroke-width="2.2" opacity=".85"/><circle cx="16" cy="16" r="12.5" fill="none" stroke="#fff" stroke-width="1.8" opacity=".45"/></svg><span>La <b>Sonde</b></span></a>
   <nav class="nav">${nav.map((t, i) => `<a href="${home}#${sec[i]}">${esc(t)}</a>`).join('')}</nav>
-  <div class="tools"><a class="pill donate" href="${esc(D.site.donate)}" target="_blank" rel="noopener"><span aria-hidden="true">♥</span> <span>${T.donate}</span></a></div>
+  <div class="tools"><a class="pill donate" href="${esc(D.site.donate)}" target="_blank" rel="noopener"><span aria-hidden="true">♥</span> <span>${T.donate}</span></a><button class="pill" id="themeBtn" type="button" aria-label="Mode clair / sombre"><svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" style="display:block"><circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M8 1.5a6.5 6.5 0 0 1 0 13z" fill="currentColor"/></svg></button></div>
 </div></header>
 <main class="wrap">
   <p class="crumb"><a href="${home}">La Sonde</a> › ${esc(T.crumb(name))} <span style="float:right">${langLinks}</span></p>
@@ -197,6 +198,7 @@ function page(s, rank, all, L) {
   <p class="note" style="margin:22px 0">${T.foot(fdL(D.asOf)).replace('ROOT', home)}</p>
 </main>
 <footer><div class="wrap"><p>La Sonde · ${esc(D.site.author)} · <a href="${esc(D.site.donate)}" target="_blank" rel="noopener">${T.support}</a> · <a href="mailto:${esc(D.site.contact)}">${esc(D.site.contact)}</a></p></div></footer>
+<script>document.getElementById('themeBtn').onclick=function(){var r=document.documentElement,d=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme: dark)').matches,n=d?'light':'dark';r.dataset.theme=n;try{localStorage.setItem('theme',n)}catch(e){}};</script>
 </body>
 </html>
 `;
