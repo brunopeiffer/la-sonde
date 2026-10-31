@@ -452,7 +452,16 @@
       "inst": "ODOXA",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10345": {
+      "fid": "2365",
+      "title": "10345 Pres Barometre de confiance TOLUNA HARRIS INTERACTIVE LCI 30 octobre",
+      "pub": "2026-10-30",
+      "inst": "Toluna Harris Interactive",
+      "tries": 0,
+      "status": "sans intentions de vote",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10345-pres-barometre-de-confiance-toluna-harris-interactive-lci-30-octobre.pdf"
     }
   },
-  "checked": "2026-10-31T05:45:23.402Z"
+  "checked": "2026-10-31T11:45:34.123Z"
 }
