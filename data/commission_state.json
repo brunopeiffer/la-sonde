@@ -429,6 +429,14 @@
       "status": "sans intentions de vote",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10340-pres-barometre-politique-odoxa-27-octobre.pdf"
     },
+    "10341": {
+      "fid": "2367",
+      "title": "10341 Pres niche parlementaire LFI THI 28 octobre",
+      "pub": "2026-10-28",
+      "inst": null,
+      "tries": 0,
+      "status": "hors sujet"
+    },
     "10342": {
       "fid": "2362",
       "title": "10342 Pres revendications mobilisations sociales ELABE 28 octobre",
@@ -461,7 +469,15 @@
       "tries": 0,
       "status": "sans intentions de vote",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/octobre/10345-pres-barometre-de-confiance-toluna-harris-interactive-lci-30-octobre.pdf"
+    },
+    "10346": {
+      "fid": "2366",
+      "title": "10346 Pres autodefense commerçants CSA Cnews 30 octobre",
+      "pub": "2026-10-30",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-02T06:06:23.617Z"
+  "checked": "2026-11-02T12:01:58.854Z"
 }
