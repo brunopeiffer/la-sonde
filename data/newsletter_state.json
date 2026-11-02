@@ -1,13 +1,13 @@
 {
-  "last": "2026-10-26",
+  "last": "2026-11-02",
   "campaigns": [
     {
       "lang": "fr",
-      "campaign": 5
+      "campaign": 6
     }
   ],
   "subject": "Le point du lundi · Le Pen 35 %, Mélenchon 17 %, Philippe 14 %",
-  "translationUsd": 0.0146,
+  "translationUsd": 0,
   "abonnesParLangue": {
     "en": 0,
     "de": 0,
