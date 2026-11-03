@@ -477,7 +477,24 @@
       "inst": "CSA",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10347": {
+      "fid": "2368",
+      "title": "10347 Pres accompagnement fin de vie IFOP 2 novembre",
+      "pub": "2026-11-02",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10349": {
+      "fid": "2369",
+      "title": "10349 Pres Barometre engagement des entreprises IPSOS BVA 3 novembre",
+      "pub": "2026-11-03",
+      "inst": "Ipsos BVA",
+      "tries": 0,
+      "status": "sans intentions de vote",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10349-pres-barometre-engagement-des-entreprises-ipsos-bva-3-novembre.pdf"
     }
   },
-  "checked": "2026-11-03T11:56:33.958Z"
+  "checked": "2026-11-03T17:58:15.558Z"
 }
