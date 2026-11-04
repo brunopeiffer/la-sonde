@@ -98,6 +98,7 @@
     const declS = D.standings.filter(s => s.declared);
     let top = declS.filter(s => s.v >= 5); if (top.length < 4) top = declS.slice(0, 4);
     const max = Math.max(...top.map(s => s.v)) * 1.08;
+    const EMB = c => { const e = ((D.pulse || {}).emerging || []).find(x => x.c === c); return e ? `<em class="pem ${e.dir}" title="${esc(t('pl.badgeT', { n: e.n }))}">${e.dir === 'up' ? '▲' : '▼'}</em>` : ''; };
     const BAL = c => { const b = (D.ballot || {})[c]; return b ? t('pod.ballot', { w: fmt(b.with, 0) + pct, r: sh(b.rival), wo: fmt(b.without, 0) + pct }) : ''; };
     // Égalités dans la marge : candidats voisins dont les fourchettes se chevauchent.
     const ties = []; let grp = [top[0]];
@@ -110,7 +111,7 @@
     const chip = (s, nd) => `<a class="pchip${nd ? ' nd' : ''}" href="${page(s.c)}" title="${esc(nm(s.c))}${nd ? ' · ' + esc(t('pod.undeclShort')) : ''}${BAL(s.c) ? ' · ' + esc(BAL(s.c)) : ''}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num">${fmt(s.v, 0)}${pct}</b>${s.presence < 30 ? '<sup>*</sup>' : ''}${BAL(s.c) ? '<sup>†</sup>' : ''}</a>`;
     $('#podium').innerHTML = `<h2><span>${t('pod.title')}</span><span>${t('pod.d30')}</span></h2>` + top.map(s => {
       const cls = s.d30 > 0.4 ? 'up' : s.d30 < -0.4 ? 'down' : 'flat', ar = s.d30 > 0.4 ? '▲' : s.d30 < -0.4 ? '▼' : '•';
-      return `<div class="prow"><a class="nm" href="${page(s.c)}"><i style="background:${col(s.c)}"></i><span>${esc(nm(s.c))}</span>${s.presence < 30 ? '<sup class="pmark">*</sup>' : ''}${BAL(s.c) ? `<sup class="pmark" title="${esc(BAL(s.c))}">†</sup>` : ''}${tied.has(s.c) ? `<em class="ptie" title="${esc(t('pod.tieT'))}">≈</em>` : ''}</a>
+      return `<div class="prow"><a class="nm" href="${page(s.c)}"><i style="background:${col(s.c)}"></i><span>${esc(nm(s.c))}</span>${s.presence < 30 ? '<sup class="pmark">*</sup>' : ''}${BAL(s.c) ? `<sup class="pmark" title="${esc(BAL(s.c))}">†</sup>` : ''}${EMB(s.c)}</a>
         <div class="v num">${fmt(s.v, 0)}<small style="font-size:12px">${pct}</small></div><div class="delta ${cls} num">${ar} ${sgn(s.d30)}</div>
         <div class="bar"><i style="width:${s.v / max * 100}%;background:${col(s.c)}"></i></div></div>`;
     }).join('') + (() => {
@@ -127,18 +128,10 @@
       if (notes.length) h += `<details class="pread"><summary>${t('pod.read')}</summary>${notes.map(n => `<p class="pnote">${n}</p>`).join('')}</details>`;
       return h + `<p class="pnote plink"><a href="#candidats">${t('cf.hint')} →</a></p></div>`;
     })();
-    // Colonne de gauche : ce qui a bougé (tendances nettes sur 14 jours, candidats déclarés), sans commentaire.
+    // Colonne de gauche : une ligne d'accroche vers « Ce qui bouge » (le détail est plus bas, en trois étapes).
     if ($('#hweek')) {
-      const MOMh = D.momentum || {}, dc = D.standings.filter(s => s.declared && MOMh[s.c]);
-      const ups = dc.filter(s => MOMh[s.c].state === 'up').sort((a, b) => MOMh[b.c].d14 - MOMh[a.c].d14).slice(0, 3);
-      const dns = dc.filter(s => MOMh[s.c].state === 'down').sort((a, b) => MOMh[a.c].d14 - MOMh[b.c].d14).slice(0, 3);
-      const seen = new Set(), nNew = D.surveys.filter(s => { const k = s.inst + s.end; if (seen.has(k)) return false; seen.add(k); return (Date.now() - Date.parse(s.end)) / 864e5 <= 7.5; }).length;
-      const li = (arr, cls, ar) => arr.map(s => `<a class="hw-c" href="${page(s.c)}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num ${cls}">${ar} ${sgn(MOMh[s.c].d14)}</b></a>`).join('');
-      $('#hweek').innerHTML = `<div class="hw-h"><span>${t('hw.title')}</span><span>${t('hw.polls', { n: nNew })}</span></div>
-        ${ups.length ? `<div class="hw-r"><span class="hw-l">${t('hw.up')}</span>${li(ups, 'up', '▲')}</div>` : ''}
-        ${dns.length ? `<div class="hw-r"><span class="hw-l">${t('hw.down')}</span>${li(dns, 'down', '▼')}</div>` : ''}
-        ${!ups.length && !dns.length ? `<div class="hw-r">${t('hw.none')}</div>` : ''}
-        <a class="hw-more" href="#resume">${t('hw.more')} ↓</a>`;
+      const PL = (D.pulse || {}).latest, nE = ((D.pulse || {}).emerging || []).length;
+      $('#hweek').innerHTML = `<a class="hw-teaser" href="#bouge">${PL ? `<span>${t('hw.last', { i: esc(PL.inst), d: fdate(PL.end, { day: 'numeric', month: 'short' }) })}</span>` : ''}<span>${t(nE ? 'hw.conf' : 'hw.conf0', { n: nE })}</span><b>${t('hw.see')} ↓</b></a>`;
     }
     // Première ouverture : les chiffres défilent jusqu'à leur valeur, les barres se remplissent.
     if (!heroDone && !RM) {
@@ -290,9 +283,30 @@
     if (navigator.share && matchMedia('(pointer: coarse)').matches) { try { await navigator.share({ title: 'La Sonde', text: b.dataset.t, url: b.dataset.u }); } catch { /* annulé */ } return; }
     const m = b.parentNode.querySelector('.sharemenu'); m.hidden = !m.hidden;
   });
+  // ---------- Le dernier sondage (comparé au précédent du même institut) et mouvements émergents ----------
+  function renderPulse() {
+    const el = $('#pulse'), P = D.pulse; if (!el || !P) return;
+    const L = P.latest, dd = d => fdate(d, { day: 'numeric', month: 'short' });
+    // Flèches : longueur = écart en points (échelle commune), départ au centre.
+    const arrows = (rows, lab) => { const m = Math.max(3, ...rows.map(x => Math.abs(x.d))); return rows.map(x => {
+      const w = Math.abs(x.d) / m * 44, dir = x.d >= 0 ? 'up' : 'down';
+      return `<a class="ar-row${Math.abs(x.d) >= 1.5 ? ' big' : ''}" href="${x.href || '#'}"><span class="ar-nm"><i style="background:${x.col}"></i>${esc(x.lab)}</span>
+        <span class="ar-tr"><span class="ar-0"></span>${Math.abs(x.d) >= .05 ? `<span class="ar-b ${dir}" style="${x.d >= 0 ? 'left' : 'right'}:50%;width:${w.toFixed(1)}%;--c:${x.col}"></span>` : ''}</span>
+        <span class="ar-v num">${lab(x)}</span></a>`; }).join(''); };
+    const latestRows = L && L.deltas.length ? L.deltas.filter(x => D.cands[x.c]).slice(0, 8).map(x => ({ ...x, lab: sh(x.c), col: col(x.c), href: page(x.c) })) : [];
+    const last = L ? `<div class="pl-card"><div class="pl-k"><span class="stp st1">1 · ${t('bg.s1')}</span>${t('pl.lastK')}</div><h3>${esc(L.inst)} · ${esc(L.sponsor)} · ${dd(L.end)}</h3>
+      <p class="pl-n">${L.deltas.length ? t('pl.vs', { i: esc(L.inst), d: dd(L.prevEnd) }) : t('pl.noComp', { i: esc(L.inst) })}</p>
+      ${latestRows.length ? `<div class="ar-ax"><span></span><span class="ar-axl"><b class="down">◀</b>${t('pl.axis')}<b class="up">▶</b></span><span></span></div>` + arrows(latestRows, x => `${fmt(x.prev)} → <b>${fmt(x.now)}</b> <em class="${x.d >= 1 ? 'up' : x.d <= -1 ? 'down' : 'flat'}">${sgn(x.d)}</em>`) : ''}</div>` : '';
+    const E = (P.emerging || []).filter(e => D.cands[e.c]);
+    const card = e => { const pips = (e.all || []).map(x => { const k = x.d * (e.dir === 'up' ? 1 : -1); return `<i class="pip ${k >= 1.5 ? 'on' : k > 0 ? 'half' : 'off'}" title="${esc(x.inst)} : ${sgn(x.d)}"></i>`; }).join('');
+      return `<a class="em-card ${e.dir}" href="${page(e.c)}" style="--c:${col(e.c)}"><span class="em-nm">${esc(sh(e.c))}</span><b class="em-v num">${e.dir === 'up' ? '▲' : '▼'} ${sgn(e.avg)}</b>
+        <span class="em-pips">${pips}</span><span class="em-n">${t('pl.agree', { n: e.n, m: e.of || e.n })}</span></a>`; };
+    const em = `<div class="pl-card"><div class="pl-k"><span class="stp st2">2 · ${t('bg.s2')}</span>${t('pl.emK')}</div><p class="pl-n">${t('pl.emD')}</p>${E.length ? `<div class="em-grid">${E.map(card).join('')}</div><p class="pl-n" style="margin:10px 0 0">${t('pl.emAvg')}</p>` : `<p>${t('pl.none')}</p>`}</div>`;
+    el.innerHTML = last + em;
+  }
   function renderChanges() {
     const it = D.changes ? (D.changes[lang] || D.changes.en || []) : [];
-    $('#changes').innerHTML = it.length ? `<h3>${t('chg.title')}</h3><div class="chg-grid">` + it.map(x =>
+    $('#changes').innerHTML = it.length ? `<h3><span class="stp st3">3 · ${t('bg.s3')}</span>${t('chg.title')}</h3><div class="chg-grid">` + it.map(x =>
       `<div class="chg k-${x.k}"><span class="ico" aria-hidden="true">${ICON[x.k] || '•'}</span><p>${esc(x.t)}</p></div>`).join('') + `</div>${shareRow(it[0] && it[0].t)}` : '';
   }
 
@@ -871,7 +885,7 @@
   // ---------- Assemblage ----------
   function renderAll() {
     pct = pctOf();
-    renderStatic(); renderHero(); renderFiches(); renderChanges(); renderBascule(); drawProj(); renderDecoded(); renderRaceControls(); drawRace(); renderTable(); renderProba(); drawGhosts();
+    renderStatic(); renderHero(); renderFiches(); renderPulse(); renderChanges(); renderBascule(); drawProj(); renderDecoded(); renderRaceControls(); drawRace(); renderTable(); renderProba(); drawGhosts();
     renderTransfers(); renderWhatIf(); renderDuels(); renderSim(); renderGap(); renderConcerns(); renderSolid(); renderPolls();
     renderSupport(); renderQuiz(); renderInstitutes(); renderTimeline(); renderEmbeds(); applyFeatures();
     if (window.Debate) window.Debate.render({ D, lang, t, tr, loc, pct: () => pct, col, nm, sh, fmt, esc, css, tipFor });

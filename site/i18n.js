@@ -356,3 +356,15 @@ Object.assign(window.I18N.en, {"pod.read": "How to read this ranking", "pod.unde
 Object.assign(window.I18N.fr, {"hw.polls": "Nouveaux sondages en 7 jours : {n}"});
 
 Object.assign(window.I18N.en, {"hw.polls": "New polls in 7 days: {n}"});
+
+Object.assign(window.I18N.fr, {"pl.lastK": "Le dernier sondage", "pl.vs": "Comparé au précédent sondage {i} ({d}), sur le même bulletin. Un sondage seul reste à confirmer.", "pl.noComp": "Pas de sondage {i} précédent sur le même bulletin : comparaison impossible.", "pl.emK": "Mouvements émergents", "pl.emD": "Au moins deux instituts différents mesurent le même mouvement en 10 jours, chacun par rapport à son propre sondage précédent.", "pl.emAvg": "Écart moyen en points, sur les sondages concernés. Signal précoce : la moyenne suit en général quelques jours plus tard.", "pl.none": "Aucun mouvement confirmé par deux instituts : les variations récentes restent isolées."});
+
+Object.assign(window.I18N.en, {"pl.lastK": "The latest poll", "pl.vs": "Compared with the previous {i} poll ({d}), on the same line-up. A single poll still needs confirming.", "pl.noComp": "No previous {i} poll on the same line-up: no comparison possible.", "pl.emK": "Emerging moves", "pl.emD": "At least two different pollsters measure the same move within 10 days, each against its own previous poll.", "pl.emAvg": "Average change in points across those polls. An early signal: the average usually follows a few days later.", "pl.none": "No move confirmed by two pollsters: recent changes remain isolated."});
+
+Object.assign(window.I18N.fr, {"pl.axis": "écart en points", "pl.agree": "{n} institut(s) d'accord sur {m}", "pl.badgeT": "Mouvement émergent : {n} instituts mesurent le même mouvement en 10 jours"});
+
+Object.assign(window.I18N.en, {"pl.axis": "change in points", "pl.agree": "{n} of {m} pollsters agree", "pl.badgeT": "Emerging move: {n} pollsters measure the same move within 10 days"});
+
+Object.assign(window.I18N.fr, {"bg.tag": "Ce qui bouge", "bg.title": "Du dernier sondage à la tendance installée", "bg.s1": "Nouveau", "bg.s1d": "un sondage, comparé au précédent du même institut", "bg.s2": "Confirmé", "bg.s2d": "au moins deux instituts, même sens, en 10 jours", "bg.s3": "Installé", "bg.s3d": "la moyenne bouge au-delà du bruit statistique", "hw.last": "Dernier sondage : {i}, {d}", "hw.conf": "{n} mouvement(s) confirmé(s)", "hw.conf0": "aucun mouvement confirmé", "hw.see": "Voir ce qui bouge"});
+
+Object.assign(window.I18N.en, {"bg.tag": "What's moving", "bg.title": "From the latest poll to an established trend", "bg.s1": "New", "bg.s1d": "one poll, compared with the same pollster's previous one", "bg.s2": "Confirmed", "bg.s2d": "at least two pollsters, same direction, within 10 days", "bg.s3": "Established", "bg.s3d": "the average moves beyond statistical noise", "hw.last": "Latest poll: {i}, {d}", "hw.conf": "{n} confirmed move(s)", "hw.conf0": "no confirmed move", "hw.see": "See what's moving"});

@@ -167,3 +167,9 @@ Object.assign(window.I18N.it, {"pod.undecl": "Testati ma non dichiarati", "pod.t
 Object.assign(window.I18N.it, {"pod.read": "Come leggere questa classifica", "pod.undeclShort": "non dichiarato", "hw.title": "Ultimi 14 giorni", "hw.polls": "{n} sondaggi in 7 giorni", "hw.up": "Crescita netta", "hw.down": "Calo netto", "hw.none": "Nessun movimento netto: tutto entro il margine.", "hw.more": "I segnali del giorno", "nl.heroCta": "La lettera del lunedì"});
 
 Object.assign(window.I18N.it, {"hw.polls": "Nuovi sondaggi in 7 giorni: {n}"});
+
+Object.assign(window.I18N.it, {"pl.lastK": "L’ultimo sondaggio", "pl.vs": "Confrontato con il precedente sondaggio {i} ({d}), sulla stessa lista. Un singolo sondaggio va confermato.", "pl.noComp": "Nessun sondaggio {i} precedente sulla stessa lista: confronto impossibile.", "pl.emK": "Movimenti emergenti", "pl.emD": "Almeno due istituti diversi misurano lo stesso movimento in 10 giorni, ciascuno rispetto al proprio sondaggio precedente.", "pl.emAvg": "Variazione media in punti. Segnale precoce: la media di solito segue qualche giorno dopo.", "pl.none": "Nessun movimento confermato da due istituti: i cambiamenti recenti restano isolati."});
+
+Object.assign(window.I18N.it, {"pl.axis": "variazione in punti", "pl.agree": "{n} istituti su {m} concordano", "pl.badgeT": "Movimento emergente: {n} istituti misurano lo stesso movimento in 10 giorni"});
+
+Object.assign(window.I18N.it, {"bg.tag": "Cosa si muove", "bg.title": "Dall’ultimo sondaggio alla tendenza consolidata", "bg.s1": "Nuovo", "bg.s1d": "un sondaggio, confrontato con il precedente dello stesso istituto", "bg.s2": "Confermato", "bg.s2d": "almeno due istituti, stessa direzione, in 10 giorni", "bg.s3": "Consolidato", "bg.s3d": "la media si muove oltre il rumore statistico", "hw.last": "Ultimo sondaggio: {i}, {d}", "hw.conf": "{n} movimenti confermati", "hw.conf0": "nessun movimento confermato", "hw.see": "Vedi cosa si muove"});
