@@ -494,7 +494,24 @@
       "tries": 0,
       "status": "sans intentions de vote",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10349-pres-barometre-engagement-des-entreprises-ipsos-bva-3-novembre.pdf"
+    },
+    "10350": {
+      "fid": "2372",
+      "title": "10350 Pres dette publique IFOP Le Figaro 3 novembre",
+      "pub": "2026-11-03",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10351": {
+      "fid": "2371",
+      "title": "10351 Pres IV IFOP LCI 3 novembre",
+      "pub": "2026-11-03",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "relevée (1 sondage(s) ajouté(s))",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10352-pres-iv-ifop-lci-3-novembre.pdf"
     }
   },
-  "checked": "2026-11-04T06:02:30.258Z"
+  "checked": "2026-11-04T11:59:41.779Z"
 }

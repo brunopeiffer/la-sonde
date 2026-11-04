@@ -951,6 +951,82 @@
           }
         }
       ]
+    },
+    {
+      "survey": "20261027_1029_if_ag1",
+      "institute": "IFOP",
+      "sponsor": "LCI",
+      "start": "2026-10-27",
+      "end": "2026-10-29",
+      "n": 1501,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10352-pres-iv-ifop-lci-3-novembre.pdf",
+      "foundAt": "2026-11-04",
+      "hypotheses": [
+        {
+          "label": "Hypothèse Gabriel Attal, Edouard Philippe, Bruno Retailleau et David Lisnard candidats",
+          "results": {
+            "NA": 0.5,
+            "JLM": 18,
+            "FRo": 2,
+            "MT": 3,
+            "RG": 10,
+            "GA": 5,
+            "EP": 9.5,
+            "BR": 4,
+            "DL": 7,
+            "NDA": 1.5,
+            "MLP": 35,
+            "EZ": 4.5
+          }
+        },
+        {
+          "label": "Hypothèse Gabriel Attal candidat du bloc central, Bruno Retailleau candidat des Républicains et David Lisnard candidat",
+          "results": {
+            "NA": 0.5,
+            "JLM": 17.5,
+            "FRo": 2,
+            "MT": 3,
+            "RG": 13,
+            "GA": 9,
+            "BR": 5,
+            "DL": 7.5,
+            "NDA": 2,
+            "MLP": 36,
+            "EZ": 4.5
+          }
+        },
+        {
+          "label": "Hypothèse Edouard Philippe candidat du bloc central et Bruno Retailleau seul candidat à droite",
+          "results": {
+            "NA": 1,
+            "JLM": 17.5,
+            "FRo": 1.5,
+            "MT": 3.5,
+            "RG": 11.5,
+            "EP": 15,
+            "BR": 7,
+            "NDA": 2,
+            "MLP": 37,
+            "EZ": 4
+          }
+        },
+        {
+          "label": "Hypothèse Edouard Philippe candidat du bloc central et David Lisnard seul candidat de droite",
+          "results": {
+            "NA": 0.5,
+            "JLM": 17.5,
+            "FRo": 2,
+            "MT": 3,
+            "RG": 11,
+            "EP": 15,
+            "DL": 9,
+            "NDA": 2,
+            "MLP": 36,
+            "EZ": 4
+          }
+        }
+      ]
     }
   ]
 }
