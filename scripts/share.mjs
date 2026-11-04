@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { readJSON, themeSvg } from './lib.mjs';
+import { latestSvg } from './social.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
 const P = (...a) => path.join(ROOT, ...a);
@@ -66,6 +67,9 @@ try {
   const png = new Resvg(svg, { font: { fontFiles, loadSystemFonts: true, defaultFontFamily: 'Inter' }, fitTo: { mode: 'width', value: 1200 } }).render().asPng();
   fs.writeFileSync(P('site/share/carte-du-jour.png'), png);
   console.log('Image du jour : site/share/carte-du-jour.png');
+  // Image « Le dernier sondage » (Bluesky en réponse au post du jour, lettre du lundi).
+  const ls = latestSvg(D);
+  if (ls) { fs.writeFileSync(P('site/share/dernier-sondage.png'), new Resvg(ls, { font: { fontFiles, loadSystemFonts: true, defaultFontFamily: 'Inter' }, fitTo: { mode: 'width', value: 1200 } }).render().asPng()); console.log('Image : site/share/dernier-sondage.png'); }
   // L'aperçu des partages de la page d'accueil montre la carte du jour.
   const idx = P('site/index.html'), html = fs.readFileSync(idx, 'utf8');
   const base = D.site.url.replace(/\/$/, '');

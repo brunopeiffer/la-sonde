@@ -60,6 +60,14 @@ if (newest && newest.id !== st.lastSurvey) {
   replyText = `🆕 Nouveau sondage intégré à la moyenne : ${who}, terrain du ${fd(newest.start)} au ${fd(newest.end)}, ${newest.n.toLocaleString('fr-FR')} personnes interrogées.\nLe détail : la-sonde.fr/#sondages`;
   while (len(replyText) > 300) replyText = replyText.replace(/,[^,]*\.\n/, '.\n');
 }
+// Image « ce qui bouge » jointe à la réponse quand le nouveau sondage se compare au précédent du même institut.
+const PL = D.pulse && D.pulse.latest;
+const latestImg = replyText && PL && PL.deltas && PL.deltas.length && PL.inst === newest.inst && PL.end === newest.end && fs.existsSync(P('site/share/dernier-sondage.png')) ? P('site/share/dernier-sondage.png') : null;
+if (latestImg) {
+  const big = PL.deltas.filter(x => Math.abs(x.d) >= 1.5).slice(0, 3).map(x => `${(D.cands[x.c] || {}).short || x.c} ${x.d > 0 ? '+' : '−'}${String(Math.abs(x.d)).replace('.', ',')}`).join(', ');
+  const alt = `📊 ${newest.inst} : ce qui bouge par rapport à son sondage précédent${big ? ` (${big})` : ''}. Un sondage seul reste à confirmer.\n`;
+  if (len(alt + replyText) <= 300) replyText = alt + replyText;
+}
 
 // Texte ≤ 300 caractères : texte du format + lien + hashtags (les hashtags sautent s'ils ne tiennent pas).
 const shown = post.link.replace(/^https?:\/\//, '').replace(/\/$/, '');
@@ -81,7 +89,7 @@ async function png() {
 if (DRY) {
   fs.mkdirSync(P('site/share'), { recursive: true });
   try { fs.writeFileSync(P(`site/share/essai-${key}.png`), await png()); } catch (e) { console.log('(image non rendue : ' + e.message + ')'); }
-  exit(`essai à blanc, format « ${key} » (${len(text)} car.) :\n${text}${replyText ? `\n\n↳ réponse en fil (${len(replyText)} car.) :\n${replyText}` : ''}`);
+  exit(`essai à blanc, format « ${key} » (${len(text)} car.) :\n${text}${replyText ? `\n\n↳ réponse en fil (${len(replyText)} car.)${latestImg ? ' + image dernier-sondage.png' : ''} :\n${replyText}` : ''}`);
 }
 
 const enc = new TextEncoder();
@@ -121,8 +129,11 @@ try {
   if (replyText) {
     try {
       const ref = { uri: rec.uri, cid: rec.cid };
+      let embed;
+      if (latestImg) { const up = await call('com.atproto.repo.uploadBlob', fs.readFileSync(latestImg), s.accessJwt, 'image/png');
+        embed = { $type: 'app.bsky.embed.images', images: [{ alt: `Écarts entre le nouveau sondage ${PL.inst} et le précédent du même institut, par candidat`, image: up.blob, aspectRatio: { width: 1200, height: 630 } }] }; }
       await call('com.atproto.repo.createRecord', { repo: s.did, collection: 'app.bsky.feed.post', record: {
-        $type: 'app.bsky.feed.post', text: replyText, createdAt: new Date().toISOString(), langs: ['fr'], facets: await facetsOf(replyText), reply: { root: ref, parent: ref } } }, s.accessJwt);
+        $type: 'app.bsky.feed.post', text: replyText, createdAt: new Date().toISOString(), langs: ['fr'], facets: await facetsOf(replyText), reply: { root: ref, parent: ref }, ...(embed ? { embed } : {}) } }, s.accessJwt);
       console.log('Bluesky : réponse « nouveau sondage » publiée');
     } catch (e) { console.log('Bluesky : réponse non publiée (' + e.message.slice(0, 120) + ')'); }
   }

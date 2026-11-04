@@ -412,6 +412,61 @@ function ballotDependence(r1, lastPoll) {
   return out;
 }
 
+// ---------- 8 ter. Le dernier sondage et les mouvements émergents ----------
+// On compare chaque enquête à la précédente du MÊME institut, sur le MÊME bulletin (mêmes candidats principaux) :
+// les habitudes de l'institut s'annulent, il reste le mouvement mesuré. Un sondage seul reste à confirmer ;
+// un « mouvement émergent » exige au moins deux instituts différents allant dans le même sens en 10 jours.
+function instituteDeltas(r1, major) {
+  const key = r => Object.keys(r).filter(c => major.has(c)).sort().join(',');
+  const surveys = new Map();
+  for (const p of r1) { const k = p.institute + '|' + p.end; if (!surveys.has(k)) surveys.set(k, { inst: p.institute, sponsor: p.sponsor, end: p.end, hyps: [] }); surveys.get(k).hyps.push(p.results); }
+  const list = [...surveys.values()].sort((a, b) => a.end.localeCompare(b.end));
+  const out = [];
+  for (const s of list) {
+    const prev = list.filter(x => x.inst === s.inst && x.end < s.end && toDay(s.end) - toDay(x.end) <= 75).reverse();
+    for (const pv of prev) {
+      const acc = {}; let pairs = 0;
+      for (const h of s.hyps) { const k = key(h); const m = pv.hyps.filter(x => key(x) === k); if (!m.length) continue; pairs++;
+        for (const c of Object.keys(h)) { if (!major.has(c)) continue; const pvv = m.reduce((a, x) => a + x[c], 0) / m.length;
+          (acc[c] ||= []).push([h[c], pvv]); } }
+      if (!pairs) continue;
+      const deltas = Object.entries(acc).map(([c, v]) => { const now = v.reduce((a, x) => a + x[0], 0) / v.length, was = v.reduce((a, x) => a + x[1], 0) / v.length;
+        return { c, now: round1(now), prev: round1(was), d: round1(now - was) }; }).sort((a, b) => Math.abs(b.d) - Math.abs(a.d));
+      out.push({ inst: s.inst, sponsor: s.sponsor, end: s.end, prevEnd: pv.end, prevSponsor: pv.sponsor, pairs, deltas });
+      break;
+    }
+  }
+  return { list, comps: out };
+}
+function latestAndEmerging(r1, standings) {
+  const major = new Set(standings.filter(s => s.v >= 3).map(s => s.c));
+  const { list, comps } = instituteDeltas(r1, major);
+  const last = list[list.length - 1];
+  const latest = last ? (comps.find(x => x.inst === last.inst && x.end === last.end) || { inst: last.inst, sponsor: last.sponsor, end: last.end, deltas: [] }) : null;
+  const lastDay = last ? toDay(last.end) : 0;
+  const recent = comps.filter(x => lastDay - toDay(x.end) <= 10 && toDay(x.end) - toDay(x.prevEnd) <= 45);
+  const emerging = [];
+  for (const c of major) {
+    const mv = recent.map(x => ({ inst: x.inst, end: x.end, prevEnd: x.prevEnd, d: (x.deltas.find(y => y.c === c) || {}).d })).filter(x => x.d != null);
+    for (const dir of [1, -1]) {
+      const same = mv.filter(x => x.d * dir >= 1.5), opp = mv.filter(x => x.d * dir <= -1.5);
+      const insts = new Set(same.map(x => x.inst));
+      // Tous les instituts récents qui ont mesuré ce candidat (pour le compteur « x instituts sur y »).
+      const byInst = new Map(); for (const x of [...mv].reverse()) if (!byInst.has(x.inst)) byInst.set(x.inst, x);
+      if (insts.size >= 2 && !opp.length) emerging.push({ c, dir: dir > 0 ? 'up' : 'down', n: insts.size, of: byInst.size, avg: round1(same.reduce((a, x) => a + x.d, 0) / same.length), polls: same,
+        all: [...byInst.values()].map(x => ({ inst: x.inst, d: x.d })) });
+    }
+  }
+  emerging.sort((a, b) => Math.abs(b.avg) - Math.abs(a.avg));
+  // Pour chaque candidat : la dernière comparaison de chaque institut (fiches candidats), sur 45 jours.
+  const byCand = {};
+  for (const x of [...comps].reverse()) {
+    if (lastDay - toDay(x.end) > 45 || toDay(x.end) - toDay(x.prevEnd) > 60) continue;
+    for (const y of x.deltas) { const arr = (byCand[y.c] ||= []); if (!arr.some(z => z.inst === x.inst)) arr.push({ inst: x.inst, sponsor: x.sponsor, end: x.end, prevEnd: x.prevEnd, prev: y.prev, now: y.now, d: y.d }); }
+  }
+  return { latest, emerging, byCand };
+}
+
 // ---------- 9. Assemblage ----------
 function build() {
   const polls = loadPolls();
@@ -541,6 +596,7 @@ function build() {
     ghosts: { daysBack: G.daysBack, series: G.series, round1: cfg.previousElection.round1 },
     concerns: readJSON(P('data/concerns.json')),
     ballot: ballotDependence(FR.r1, FR.lastPoll),
+    pulse: latestAndEmerging(FR.r1, standings),
     certainty: fs.existsSync(P('data/certainty.json')) ? readJSON(P('data/certainty.json')) : null,
     newsletter: { formUrl: (cfg.newsletter || {}).formUrl || '' },
     summary: null

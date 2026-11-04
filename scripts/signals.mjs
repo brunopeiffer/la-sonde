@@ -50,7 +50,20 @@ export function signals({ MOM, cross, dec, hist, today, qualify, nm, features, f
 
   // 3. Mouvement net, avec record éventuel (« plus haut depuis… »)
   for (const s of main) {
-    const m = MOM[s.c]; if (!m || (m.state !== 'up' && m.state !== 'down')) continue;
+    const m = MOM[s.c]; if (!m) continue;
+    // Mouvement « en voie d'installation » : au moins 1,5 point, certitude entre 80 et 90 % (souvent un candidat peu testé).
+    if (m.state === 'flat' && Math.abs(m.d14 || 0) >= 1.5) {
+      const upF = m.d14 > 0, cert = upF ? m.pUp : 100 - m.pUp;
+      if (cert >= 80 && cert < 90) S.push({ k: upF ? 'up' : 'down', cs: [s.c], score: 4.5 + Math.min(2, Math.abs(m.d14) / 2) + (rankOf(s.c) <= 3 ? 1 : 0), t: T(l => ({
+        fr: `${nm(s.c)} ${upF ? 'progresse' : 'recule'} de ${sg(m.d14, l)} en deux semaines, à ${P(s.v, l)} : mouvement en voie d'installation (certitude ${cert} %, sous le seuil de 90 %).`,
+        en: `${nm(s.c)} is ${upF ? 'up' : 'down'} ${sg(m.d14, l)} in two weeks, at ${P(s.v, l)}: a move taking shape (certainty ${cert}%, below the 90% threshold).`,
+        de: `${nm(s.c)} ${upF ? 'legt' : 'verliert'} in zwei Wochen ${sg(m.d14, l)} ${upF ? 'zu' : ''}, jetzt ${P(s.v, l)}: Bewegung im Entstehen (Sicherheit ${cert} %, unter der 90-%-Schwelle).`,
+        es: `${nm(s.c)} ${upF ? 'sube' : 'baja'} ${sg(m.d14, l)} en dos semanas, hasta el ${P(s.v, l)}: movimiento en vías de asentarse (certeza ${cert} %, por debajo del umbral del 90 %).`,
+        it: `${nm(s.c)} ${upF ? 'cresce' : 'cala'} di ${sg(m.d14, l)} in due settimane, al ${P(s.v, l)}: movimento in via di consolidamento (certezza ${cert} %, sotto la soglia del 90 %).`
+      })[l]) });
+    }
+    // Mouvement net : certitude d'au moins 90 % ET au moins 1 point (un petit écart, même certain, ne fait pas un signal du jour).
+    if ((m.state !== 'up' && m.state !== 'down') || Math.abs(m.d14 || 0) < 1) continue;
     const up = m.state === 'up', z = Math.abs(m.slope / m.se);
     let since = null, i = nowI - 14;
     while (i >= 0) { const v = val(s.c, i); if (v != null && (up ? v >= s.v : v <= s.v)) break; i--; }

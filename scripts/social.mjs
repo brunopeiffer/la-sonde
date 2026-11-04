@@ -206,3 +206,23 @@ export function dayIndex(now = new Date()) {
   return ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].indexOf(wd);
 }
 export const parisDate = (now = new Date()) => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Paris' }).format(now);
+
+// Image « Le dernier sondage » : flèches par candidat, du sondage précédent du même institut au nouveau (même bulletin).
+export function latestSvg(D) {
+  const L = D.pulse && D.pulse.latest; if (!L || !L.deltas || !L.deltas.length) return null;
+  const C = c => D.cands[c] || { name: c, short: c, color: '#888' };
+  const rows = L.deltas.filter(x => D.cands[x.c]).slice(0, 7);
+  const m = Math.max(3, ...rows.map(x => Math.abs(x.d))), mid = 560, half = 250, y0 = 196, rh = 52;
+  const fdd = d => new Date(d + 'T12:00:00Z').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
+  const body = `<line x1="${mid}" y1="${y0 - 14}" x2="${mid}" y2="${y0 + rows.length * rh - 10}" stroke="#15131f" stroke-width="2" opacity=".25"/>
+  <text x="${mid - half}" y="${y0 - 20}" font-size="15" font-weight="700" fill="#d23a5f">◀ baisse</text><text x="${mid + half}" y="${y0 - 20}" font-size="15" font-weight="700" fill="#0f8a5f" text-anchor="end">hausse ▶</text>` +
+    rows.map((x, i) => {
+      const y = y0 + i * rh, w = Math.abs(x.d) / m * half, col = C(x.c).color, big = Math.abs(x.d) >= 1.5, op = big ? 1 : .45;
+      const x1 = x.d >= 0 ? mid : mid - w, head = x.d >= 0 ? `<path d="M${mid + w},${y + 4} l16,12 l-16,12 z" fill="${col}" opacity="${op}"/>` : `<path d="M${mid - w},${y + 4} l-16,12 l16,12 z" fill="${col}" opacity="${op}"/>`;
+      return `<circle cx="70" cy="${y + 16}" r="8" fill="${col}" opacity="${op}"/><text x="88" y="${y + 24}" font-size="23" font-weight="${big ? 800 : 600}" fill="#15131f" opacity="${big ? 1 : .6}">${esc(C(x.c).short)}</text>
+      ${Math.abs(x.d) >= .05 ? `<rect x="${x1}" y="${y + 10}" width="${Math.max(w, 2)}" height="12" rx="6" fill="${col}" opacity="${op}"/>${head}` : ''}
+      <text x="1144" y="${y + 24}" font-size="22" font-weight="600" fill="#4a4659" text-anchor="end" opacity="${big ? 1 : .6}">${f1(x.prev)} → <tspan font-weight="800" fill="#15131f">${f1(x.now)}</tspan>  <tspan font-weight="800" fill="${x.d >= 1 ? '#0f8a5f' : x.d <= -1 ? '#d23a5f' : '#7d788c'}">${sg(x.d)}</tspan></text>`;
+    }).join('');
+  return frame({ kicker: 'Nouveau sondage', title: `${L.inst} (${L.sponsor}) : ce qui bouge`, body,
+    note: `Écart avec le précédent sondage ${L.inst} du ${fdd(L.prevEnd)}, sur le même bulletin · un sondage seul reste à confirmer` });
+}

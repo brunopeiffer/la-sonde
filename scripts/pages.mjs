@@ -117,6 +117,16 @@ function page(s, rank, all, L) {
       ${A.peaks.length ? `<h3 class="atth">${T.attPeaks}</h3><ol class="attpk">${A.peaks.map(p => `<li><b>${fdL(p.date)}</b> · ${nf(p.v)} ${T.attViews}${p.ev ? ` · ${esc(evText(p.ev))}` : ''}</li>`).join('')}</ol>` : ''}
       <p class="note" style="margin-top:8px">${T.attSrc} <a href="https://fr.wikipedia.org/wiki/${esc(encodeURIComponent((SC.wiki || '').replace(/ /g, '_')))}" target="_blank" rel="noopener">Wikipédia</a></p></section>`;
   })() : '';
+  // Derniers mouvements, institut par institut (même bulletin que le sondage précédent du même institut).
+  const MV = ((D.pulse || {}).byCand || {})[c] || [];
+  const mvHtml = MV.length ? (() => { const m = Math.max(3, ...MV.map(x => Math.abs(x.d))); const fdS = d => new Date(d + 'T12:00:00Z').toLocaleDateString(loc, { day: 'numeric', month: 'short' });
+    const EM = (((D.pulse || {}).emerging) || []).find(e => e.c === c);
+    return `<section class="card" style="margin-top:18px"><h2>${T.mvT}</h2><p class="note">${esc(T.mvN(name))}</p>
+      <p class="mvconf ${EM ? EM.dir : ''}">${EM ? T.mvConf(EM.n, EM.of || EM.n, EM.dir === 'up') : T.mvNo}</p>
+      <div class="ar-ax"><span></span><span class="ar-axl"><b class="down">◀</b>${T.mvAx}<b class="up">▶</b></span><span></span></div>
+      ${MV.map(x => { const w = Math.abs(x.d) / m * 44; return `<div class="ar-row${Math.abs(x.d) >= 1.5 ? ' big' : ''}"><span class="ar-nm" title="${esc(x.sponsor)}"><i style="background:${K.color}"></i>${esc(x.inst)} · ${fdS(x.end)}</span>
+        <span class="ar-tr"><span class="ar-0"></span>${Math.abs(x.d) >= .05 ? `<span class="ar-b ${x.d >= 0 ? 'up' : 'down'}" style="${x.d >= 0 ? 'left' : 'right'}:50%;width:${w.toFixed(1)}%;--c:${K.color}"></span>` : ''}</span>
+        <span class="ar-v num">${num(x.prev)} → <b>${num(x.now)}</b> <em class="${x.d >= 1 ? 'up' : x.d <= -1 ? 'down' : 'flat'}">${sgn(x.d)}</em></span></div>`; }).join('')}</section>`; })() : '';
   const msg = T.msg(name, num(s.v)), enc = encodeURIComponent;
   const share = `<div class="sharerow"><span>${T.share}</span>
       <a target="_blank" rel="noopener" href="https://bsky.app/intent/compose?text=${enc(msg + ' ' + url)}">Bluesky</a>
@@ -176,6 +186,7 @@ function page(s, rank, all, L) {
   </section>
   ${share}
   <section class="card"><h2>${T.chartT}</h2><p class="note">${T.chartN}</p>${chart(c, L)}</section>
+  ${mvHtml}
   <div class="grid2" style="margin-top:18px">
     <section class="card"><h2>${T.r2T}</h2><p class="note">${T.r2N}</p>${duelHtml}</section>
     <section class="card"><h2>${T.wdT}</h2>${trHtml}
