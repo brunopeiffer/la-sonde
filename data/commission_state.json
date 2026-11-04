@@ -511,7 +511,15 @@
       "tries": 0,
       "status": "relevée (1 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10352-pres-iv-ifop-lci-3-novembre.pdf"
+    },
+    "10352": {
+      "fid": "2373",
+      "title": "10352 Pres mobilisations sociales ELABE 4 novembre",
+      "pub": "2026-11-04",
+      "inst": "ELABE",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-04T11:59:41.779Z"
+  "checked": "2026-11-04T17:59:14.122Z"
 }
