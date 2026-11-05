@@ -519,7 +519,23 @@
       "inst": "ELABE",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10354": {
+      "fid": "2374",
+      "title": "10354 Pres CSA Cnews Europe 1 JDD 4 novembre",
+      "pub": "2026-11-04",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10355": {
+      "fid": "2375",
+      "title": "10355 Pres filière textile IPSOS BVA 3 novembre",
+      "pub": "2026-11-03",
+      "inst": "Ipsos BVA",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-05T06:04:33.340Z"
+  "checked": "2026-11-05T12:04:25.909Z"
 }
