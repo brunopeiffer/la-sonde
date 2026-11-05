@@ -535,7 +535,31 @@
       "inst": "Ipsos BVA",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10356": {
+      "fid": "2380",
+      "title": "10356 Pres enseignement supérieur ELABE 5 novembre",
+      "pub": "2026-11-05",
+      "inst": "ELABE",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10357": {
+      "fid": "2377",
+      "title": "10357 Pres Observatoire politique ELABE 5 novembre",
+      "pub": "2026-11-05",
+      "inst": "ELABE",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10358": {
+      "fid": "2379",
+      "title": "10358 Pres primaire droite et centre ODOXA 5 novembre",
+      "pub": "2026-11-05",
+      "inst": "ODOXA",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-05T12:04:25.909Z"
+  "checked": "2026-11-05T17:57:50.965Z"
 }
