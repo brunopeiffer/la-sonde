@@ -16,7 +16,16 @@
       "source": "https://lcp.fr/actualites/primaire-socialiste-vainqueur-des-le-1er-tour-raphael-glucksmann-sera-le-candidat-de-la"
     }
   ],
-  "declarations": [],
+  "declarations": [
+    {
+      "id": "NP",
+      "date": "2026-10-14",
+      "fr": "L'essayiste Natacha Polony a annoncé sa candidature à l'élection présidentielle de 2027 sur France Inter, avec le slogan « Nous sommes la France ».",
+      "en": "Essayist Natacha Polony announced her candidacy for the 2027 French presidential election on France Inter, with the slogan \"Nous sommes la France\".",
+      "source": "https://www.cnews.fr/france/2026-10-14/presidentielle-2027-lessayiste-natacha-polony-annonce-sa-candidature-1934782",
+      "agent": true
+    }
+  ],
   "required": [
     {
       "id": "RG",
@@ -27,5 +36,5 @@
       }
     }
   ],
-  "lastCheck": "2026-10-30"
+  "lastCheck": "2026-11-06"
 }
