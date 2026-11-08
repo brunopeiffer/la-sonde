@@ -1,10 +1,10 @@
 {
-  "day": "2026-11-06",
+  "day": "2026-11-08",
   "asOf": "2026-10-29",
   "lastSurvey": "20261027_1029_if",
-  "postedAt": "2026-11-06T06:02:39.142Z",
-  "uri": "at://did:plc:lex3hqga4vdth7qlhbfwbtue/app.bsky.feed.post/3mzmpi4d3gy24",
-  "format": "y2022",
+  "postedAt": "2026-11-08T05:53:30.710Z",
+  "uri": "at://did:plc:lex3hqga4vdth7qlhbfwbtue/app.bsky.feed.post/3mzrpvlxefs26",
+  "format": "instituts",
   "history": [
     {
       "at": "2026-10-23T11:20:22.351Z",
@@ -70,6 +70,11 @@
       "at": "2026-11-06T06:02:39.142Z",
       "format": "y2022",
       "hash": "df3eb19478e7"
+    },
+    {
+      "at": "2026-11-08T05:53:30.710Z",
+      "format": "instituts",
+      "hash": "c39cfdf2f2a1"
     }
   ]
 }
