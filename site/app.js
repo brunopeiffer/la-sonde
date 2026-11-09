@@ -8,6 +8,7 @@
   // Animations : coupées si le visiteur a demandé de réduire les animations.
   const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let heroDone = false, raceDrawn = false, raceSeen = false;
+  let podMode = 'avg';   // classement : « avg » = moyenne des sondages, « full » = si tous étaient candidats
   const store = {
     get(k) { try { return localStorage.getItem(k); } catch { return null; } },
     set(k, v) { try { localStorage.setItem(k, v); } catch { /* stockage indisponible */ } }
@@ -109,7 +110,17 @@
     if (grp.length > 1) ties.push(grp);
     const tied = new Set(ties.flat().map(s => s.c));
     const chip = (s, nd) => `<a class="pchip${nd ? ' nd' : ''}" href="${page(s.c)}" title="${esc(nm(s.c))}${nd ? ' · ' + esc(t('pod.undeclShort')) : ''}${BAL(s.c) ? ' · ' + esc(BAL(s.c)) : ''}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num">${fmt(s.v, 1)}${pct}</b>${s.presence < 30 ? '<sup>*</sup>' : ''}${BAL(s.c) ? '<sup>†</sup>' : ''}</a>`;
-    $('#podium').innerHTML = `<h2><span>${t('pod.title')}</span><span>${t('pod.d30')}</span></h2>` + top.map(s => {
+    const FB = D.fullBallot, modeSw = FB ? `<div class="pmode" role="tablist"><button role="tab" aria-selected="${podMode === 'avg'}" data-m="avg">${t('pod.modeA')}</button><button role="tab" aria-selected="${podMode === 'full'}" data-m="full">${t('pod.modeB')}</button></div>` : '';
+    if (FB && podMode === 'full') {
+      const mx = Math.max(...FB.rows.map(r => r.v)) * 1.08;
+      const ex = FB.top.slice(0, 2).map(x => t('pod.fbEx', { c: sh(x.c), r: sh(x.r), v: fmt(x.v) })).join(' ; ');
+      $('#podium').innerHTML = modeSw + `<h2><span>${t('pod.modeB')}</span><span>${t('pod.fbVs')}</span></h2>` + FB.rows.map(r => `<div class="prow"><a class="nm" href="${page(r.c)}"><i style="background:${col(r.c)}"></i><span>${esc(nm(r.c))}</span></a>
+        <div class="v num">${fmt(r.v, 1)}<small style="font-size:12px">${pct}</small></div><div class="delta flat num">${r.avg != null ? fmt(r.avg, 1) : '–'}</div>
+        <div class="bar"><i style="width:${r.v / mx * 100}%;background:${col(r.c)}"></i></div></div>`).join('')
+        + `<div class="pothers"><p class="pnote">${t('pod.fbNote', { ex })}</p><p class="pnote plink"><a href="#candidats">${t('cf.hint')} →</a></p></div>`;
+      $('#podium').querySelectorAll('.pmode button').forEach(b => b.onclick = () => { podMode = b.dataset.m; renderHero(); });
+    }
+    else $('#podium').innerHTML = modeSw + `<h2><span>${t('pod.title')}</span><span>${t('pod.d30')}</span></h2>` + top.map(s => {
       const cls = s.d30 > 0.4 ? 'up' : s.d30 < -0.4 ? 'down' : 'flat', ar = s.d30 > 0.4 ? '▲' : s.d30 < -0.4 ? '▼' : '•';
       return `<div class="prow"><a class="nm" href="${page(s.c)}"><i style="background:${col(s.c)}"></i><span>${esc(nm(s.c))}</span>${s.presence < 30 ? '<sup class="pmark">*</sup>' : ''}${BAL(s.c) ? `<sup class="pmark" title="${esc(BAL(s.c))}">†</sup>` : ''}${EMB(s.c)}</a>
         <div class="v num">${fmt(s.v, 1)}<small style="font-size:12px">${pct}</small></div><div class="delta ${cls} num">${ar} ${sgn(s.d30)}</div>
@@ -128,6 +139,7 @@
       if (notes.length) h += `<details class="pread"><summary>${t('pod.read')}</summary>${notes.map(n => `<p class="pnote">${n}</p>`).join('')}</details>`;
       return h + `<p class="pnote plink"><a href="#candidats">${t('cf.hint')} →</a></p></div>`;
     })();
+    $('#podium').querySelectorAll('.pmode button').forEach(b => b.onclick = () => { podMode = b.dataset.m; renderHero(); });
     // Colonne de gauche : une ligne d'accroche vers « Ce qui bouge » (le détail est plus bas, en trois étapes).
     if ($('#hweek')) {
       const PL = (D.pulse || {}).latest, nE = ((D.pulse || {}).emerging || []).length;

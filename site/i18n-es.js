@@ -175,3 +175,5 @@ Object.assign(window.I18N.es, {"pl.axis": "variación en puntos", "pl.agree": "{
 Object.assign(window.I18N.es, {"bg.tag": "Lo que se mueve", "bg.title": "De la última encuesta a la tendencia asentada", "bg.s1": "Nuevo", "bg.s1d": "una encuesta, comparada con la anterior del mismo instituto", "bg.s2": "Confirmado", "bg.s2d": "al menos dos institutos, mismo sentido, en 10 días", "bg.s3": "Asentado", "bg.s3d": "la media se mueve más allá del ruido estadístico", "hw.last": "Última encuesta: {i}, {d}", "hw.conf": "{n} movimiento(s) confirmado(s)", "hw.conf0": "ningún movimiento confirmado", "hw.see": "Ver lo que se mueve"});
 
 Object.assign(window.I18N.es, {"dec.with": "con", "dec.without": "sin"});
+
+Object.assign(window.I18N.es, {"pod.modeA": "Media de encuestas", "pod.modeB": "Si todos se presentaran", "pod.fbVs": "media", "pod.fbEx": "{c} gana {v} pts cuando {r} no está", "pod.fbNote": "Estimación de La Sonde: cada resultado obtenido sin un rival se corrige con la diferencia medida en las mismas encuestas ({ex}), para comparar a todos en la misma papeleta. A la derecha, la media de encuestas para comparar. No es una encuesta."});

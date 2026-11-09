@@ -175,3 +175,5 @@ Object.assign(window.I18N.it, {"pl.axis": "variazione in punti", "pl.agree": "{n
 Object.assign(window.I18N.it, {"bg.tag": "Cosa si muove", "bg.title": "Dall’ultimo sondaggio alla tendenza consolidata", "bg.s1": "Nuovo", "bg.s1d": "un sondaggio, confrontato con il precedente dello stesso istituto", "bg.s2": "Confermato", "bg.s2d": "almeno due istituti, stessa direzione, in 10 giorni", "bg.s3": "Consolidato", "bg.s3d": "la media si muove oltre il rumore statistico", "hw.last": "Ultimo sondaggio: {i}, {d}", "hw.conf": "{n} movimenti confermati", "hw.conf0": "nessun movimento confermato", "hw.see": "Vedi cosa si muove"});
 
 Object.assign(window.I18N.it, {"dec.with": "con", "dec.without": "senza"});
+
+Object.assign(window.I18N.it, {"pod.modeA": "Media dei sondaggi", "pod.modeB": "Se tutti si candidassero", "pod.fbVs": "media", "pod.fbEx": "{c} guadagna {v} punti quando {r} è assente", "pod.fbNote": "Stima di La Sonde: ogni risultato ottenuto senza un rivale è corretto con lo scarto misurato negli stessi sondaggi ({ex}), per confrontare tutti sulla stessa scheda. A destra, la media dei sondaggi per confronto. Non è un sondaggio."});
