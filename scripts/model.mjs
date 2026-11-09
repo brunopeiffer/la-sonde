@@ -468,6 +468,49 @@ function latestAndEmerging(r1, standings) {
   return { latest, emerging, byCand };
 }
 
+// ---------- 8 quater. « Si tous étaient candidats » : moyenne ramenée au bulletin complet ----------
+// Pour chaque candidat du bulletin de référence (déclarés à 5 % ou plus), on mesure DANS LES MÊMES ENQUÊTES ce qu'il gagne
+// quand tel rival est absent (régression à effets fixes par enquête, légèrement régularisée), puis on corrige chaque score
+// obtenu sans ce rival. Corrections plafonnées : jamais négatives par rival, et au plus 40 % du score publié au total.
+function fullBallot(FR, standings) {
+  const R = standings.filter(s => s.declared && s.v >= 5).map(s => s.c);
+  if (R.length < 3) return null;
+  const T = FR.lastPoll, win = FR.r1.filter(p => T - p.t <= 150);
+  const bySurvey = new Map(); for (const p of win) { if (!bySurvey.has(p.survey)) bySurvey.set(p.survey, []); bySurvey.get(p.survey).push(p); }
+  const solve = (A, b) => { const n = b.length, M2 = A.map((r, i) => [...r, b[i]]);
+    for (let i = 0; i < n; i++) { let m = i; for (let k = i + 1; k < n; k++) if (Math.abs(M2[k][i]) > Math.abs(M2[m][i])) m = k; [M2[i], M2[m]] = [M2[m], M2[i]];
+      const d = M2[i][i] || 1e-9; for (let k = i; k <= n; k++) M2[i][k] /= d;
+      for (let r = 0; r < n; r++) if (r !== i) { const f = M2[r][i]; for (let k = i; k <= n; k++) M2[r][k] -= f * M2[i][k]; } }
+    return M2.map(r => r[n]); };
+  const beta = {};
+  for (const c of R) {
+    const riv = R.filter(r => r !== c), k = riv.length, XtX = riv.map(() => Array(k).fill(0)), Xty = Array(k).fill(0);
+    for (const hs0 of bySurvey.values()) {
+      const hs = hs0.filter(p => c in p.results); if (hs.length < 2) continue;
+      const X = hs.map(p => riv.map(r => r in p.results ? 0 : 1)), y = hs.map(p => p.results[c]);
+      const mx = riv.map((_, j) => X.reduce((a, x) => a + x[j], 0) / X.length), my = y.reduce((a, v) => a + v, 0) / y.length;
+      X.forEach((x, i) => { const xc = x.map((v, j) => v - mx[j]), yc = y[i] - my;
+        for (let a = 0; a < k; a++) { Xty[a] += xc[a] * yc; for (let b2 = 0; b2 < k; b2++) XtX[a][b2] += xc[a] * xc[b2]; } });
+    }
+    for (let a = 0; a < k; a++) XtX[a][a] += 3;          // régularisation : un effet peu mesuré reste proche de zéro
+    const b = solve(XtX, Xty);
+    beta[c] = Object.fromEntries(riv.map((r, j) => [r, Math.max(0, round1(b[j]))]));
+  }
+  const rows = R.map(c => {
+    let num = 0, den = 0;
+    for (const p of FR.r1) {
+      if (!(c in p.results)) continue; const dt = (T - p.t) / M.bandwidthDays; if (Math.abs(dt) > 3) continue;
+      const raw = p.results[c], adj = Math.min(raw * 0.4, R.filter(r => r !== c && !(r in p.results)).reduce((a, r) => a + beta[c][r], 0));
+      const he = (FR.house[c] || {})[p.institute] || 0, k = p.w * Math.exp(-0.5 * dt * dt);
+      num += k * (raw - adj - he); den += k;
+    }
+    return { c, v: den ? round1(num / den) : null, avg: (standings.find(s => s.c === c) || {}).v };
+  }).filter(r => r.v != null).sort((a, b) => b.v - a.v);
+  // Les effets les plus forts, pour l'explication.
+  const top = R.flatMap(c => Object.entries(beta[c]).map(([r, v]) => ({ c, r, v }))).filter(x => x.v >= 1).sort((a, b) => b.v - a.v).slice(0, 6);
+  return { ref: R, rows, top };
+}
+
 // ---------- 9. Assemblage ----------
 function build() {
   const polls = loadPolls();
@@ -601,6 +644,7 @@ function build() {
     concerns: readJSON(P('data/concerns.json')),
     ballot: ballotDependence(FR.r1, FR.lastPoll),
     pulse: latestAndEmerging(FR.r1, standings),
+    fullBallot: fullBallot(FR, standings),
     certainty: fs.existsSync(P('data/certainty.json')) ? readJSON(P('data/certainty.json')) : null,
     newsletter: { formUrl: (cfg.newsletter || {}).formUrl || '' },
     summary: null
