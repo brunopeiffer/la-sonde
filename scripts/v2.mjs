@@ -86,8 +86,22 @@ export function decode(FR, standings, SC) {
       return { c, raw, he: round1(he), corr: round1(raw - he), avg: round1(avg), diff: round1(raw - he - avg) };
     }).sort((a, b) => b.raw - a.raw).slice(0, 8);
   const big = [...rows].sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff))[0];
+  // Toutes les hypothèses de l'enquête (onglets) : chacune comparée à la moyenne de la même liste si elle existe.
+  const followed = new Set(standings.filter(s => s.v >= 3).map(s => s.c));
+  const swing = [...followed].filter(c => hyps.some(p => c in p.results) && hyps.some(p => !(c in p.results)));
+  const nameOf = c => c;
+  const alts = hyps.map((p, i) => {
+    const s2 = SC.find(x => x.key === keyOf(p));
+    const rws = Object.entries(p.results).filter(([c]) => standings.some(s => s.c === c)).map(([c, raw]) => {
+      const he = (FR.house[c] || {})[p.institute] || 0, avg = s2 ? s2.set.find(x => x.c === c).share : standings.find(s => s.c === c).v;
+      return { c, raw, he: round1(he), corr: round1(raw - he), avg: round1(avg), diff: round1(raw - he - avg) };
+    }).sort((a, b) => b.raw - a.raw).slice(0, 9);
+    const bg = [...rws].sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff))[0];
+    return { i: i + 1, with: swing.filter(c => c in p.results), without: swing.filter(c => !(c in p.results)), sameList: !!s2, rows: rws,
+      outlier: s2 && bg && Math.abs(bg.diff) > 1.5 ? bg : null, main: p === h };
+  });
   return { survey: last.survey, inst: h.institute, sponsor: h.sponsor, end: h.end, n: h.n, hyps: hyps.length, listSize: Object.keys(h.results).length,
-    sameList: same, rows, outlier: same && big && Math.abs(big.diff) > 1.5 ? big : null };
+    sameList: same, rows, outlier: same && big && Math.abs(big.diff) > 1.5 ? big : null, alts };
 }
 
 // ---------- 5. Historique quotidien (pour mesurer ce qui a bougé d'un jour à l'autre) ----------

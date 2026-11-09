@@ -14,6 +14,7 @@ const cfg = readJSON(P('config.json'));
 const M = cfg.model;
 const CANDS = readJSON(P('data/candidates.json'));
 const color = id => (CANDS[id] || CANDS._default).color;
+const MVC = (() => { try { return Object.fromEntries(parseCSV(fs.readFileSync(P('data/sources/mieuxvoter_candidats.csv'), 'utf8')).map(r => [r.candidate_id, r])); } catch { return {}; } })();
 
 const R1 = toDay(cfg.election.round1), R2 = toDay(cfg.election.round2);
 // Fichier candidats MieuxVoter + corrections locales (retraits / déclarations plus récents).
@@ -572,8 +573,11 @@ function build() {
   const events = ev.filter(e => toDay(e.date) >= FR.start && toDay(e.date) <= TODAY).sort((a, b) => a.date.localeCompare(b.date));
 
   const cands = {};
-  for (const c of new Set([...Object.keys(series), ...D.flatMap(d => [d.a, d.b])])) {
-    const k = CANDS[c] || { name: c, short: c, party: '' };
+  // Tous les candidats testés (même rarement : ils peuvent apparaître dans le simulateur « Et si… »).
+  for (const c of new Set([...Object.keys(series), ...D.flatMap(d => [d.a, d.b]), ...Object.keys(FR.ids || {})])) {
+    // Candidat absent de data/candidates.json : nom, nom court et parti repris de la base MieuxVoter (jamais l'identifiant brut).
+    const mv = MVC[c];
+    const k = CANDS[c] || (mv ? { name: mv.complete_name, short: mv.surname || mv.complete_name, party: mv.parti || '' } : { name: c, short: c, party: '' });
     cands[c] = { name: k.name, short: k.short || k.name, party: k.party || '', color: color(c), colorDark: k.colorDark || color(c), n: FR.ids[c] || 0, slug: slugify(k.name) };
   }
 
@@ -635,7 +639,10 @@ function build() {
         return { cs, set, surveys: g.surveys, last: fromDay(Math.max(...g.ps.map(p => p.t))) };
       });
     out.whatif = {
-      base: allScen.set.map(x => ({ c: x.c, v: round1(x.share), band: (standings.find(s => s.c === x.c) || { band: 1.5 }).band })),
+      // Simulateur : seulement les candidats suivis (classement). Un nom testé de façon marginale (ex. une seule hypothèse
+      // d'un institut) est retiré et ses quelques voix réparties à proportion entre les autres.
+      base: (() => { const kept = allScen.set.filter(x => standings.some(s => s.c === x.c)); const tot = allScen.set.reduce((a, x) => a + x.share, 0), k = kept.reduce((a, x) => a + x.share, 0) || 1;
+        return kept.map(x => ({ c: x.c, v: round1(x.share * tot / k), band: (standings.find(s => s.c === x.c) || { band: 1.5 }).band })); })(),
       tested, pos: POS.positions, ...cal, calib, source: POS.source
     };
   }
