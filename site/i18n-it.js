@@ -173,3 +173,5 @@ Object.assign(window.I18N.it, {"pl.lastK": "L’ultimo sondaggio", "pl.vs": "Con
 Object.assign(window.I18N.it, {"pl.axis": "variazione in punti", "pl.agree": "{n} istituti su {m} concordano", "pl.badgeT": "Movimento emergente: {n} istituti misurano lo stesso movimento in 10 giorni"});
 
 Object.assign(window.I18N.it, {"bg.tag": "Cosa si muove", "bg.title": "Dall’ultimo sondaggio alla tendenza consolidata", "bg.s1": "Nuovo", "bg.s1d": "un sondaggio, confrontato con il precedente dello stesso istituto", "bg.s2": "Confermato", "bg.s2d": "almeno due istituti, stessa direzione, in 10 giorni", "bg.s3": "Consolidato", "bg.s3d": "la media si muove oltre il rumore statistico", "hw.last": "Ultimo sondaggio: {i}, {d}", "hw.conf": "{n} movimenti confermati", "hw.conf0": "nessun movimento confermato", "hw.see": "Vedi cosa si muove"});
+
+Object.assign(window.I18N.it, {"dec.with": "con", "dec.without": "senza"});

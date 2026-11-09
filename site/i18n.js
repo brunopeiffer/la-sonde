@@ -368,3 +368,7 @@ Object.assign(window.I18N.en, {"pl.axis": "change in points", "pl.agree": "{n} o
 Object.assign(window.I18N.fr, {"bg.tag": "Ce qui bouge", "bg.title": "Du dernier sondage à la tendance installée", "bg.s1": "Nouveau", "bg.s1d": "un sondage, comparé au précédent du même institut", "bg.s2": "Confirmé", "bg.s2d": "au moins deux instituts, même sens, en 10 jours", "bg.s3": "Installé", "bg.s3d": "la moyenne bouge au-delà du bruit statistique", "hw.last": "Dernier sondage : {i}, {d}", "hw.conf": "{n} mouvement(s) confirmé(s)", "hw.conf0": "aucun mouvement confirmé", "hw.see": "Voir ce qui bouge"});
 
 Object.assign(window.I18N.en, {"bg.tag": "What's moving", "bg.title": "From the latest poll to an established trend", "bg.s1": "New", "bg.s1d": "one poll, compared with the same pollster's previous one", "bg.s2": "Confirmed", "bg.s2d": "at least two pollsters, same direction, within 10 days", "bg.s3": "Established", "bg.s3d": "the average moves beyond statistical noise", "hw.last": "Latest poll: {i}, {d}", "hw.conf": "{n} confirmed move(s)", "hw.conf0": "no confirmed move", "hw.see": "See what's moving"});
+
+Object.assign(window.I18N.fr, {"dec.with": "avec", "dec.without": "sans"});
+
+Object.assign(window.I18N.en, {"dec.with": "with", "dec.without": "without"});

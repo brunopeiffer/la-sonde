@@ -173,3 +173,5 @@ Object.assign(window.I18N.de, {"pl.lastK": "Die neueste Umfrage", "pl.vs": "Verg
 Object.assign(window.I18N.de, {"pl.axis": "Veränderung in Punkten", "pl.agree": "{n} von {m} Instituten stimmen überein", "pl.badgeT": "Sich abzeichnende Bewegung: {n} Institute messen in 10 Tagen dieselbe Bewegung"});
 
 Object.assign(window.I18N.de, {"bg.tag": "Was sich bewegt", "bg.title": "Von der neuesten Umfrage zum gefestigten Trend", "bg.s1": "Neu", "bg.s1d": "eine Umfrage, verglichen mit der vorherigen desselben Instituts", "bg.s2": "Bestätigt", "bg.s2d": "mindestens zwei Institute, gleiche Richtung, in 10 Tagen", "bg.s3": "Gefestigt", "bg.s3d": "der Durchschnitt bewegt sich über das statistische Rauschen hinaus", "hw.last": "Neueste Umfrage: {i}, {d}", "hw.conf": "{n} bestätigte Bewegung(en)", "hw.conf0": "keine bestätigte Bewegung", "hw.see": "Was sich bewegt"});
+
+Object.assign(window.I18N.de, {"dec.with": "mit", "dec.without": "ohne"});

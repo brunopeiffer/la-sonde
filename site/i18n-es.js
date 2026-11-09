@@ -173,3 +173,5 @@ Object.assign(window.I18N.es, {"pl.lastK": "La última encuesta", "pl.vs": "Comp
 Object.assign(window.I18N.es, {"pl.axis": "variación en puntos", "pl.agree": "{n} de {m} institutos coinciden", "pl.badgeT": "Movimiento emergente: {n} institutos miden el mismo movimiento en 10 días"});
 
 Object.assign(window.I18N.es, {"bg.tag": "Lo que se mueve", "bg.title": "De la última encuesta a la tendencia asentada", "bg.s1": "Nuevo", "bg.s1d": "una encuesta, comparada con la anterior del mismo instituto", "bg.s2": "Confirmado", "bg.s2d": "al menos dos institutos, mismo sentido, en 10 días", "bg.s3": "Asentado", "bg.s3d": "la media se mueve más allá del ruido estadístico", "hw.last": "Última encuesta: {i}, {d}", "hw.conf": "{n} movimiento(s) confirmado(s)", "hw.conf0": "ningún movimiento confirmado", "hw.see": "Ver lo que se mueve"});
+
+Object.assign(window.I18N.es, {"dec.with": "con", "dec.without": "sin"});

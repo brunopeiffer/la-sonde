@@ -108,11 +108,11 @@
     }
     if (grp.length > 1) ties.push(grp);
     const tied = new Set(ties.flat().map(s => s.c));
-    const chip = (s, nd) => `<a class="pchip${nd ? ' nd' : ''}" href="${page(s.c)}" title="${esc(nm(s.c))}${nd ? ' · ' + esc(t('pod.undeclShort')) : ''}${BAL(s.c) ? ' · ' + esc(BAL(s.c)) : ''}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num">${fmt(s.v, 0)}${pct}</b>${s.presence < 30 ? '<sup>*</sup>' : ''}${BAL(s.c) ? '<sup>†</sup>' : ''}</a>`;
+    const chip = (s, nd) => `<a class="pchip${nd ? ' nd' : ''}" href="${page(s.c)}" title="${esc(nm(s.c))}${nd ? ' · ' + esc(t('pod.undeclShort')) : ''}${BAL(s.c) ? ' · ' + esc(BAL(s.c)) : ''}"><i style="background:${col(s.c)}"></i>${esc(sh(s.c))} <b class="num">${fmt(s.v, 1)}${pct}</b>${s.presence < 30 ? '<sup>*</sup>' : ''}${BAL(s.c) ? '<sup>†</sup>' : ''}</a>`;
     $('#podium').innerHTML = `<h2><span>${t('pod.title')}</span><span>${t('pod.d30')}</span></h2>` + top.map(s => {
       const cls = s.d30 > 0.4 ? 'up' : s.d30 < -0.4 ? 'down' : 'flat', ar = s.d30 > 0.4 ? '▲' : s.d30 < -0.4 ? '▼' : '•';
       return `<div class="prow"><a class="nm" href="${page(s.c)}"><i style="background:${col(s.c)}"></i><span>${esc(nm(s.c))}</span>${s.presence < 30 ? '<sup class="pmark">*</sup>' : ''}${BAL(s.c) ? `<sup class="pmark" title="${esc(BAL(s.c))}">†</sup>` : ''}${EMB(s.c)}</a>
-        <div class="v num">${fmt(s.v, 0)}<small style="font-size:12px">${pct}</small></div><div class="delta ${cls} num">${ar} ${sgn(s.d30)}</div>
+        <div class="v num">${fmt(s.v, 1)}<small style="font-size:12px">${pct}</small></div><div class="delta ${cls} num">${ar} ${sgn(s.d30)}</div>
         <div class="bar"><i style="width:${s.v / max * 100}%;background:${col(s.c)}"></i></div></div>`;
     }).join('') + (() => {
       const shown = new Set(top.map(s => s.c));
@@ -408,17 +408,24 @@
   }
 
   // ---------- V2 : le dernier sondage décrypté ----------
+  let decSel = null;
   function renderDecoded() {
-    const X = D.decoded, el = $('#decoded'); if (!X) { el.hidden = true; return; }
-    const verdict = !X.sameList ? t('dec.newList') : X.outlier ? t('dec.out', { c: esc(nm(X.outlier.c)), d: sgn(X.outlier.diff), dir: t(X.outlier.diff > 0 ? 'dec.above' : 'dec.below') }) : t('dec.ok');
-    el.innerHTML = `<div class="dec-head"><div><div class="tag" style="margin:0 0 6px">${t('dec.tag')}</div><h3 style="margin:0">${esc(X.inst)} <span class="note" style="margin:0;font-weight:600">${t('dec.for')} ${esc(X.sponsor)}</span></h3>
-      <p class="note" style="margin:4px 0 0">${t('dec.meta', { d: fdate(X.end), n: X.n.toLocaleString(loc()), h: X.hyps })}</p></div>
-      <div class="verdict ${X.outlier ? 'warn' : 'ok'}">${verdict}</div></div>
-      <div class="scroll"><table class="tbl"><thead><tr><th>${t('tab.cand')}</th><th class="c">${t('dec.raw')}</th><th class="c">${t('dec.he')}</th><th class="c">${t('dec.corr')}</th><th class="c">${t(X.sameList ? 'dec.avgList' : 'dec.avg')}</th><th class="c">${t('dec.diff')}</th></tr></thead><tbody>`
-      + X.rows.map(r => `<tr><td><span style="display:inline-flex;gap:8px;align-items:center"><i style="width:10px;height:10px;border-radius:50%;background:${col(r.c)};display:inline-block"></i><b>${esc(sh(r.c))}</b></span></td>
-        <td class="c num">${fmt(r.raw, 0)}</td><td class="c num">${r.he ? sgn(r.he) : '0'}</td><td class="c num"><b>${fmt(r.corr)}</b></td><td class="c num">${fmt(r.avg)}</td>
+    const X0 = D.decoded, el = $('#decoded'); if (!X0) { el.hidden = true; return; }
+    const alts = X0.alts || [];
+    if (decSel == null || !alts[decSel]) decSel = Math.max(0, alts.findIndex(a => a.main));
+    const A = alts[decSel] || { rows: X0.rows, sameList: X0.sameList, outlier: X0.outlier };
+    const verdict = !A.sameList ? t('dec.newList') : A.outlier ? t('dec.out', { c: esc(nm(A.outlier.c)), d: sgn(A.outlier.diff), dir: t(A.outlier.diff > 0 ? 'dec.above' : 'dec.below') }) : t('dec.ok');
+    const lab = a => `H${a.i}${a.with.length ? ' · ' + t('dec.with') + ' ' + a.with.map(sh).join(', ') : ''}${a.without.length ? ' · ' + t('dec.without') + ' ' + a.without.map(sh).join(', ') : ''}`;
+    const tabs = alts.length > 1 ? `<div class="dec-tabs" role="tablist">${alts.map((a, k) => `<button role="tab" aria-selected="${k === decSel}" data-k="${k}">${esc(lab(a))}</button>`).join('')}</div>` : '';
+    el.innerHTML = `<div class="dec-head"><div><div class="tag" style="margin:0 0 6px">${t('dec.tag')}</div><h3 style="margin:0">${esc(X0.inst)} <span class="note" style="margin:0;font-weight:600">${t('dec.for')} ${esc(X0.sponsor)}</span></h3>
+      <p class="note" style="margin:4px 0 0">${t('dec.meta', { d: fdate(X0.end), n: X0.n.toLocaleString(loc()), h: X0.hyps })}</p></div>
+      <div class="verdict ${A.outlier ? 'warn' : 'ok'}">${verdict}</div></div>${tabs}
+      <div class="scroll"><table class="tbl"><thead><tr><th>${t('tab.cand')}</th><th class="c">${t('dec.raw')}</th><th class="c">${t('dec.he')}</th><th class="c">${t('dec.corr')}</th><th class="c">${A.sameList ? t('dec.avgList') : t('dec.avg')}</th><th class="c">${t('dec.diff')}</th></tr></thead><tbody>`
+      + A.rows.map(r => `<tr><td><span style="display:inline-flex;gap:8px;align-items:center"><i style="width:10px;height:10px;border-radius:50%;background:${col(r.c)};display:inline-block"></i><b>${esc(sh(r.c))}</b></span></td>
+        <td class="c num">${fmt(r.raw, r.raw % 1 ? 1 : 0)}</td><td class="c num">${r.he ? sgn(r.he) : '0'}</td><td class="c num"><b>${fmt(r.corr)}</b></td><td class="c num">${fmt(r.avg)}</td>
         <td class="c num"><span class="dpill ${Math.abs(r.diff) > 1.5 ? (r.diff > 0 ? 'hi' : 'lo') : ''}">${sgn(r.diff)}</span></td></tr>`).join('')
       + `</tbody></table></div><p class="note">${t('dec.note')}</p>`;
+    el.querySelectorAll('.dec-tabs button').forEach(b => b.onclick = () => { decSel = +b.dataset.k; renderDecoded(); });
   }
 
   // ---------- La course ----------
