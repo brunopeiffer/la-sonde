@@ -559,7 +559,41 @@
       "inst": "ODOXA",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10359": {
+      "fid": "2383",
+      "title": "10359 Pres OQTF CSA Cnews JDD Europe 1 7 novembre",
+      "pub": "2026-11-07",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10360": {
+      "fid": "2384",
+      "title": "10360 Pres barometre politique YOUGOV Le Huffpost 6 novembre",
+      "pub": "2026-11-06",
+      "inst": "YouGov",
+      "tries": 0,
+      "status": "sans intentions de vote",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10360-pres-barometre-politique-yougov-le-huffpost-6-novembre.pdf"
+    },
+    "10361": {
+      "fid": "2382",
+      "title": "10361 Pres Le regard des Français sur l'avenir IFOP 6 novembre",
+      "pub": "2026-11-06",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10362": {
+      "fid": "2381",
+      "title": "10362 Pres IV TOLUNA HARRIS INTERACTIVE 9 novembre",
+      "pub": "2026-11-09",
+      "inst": "Toluna Harris Interactive",
+      "tries": 0,
+      "status": "relevée (2 sondage(s) ajouté(s))",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10362-pres-iv-toluna-harris-interactive-9-novembre.pdf"
     }
   },
-  "checked": "2026-11-09T12:06:03.450Z"
+  "checked": "2026-11-09T18:00:29.854Z"
 }

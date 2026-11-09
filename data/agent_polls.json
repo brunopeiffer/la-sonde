@@ -1027,6 +1027,133 @@
           }
         }
       ]
+    },
+    {
+      "survey": "20261103_1105_to_ag1",
+      "institute": "Toluna Harris Interactive",
+      "sponsor": "M6, RTL",
+      "start": "2026-11-03",
+      "end": "2026-11-05",
+      "n": 2101,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10362-pres-iv-toluna-harris-interactive-9-novembre.pdf",
+      "foundAt": "2026-11-09",
+      "hypotheses": [
+        {
+          "label": "Hypothèse Édouard Philippe, Dominique de Villepin et David Lisnard",
+          "results": {
+            "NA": 1,
+            "JLM": 19,
+            "FRo": 1,
+            "MT": 2,
+            "RG": 11,
+            "EP": 12,
+            "DV": 2,
+            "DL": 9,
+            "BR": 5,
+            "NDA": 1,
+            "MLP": 34,
+            "EZ": 3
+          }
+        },
+        {
+          "label": "Hypothèse Gabriel Attal, Dominique de Villepin et David Lisnard",
+          "results": {
+            "NA": 1,
+            "JLM": 19,
+            "FRo": 1,
+            "MT": 2,
+            "RG": 12,
+            "GA": 9,
+            "DV": 2,
+            "DL": 9,
+            "BR": 6,
+            "NDA": 1,
+            "MLP": 35,
+            "EZ": 3
+          }
+        },
+        {
+          "label": "Hypothèse Gabriel Attal et Édouard Philippe",
+          "results": {
+            "NA": 1,
+            "JLM": 18,
+            "FRo": 2,
+            "MT": 2,
+            "RG": 11,
+            "GA": 6,
+            "EP": 11,
+            "BR": 7,
+            "NDA": 2,
+            "MLP": 36,
+            "EZ": 4
+          }
+        },
+        {
+          "label": "Hypothèse Édouard Philippe candidat unique du centre",
+          "results": {
+            "NA": 1,
+            "JLM": 19,
+            "FRo": 2,
+            "MT": 2,
+            "RG": 12,
+            "EP": 14,
+            "BR": 8,
+            "NDA": 2,
+            "MLP": 36,
+            "EZ": 4
+          }
+        },
+        {
+          "label": "Hypothèse Gabriel Attal candidat unique du centre",
+          "results": {
+            "NA": 1,
+            "JLM": 19,
+            "FRo": 2,
+            "MT": 3,
+            "RG": 13,
+            "GA": 10,
+            "BR": 10,
+            "NDA": 2,
+            "MLP": 36,
+            "EZ": 4
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261103_1105_to_ag2",
+      "institute": "Toluna Harris Interactive",
+      "sponsor": "M6, RTL",
+      "start": "2026-11-03",
+      "end": "2026-11-05",
+      "n": 2101,
+      "round": 2,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10362-pres-iv-toluna-harris-interactive-9-novembre.pdf",
+      "foundAt": "2026-11-09",
+      "hypotheses": [
+        {
+          "label": "Hypothèse avec Jean-Luc Mélenchon",
+          "results": {
+            "JLM": 32,
+            "MLP": 68
+          }
+        },
+        {
+          "label": "Hypothèse avec Raphaël Glucksmann",
+          "results": {
+            "RG": 40,
+            "MLP": 60
+          }
+        },
+        {
+          "label": "Hypothèse avec Édouard Philippe",
+          "results": {
+            "EP": 42,
+            "MLP": 58
+          }
+        }
+      ]
     }
   ]
 }
