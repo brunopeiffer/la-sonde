@@ -593,7 +593,15 @@
       "tries": 0,
       "status": "relevée (2 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10362-pres-iv-toluna-harris-interactive-9-novembre.pdf"
+    },
+    "10363": {
+      "fid": "2385",
+      "title": "10363 Pres Potentiel électoral TOLUNA HARRIS INTERACTIVE 10 novembre",
+      "pub": "2026-11-10",
+      "inst": "Toluna Harris Interactive",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-10T05:57:48.007Z"
+  "checked": "2026-11-10T11:58:30.240Z"
 }
