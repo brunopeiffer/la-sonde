@@ -65,7 +65,7 @@ export function buildPosts(D, now = new Date()) {
 
   // 2. Mardi — les duels de second tour
   if (D.duels?.length) {
-    const ds = [...D.duels].sort((a, b) => b.n - a.n).slice(0, 5).map(d => (d.va >= d.vb ? d : { a: d.b, b: d.a, va: d.vb, vb: d.va, n: d.n }));
+    const ds = D.duels.filter(d => !d.undeclared).slice(0, 5).map(d => (d.va >= d.vb ? d : { a: d.b, b: d.a, va: d.vb, vb: d.va, n: d.n }));
     const close = [...ds].sort((a, b) => (a.va - a.vb) - (b.va - b.vb))[0];
     const body = ds.map((d, i) => {
       const y = 190 + i * 74, W = 760, wa = W * d.va / (d.va + d.vb), x0 = 380;

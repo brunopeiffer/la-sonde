@@ -589,7 +589,10 @@ function build() {
     for (const s of SC) for (const x of s.mc[field]) m[x.c] = (m[x.c] || 0) + x.p * s.surveys / totS;
     return Object.entries(m).map(([c, p]) => ({ c, p: round1(p) })).sort((a, b) => b.p - a.p);
   };
-  const mc = { ...SC[0].mc, qualify: agg('qualify'), win: agg('win'), coverage: round1(SC.reduce((a, s) => a + s.mc.coverage * s.surveys / totS, 0)) };
+  // Chances de qualification : calculées sur le bulletin « tous les candidats déclarés », pour que tout candidat déclaré
+  // (même rarement testé, comme Lisnard) soit pris en compte selon son niveau réel. À défaut, synthèse des listes testées.
+  const mc = allScen && allScen.mc ? { ...allScen.mc, coverage: round1(SC.reduce((a, s) => a + s.mc.coverage * s.surveys / totS, 0)), basis: 'all' }
+    : { ...SC[0].mc, qualify: agg('qualify'), win: agg('win'), coverage: round1(SC.reduce((a, s) => a + s.mc.coverage * s.surveys / totS, 0)) };
 
   // Effets instituts (candidats principaux uniquement).
   const top = standings.slice(0, 7).map(s => s.c);
@@ -639,7 +642,13 @@ function build() {
     points: Object.fromEntries(Object.keys(series).map(c => [c, FR.r1.filter(p => c in p.results)
       .map(p => [fromDay(p.t), p.results[c], [...new Set(FR.r1.map(q => q.institute))].indexOf(p.institute), p.provisional ? 1 : 0])])),
     scenarios: [...SC, allScen].map(s => ({ ...s, set: s.set.map(x => ({ c: x.c, share: round1(x.share) })) })),
-    mc, duels: D, transfers: T, house, surveys: surveyList, events,
+    mc, duels: (() => { const rk = c => { const i = standings.findIndex(s => s.c === c); return i < 0 ? 99 : i; };
+      // Duels classés selon le rang actuel du challenger (le mieux placé d'abord), non-déclarés en dernier.
+      const dcl = c => (standings.find(s => s.c === c) || {}).declared;
+      return [...D].map(d => ({ ...d, undeclared: !dcl(d.a) || !dcl(d.b) })).sort((x, y) => (x.undeclared - y.undeclared) || Math.max(rk(x.a), rk(x.b)) - Math.max(rk(y.a), rk(y.b))); })(),
+    // Candidats déclarés à 5 % ou plus pour lesquels aucun institut n'a testé de duel face au premier du classement.
+    duelsMissing: (() => { const lead = standings[0] && standings[0].c; return standings.filter(s => s.declared && s.v >= 5 && s.c !== lead && !D.some(d => [d.a, d.b].includes(lead) && [d.a, d.b].includes(s.c))).map(s => s.c); })(),
+    transfers: T, house, surveys: surveyList, events,
     ghosts: { daysBack: G.daysBack, series: G.series, round1: cfg.previousElection.round1 },
     concerns: readJSON(P('data/concerns.json')),
     ballot: ballotDependence(FR.r1, FR.lastPoll),
@@ -654,7 +663,7 @@ function build() {
   // ---------- V2 : détecteur de bascule, baromètre, sondage décrypté, ce qui a changé ----------
   const MOM = momentum(FR, standings);
   const cross = crossings(standings, MOM);
-  const open = openness(SC, standings);
+  const open = openness(allScen && allScen.mc ? [allScen] : SC, standings);
   const dec = decode(FR, standings, SC);
   const histPath = P('data/history.json');
   const hist0 = fs.existsSync(histPath) ? readJSON(histPath) : [];
