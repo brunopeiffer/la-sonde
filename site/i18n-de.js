@@ -177,3 +177,5 @@ Object.assign(window.I18N.de, {"bg.tag": "Was sich bewegt", "bg.title": "Von der
 Object.assign(window.I18N.de, {"dec.with": "mit", "dec.without": "ohne"});
 
 Object.assign(window.I18N.de, {"pod.modeA": "Umfragedurchschnitt", "pod.modeB": "Wenn alle anträten", "pod.fbVs": "Durchschnitt", "pod.fbEx": "{c} gewinnt {v} Pkt., wenn {r} fehlt", "pod.fbNote": "Schätzung von La Sonde: Jeder ohne einen Rivalen erzielte Wert wird um die in denselben Umfragen gemessene Abweichung korrigiert ({ex}), damit alle Kandidaten auf demselben Stimmzettel verglichen werden. Rechts zum Vergleich der Umfragedurchschnitt. Keine Umfrage."});
+
+Object.assign(window.I18N.de, {"r2.missing": "Bisher von keinem Institut getestet: {l}. Ihr Ausgang wird nur im Simulator unten geschätzt."});

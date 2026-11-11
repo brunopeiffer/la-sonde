@@ -177,3 +177,5 @@ Object.assign(window.I18N.es, {"bg.tag": "Lo que se mueve", "bg.title": "De la �
 Object.assign(window.I18N.es, {"dec.with": "con", "dec.without": "sin"});
 
 Object.assign(window.I18N.es, {"pod.modeA": "Media de encuestas", "pod.modeB": "Si todos se presentaran", "pod.fbVs": "media", "pod.fbEx": "{c} gana {v} pts cuando {r} no está", "pod.fbNote": "Estimación de La Sonde: cada resultado obtenido sin un rival se corrige con la diferencia medida en las mismas encuestas ({ex}), para comparar a todos en la misma papeleta. A la derecha, la media de encuestas para comparar. No es una encuesta."});
+
+Object.assign(window.I18N.es, {"r2.missing": "Nunca probados por los institutos hasta ahora: {l}. Su resultado solo se estima en el simulador de abajo."});

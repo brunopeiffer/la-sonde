@@ -177,3 +177,5 @@ Object.assign(window.I18N.it, {"bg.tag": "Cosa si muove", "bg.title": "Dall’ul
 Object.assign(window.I18N.it, {"dec.with": "con", "dec.without": "senza"});
 
 Object.assign(window.I18N.it, {"pod.modeA": "Media dei sondaggi", "pod.modeB": "Se tutti si candidassero", "pod.fbVs": "media", "pod.fbEx": "{c} guadagna {v} punti quando {r} è assente", "pod.fbNote": "Stima di La Sonde: ogni risultato ottenuto senza un rivale è corretto con lo scarto misurato negli stessi sondaggi ({ex}), per confrontare tutti sulla stessa scheda. A destra, la media dei sondaggi per confronto. Non è un sondaggio."});
+
+Object.assign(window.I18N.it, {"r2.missing": "Mai testati dagli istituti finora: {l}. Il loro esito è solo stimato nel simulatore qui sotto."});

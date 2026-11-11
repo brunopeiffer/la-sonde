@@ -376,3 +376,7 @@ Object.assign(window.I18N.en, {"dec.with": "with", "dec.without": "without"});
 Object.assign(window.I18N.fr, {"pod.modeA": "Moyenne des sondages", "pod.modeB": "Si tous étaient candidats", "pod.fbVs": "moyenne", "pod.fbEx": "{c} gagne {v} pt quand {r} est absent", "pod.fbNote": "Estimation La Sonde : chaque score obtenu sans un rival est corrigé de l'écart mesuré dans les mêmes enquêtes ({ex}), pour comparer tous les candidats sur le même bulletin. À droite, la moyenne des sondages pour comparaison. Ce n'est pas un sondage."});
 
 Object.assign(window.I18N.en, {"pod.modeA": "Polling average", "pod.modeB": "If everyone ran", "pod.fbVs": "average", "pod.fbEx": "{c} gains {v} pts when {r} is absent", "pod.fbNote": "La Sonde estimate: each score obtained without a rival is corrected by the gap measured in the same surveys ({ex}), so that all candidates are compared on the same ballot. On the right, the polling average for comparison. This is not a poll."});
+
+Object.assign(window.I18N.fr, {"r2.missing": "Jamais testés par les instituts à ce jour : {l}. Leur issue n'est estimée que dans le simulateur ci-dessous."});
+
+Object.assign(window.I18N.en, {"r2.missing": "Never tested by pollsters so far: {l}. Their outcome is only estimated in the simulator below."});

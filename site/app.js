@@ -645,12 +645,13 @@
 
   // ---------- Second tour ----------
   function renderDuels() {
-    $('#duels').innerHTML = D.duels.map(d => `<div class="duel"><span><b>${esc(nm(d.a))}</b> – <b>${esc(nm(d.b))}</b></span><small class="note" style="margin:0">${t('r2.n', { n: d.n, d: fdate(d.last) })}</small>
-      <div class="split" style="height:30px;border-radius:8px"><i style="flex:${d.va};background:${col(d.a)};color:#fff;font-weight:800;display:flex;align-items:center;padding-left:10px">${fmt(d.va)}</i><i style="flex:${d.vb};background:${col(d.b)};color:#fff;font-weight:800;display:flex;align-items:center;justify-content:flex-end;padding-right:10px">${fmt(d.vb)}</i></div></div>`).join('');
+    const miss = (D.duelsMissing || []).filter(c => D.cands[c]), lead = D.standings[0] && D.standings[0].c;
+    $('#duels').innerHTML = D.duels.map(d => `<div class="duel"><span><b>${esc(nm(d.a))}</b> – <b>${esc(nm(d.b))}</b>${d.undeclared ? ` <em class="undecl">${t('pod.undeclShort')}</em>` : ''}</span><small class="note" style="margin:0">${t('r2.n', { n: d.n, d: fdate(d.last) })}</small>
+      <div class="split" style="height:30px;border-radius:8px"><i style="flex:${d.va};background:${col(d.a)};color:#fff;font-weight:800;display:flex;align-items:center;padding-left:10px">${fmt(d.va)}</i><i style="flex:${d.vb};background:${col(d.b)};color:#fff;font-weight:800;display:flex;align-items:center;justify-content:flex-end;padding-right:10px">${fmt(d.vb)}</i></div></div>`).join('') + (miss.length ? `<p class="note r2miss">${t('r2.missing', { l: miss.map(c => `${esc(sh(lead))} – ${esc(sh(c))}`).join(', ') })}</p>` : '');
   }
   const sim = { a: null, b: null, rates: {} };
   function renderSim(resetRates) {
-    const set = D.scenarios[0].set.map(x => x.c);
+    const set = (D.scenarios.find(x => x.key === 'all') || D.scenarios[0]).set.map(x => x.c).filter(c => D.standings.some(s => s.c === c));
     if (!sim.a) { sim.a = set[0]; sim.b = set[1]; }
     const opts = sel => set.map(c => `<option value="${c}" ${c === sel ? 'selected' : ''}>${esc(nm(c))}</option>`).join('');
     $('#simA').innerHTML = opts(sim.a); $('#simB').innerHTML = opts(sim.b);
