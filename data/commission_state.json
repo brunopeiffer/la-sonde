@@ -601,7 +601,58 @@
       "inst": "Toluna Harris Interactive",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10364": {
+      "fid": "2391",
+      "title": "10364 Pres barometre stature présidentielle V7 VERIAN 10 novembre",
+      "pub": "2026-11-10",
+      "inst": "Verian",
+      "tries": 0,
+      "status": "sans intentions de vote",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10364-pres-barometre-stature-presidentielle-v7-verian-10-novembre.pdf"
+    },
+    "10365": {
+      "fid": "2390",
+      "title": "10365 Pres barometre des personnalites politiques CLUSTER17 9 novembre",
+      "pub": "2026-11-09",
+      "inst": "Cluster17",
+      "tries": 0,
+      "status": "sans intentions de vote",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10365-pres-barometre-des-personnalites-politiques-cluster17-9-novembre.pdf"
+    },
+    "10366": {
+      "fid": "2389",
+      "title": "10366 Pres candidature T Riner CSA Cnews JDD Europe 1 10 novembre",
+      "pub": "2026-11-10",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10367": {
+      "fid": "2388",
+      "title": "10367 Pres potentiel electoral T Riner 10 novembre",
+      "pub": "2026-11-10",
+      "inst": null,
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10368": {
+      "fid": "2387",
+      "title": "10368 Pres IV CLUSTER17 Politico 11 novembre",
+      "pub": "2026-11-11",
+      "inst": "Cluster17",
+      "tries": 1,
+      "status": "pending",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10368-pres-iv-cluster17-politico-11-novembre.pdf"
+    },
+    "10369": {
+      "fid": "2386",
+      "title": "10369 Pres candidature T. Riner ODOXA 12 novembre",
+      "pub": "2026-11-12",
+      "inst": "ODOXA",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-12T12:07:28.968Z"
+  "checked": "2026-11-12T18:00:16.124Z"
 }
