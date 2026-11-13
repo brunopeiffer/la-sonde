@@ -641,7 +641,7 @@
       "title": "10368 Pres IV CLUSTER17 Politico 11 novembre",
       "pub": "2026-11-11",
       "inst": "Cluster17",
-      "tries": 1,
+      "tries": 2,
       "status": "pending",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10368-pres-iv-cluster17-politico-11-novembre.pdf"
     },
@@ -654,5 +654,5 @@
       "status": "hors sujet"
     }
   },
-  "checked": "2026-11-12T18:00:16.124Z"
+  "checked": "2026-11-13T06:04:22.038Z"
 }

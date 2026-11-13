@@ -24,6 +24,22 @@
       "en": "Essayist Natacha Polony announced her candidacy for the 2027 French presidential election on France Inter, with the slogan \"Nous sommes la France\".",
       "source": "https://www.cnews.fr/france/2026-10-14/presidentielle-2027-lessayiste-natacha-polony-annonce-sa-candidature-1934782",
       "agent": true
+    },
+    {
+      "id": "EZ",
+      "date": "2026-11-10",
+      "fr": "Le président de Reconquête, Éric Zemmour, a officialisé le 10 novembre 2026 sa candidature à l'élection présidentielle de 2027, après l'avoir seulement évoquée en septembre.",
+      "en": "Reconquête president Éric Zemmour made his candidacy for the 2027 French presidential election official on 10 November 2026, after only hinting at it in September.",
+      "source": "https://www.cnews.fr/france/2026-11-10/presidentielle-2027-eric-zemmour-annonce-officiellement-sa-candidature-lelection",
+      "agent": true
+    },
+    {
+      "id": "DV",
+      "date": "2026-11-03",
+      "fr": "Dominique de Villepin a confirmé le 3 novembre 2026 qu'il se lancerait dans la course à l'Élysée, sans encore avoir annoncé officiellement sa candidature.",
+      "en": "Dominique de Villepin confirmed on 3 November 2026 that he would enter the race for the Élysée, without yet having officially announced his candidacy.",
+      "source": "https://www.cnews.fr/france/2026-11-03/presidentielle-2027-dominique-de-villepin-sera-bien-candidat-mais-attend-avant-de",
+      "agent": true
     }
   ],
   "required": [
@@ -36,5 +52,5 @@
       }
     }
   ],
-  "lastCheck": "2026-11-06"
+  "lastCheck": "2026-11-13"
 }
