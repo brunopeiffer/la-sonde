@@ -1154,6 +1154,89 @@
           }
         }
       ]
+    },
+    {
+      "survey": "20261110_1112_op_ag1",
+      "institute": "OpinionWay",
+      "sponsor": "CNews",
+      "start": "2026-11-10",
+      "end": "2026-11-12",
+      "n": 964,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10371-pres-iv-opinionway-cnews-12-novembre.pdf",
+      "foundAt": "2026-11-14",
+      "hypotheses": [
+        {
+          "label": "Hypothèse 1 : avec Teddy Riner",
+          "results": {
+            "NA": 1,
+            "JLM": 16,
+            "FRo": 2,
+            "MT": 3,
+            "RG": 10,
+            "KB": 0.5,
+            "GA": 3,
+            "EP": 12,
+            "BR": 4,
+            "DL": 9,
+            "NDA": 2,
+            "EZ": 3,
+            "MLP": 31
+          }
+        },
+        {
+          "label": "Hypothèse 2 : sans Teddy Riner",
+          "results": {
+            "NA": 1,
+            "JLM": 16,
+            "FRo": 1,
+            "MT": 3,
+            "RG": 11,
+            "KB": 1,
+            "GA": 4,
+            "EP": 12,
+            "BR": 5,
+            "DL": 10,
+            "NDA": 2,
+            "EZ": 2,
+            "MLP": 32
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261110_1112_op_ag2",
+      "institute": "OpinionWay",
+      "sponsor": "CNews",
+      "start": "2026-11-10",
+      "end": "2026-11-12",
+      "n": 964,
+      "round": 2,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10371-pres-iv-opinionway-cnews-12-novembre.pdf",
+      "foundAt": "2026-11-14",
+      "hypotheses": [
+        {
+          "label": "Hypothèse 1 : Édouard Philippe contre Marine Le Pen",
+          "results": {
+            "EP": 44,
+            "MLP": 56
+          }
+        },
+        {
+          "label": "Hypothèse 2 : Jean-Luc Mélenchon contre Marine Le Pen",
+          "results": {
+            "JLM": 32,
+            "MLP": 68
+          }
+        },
+        {
+          "label": "Hypothèse 3 : Raphaël Glucksmann contre Marine Le Pen",
+          "results": {
+            "RG": 42,
+            "MLP": 58
+          }
+        }
+      ]
     }
   ]
 }

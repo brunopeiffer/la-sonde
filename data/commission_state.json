@@ -652,7 +652,24 @@
       "inst": "ODOXA",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10370": {
+      "fid": "2392",
+      "title": "10370 Pres primaire centre droite IFOP Sud Radio 12 novembre",
+      "pub": "2026-11-12",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10371": {
+      "fid": "2393",
+      "title": "10371 Pres IV OPINIONWAY Cnews 12 novembre",
+      "pub": "2026-11-12",
+      "inst": "OpinionWay",
+      "tries": 0,
+      "status": "relevée (2 sondage(s) ajouté(s))",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10371-pres-iv-opinionway-cnews-12-novembre.pdf"
     }
   },
-  "checked": "2026-11-13T18:31:59.933Z"
+  "checked": "2026-11-14T12:08:23.926Z"
 }
