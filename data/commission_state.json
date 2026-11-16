@@ -669,7 +669,41 @@
       "tries": 0,
       "status": "relevée (2 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10371-pres-iv-opinionway-cnews-12-novembre.pdf"
+    },
+    "10372": {
+      "fid": "2396",
+      "title": "10372 Pres Presitrack OPINIONWAY 13 novembre",
+      "pub": "2026-11-13",
+      "inst": "OpinionWay",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10373": {
+      "fid": "2395",
+      "title": "10373 Pres Barometre politique IPSOS BVA La Tribune dimanche 14 novembre",
+      "pub": "2026-11-14",
+      "inst": "Ipsos BVA",
+      "tries": 0,
+      "status": "sans intentions de vote",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10373-pres-barometre-politique-ipsos-bva-la-tribune-dimanche-14-novembre.pdf"
+    },
+    "10375": {
+      "fid": "2394",
+      "title": "10375 Pres IV ELABE 14 novembre",
+      "pub": "2026-11-14",
+      "inst": "ELABE",
+      "tries": 0,
+      "status": "relevée (2 sondage(s) ajouté(s))",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10375-pres-iv-elabe-14-novembre.pdf"
+    },
+    "10376": {
+      "fid": "2397",
+      "title": "10376 Pres balise opinion CSA Cnews Europe 1 JDD 12 novembre",
+      "pub": "2026-11-12",
+      "inst": "CSA",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-15T17:42:42.765Z"
+  "checked": "2026-11-16T13:35:32.289Z"
 }

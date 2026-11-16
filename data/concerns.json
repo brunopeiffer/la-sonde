@@ -82,6 +82,21 @@
             "environnement": 27,
             "immigration": 27
           }
+        },
+        {
+          "date": "2026-11-12",
+          "field": "10-12 novembre 2026",
+          "n": 1000,
+          "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10373-pres-barometre-politique-ipsos-bva-la-tribune-dimanche-14-novembre.pdf",
+          "values": {
+            "pouvoir_achat": 60,
+            "systeme_social": 38,
+            "dette": 36,
+            "delinquance": 30,
+            "immigration": 28,
+            "environnement": 26
+          },
+          "agent": true
         }
       ]
     }

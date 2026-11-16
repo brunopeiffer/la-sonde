@@ -1237,6 +1237,151 @@
           }
         }
       ]
+    },
+    {
+      "survey": "20261112_1113_el_ag1",
+      "institute": "Elabe",
+      "sponsor": "BFMTV, La Tribune Dimanche",
+      "start": "2026-11-12",
+      "end": "2026-11-13",
+      "n": 1391,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10375-pres-iv-elabe-14-novembre.pdf",
+      "foundAt": "2026-11-16",
+      "hypotheses": [
+        {
+          "label": "Hypothèse 1",
+          "results": {
+            "NA": 0.5,
+            "FRo": 2,
+            "JLM": 17,
+            "MT": 3,
+            "RG": 13.5,
+            "EP": 15,
+            "DV": 2.5,
+            "BR": 6,
+            "NDA": 3,
+            "MLP": 33,
+            "EZ": 4.5
+          }
+        },
+        {
+          "label": "Hypothèse 2",
+          "results": {
+            "NA": 1,
+            "FRo": 2.5,
+            "JLM": 17.5,
+            "MT": 3,
+            "RG": 14,
+            "GA": 10,
+            "DV": 3,
+            "BR": 9,
+            "NDA": 2.5,
+            "MLP": 33,
+            "EZ": 4.5
+          }
+        },
+        {
+          "label": "Hypothèse 3",
+          "results": {
+            "NA": 0.5,
+            "FRo": 2,
+            "JLM": 17.5,
+            "MT": 3.5,
+            "RG": 13,
+            "EP": 12,
+            "GA": 5.5,
+            "BR": 6,
+            "NDA": 3,
+            "MLP": 33,
+            "EZ": 4
+          }
+        },
+        {
+          "label": "Hypothèse 4",
+          "results": {
+            "NA": 0.5,
+            "FRo": 1.5,
+            "JLM": 17.5,
+            "FR": 3,
+            "RG": 14,
+            "GA": 8.5,
+            "BR": 6,
+            "DL": 10.5,
+            "NDA": 2.5,
+            "MLP": 32,
+            "EZ": 4
+          }
+        },
+        {
+          "label": "Hypothèse 5",
+          "results": {
+            "NA": 0.5,
+            "FRo": 2.5,
+            "JLM": 18.5,
+            "RG": 13.5,
+            "EP": 13,
+            "BR": 4,
+            "DL": 9,
+            "NDA": 3,
+            "MLP": 32.5,
+            "EZ": 3.5
+          }
+        },
+        {
+          "label": "Hypothèse 6",
+          "results": {
+            "NA": 0.5,
+            "FRo": 1.5,
+            "JLM": 17,
+            "MT": 3,
+            "RG": 10.5,
+            "NP": 1.5,
+            "TR": 4.5,
+            "EP": 9.5,
+            "GA": 4,
+            "BR": 4,
+            "DL": 8,
+            "NDA": 2,
+            "MLP": 31,
+            "EZ": 3
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261112_1113_el_ag2",
+      "institute": "Elabe",
+      "sponsor": "BFMTV, La Tribune Dimanche",
+      "start": "2026-11-12",
+      "end": "2026-11-13",
+      "n": 1391,
+      "round": 2,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10375-pres-iv-elabe-14-novembre.pdf",
+      "foundAt": "2026-11-16",
+      "hypotheses": [
+        {
+          "label": "Hypothèse Mélenchon - Le Pen",
+          "results": {
+            "JLM": 31.5,
+            "MLP": 68.5
+          }
+        },
+        {
+          "label": "Hypothèse Glucksmann - Le Pen",
+          "results": {
+            "RG": 45,
+            "MLP": 55
+          }
+        },
+        {
+          "label": "Hypothèse Philippe - Le Pen",
+          "results": {
+            "EP": 45,
+            "MLP": 55
+          }
+        }
+      ]
     }
   ]
 }
