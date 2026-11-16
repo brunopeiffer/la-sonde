@@ -703,7 +703,15 @@
       "inst": "CSA",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10377": {
+      "fid": "2398",
+      "title": "10377 Pres Fractures françaises Le Monde 16 novembre",
+      "pub": "2026-11-16",
+      "inst": null,
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-16T13:35:32.289Z"
+  "checked": "2026-11-16T21:02:10.369Z"
 }
