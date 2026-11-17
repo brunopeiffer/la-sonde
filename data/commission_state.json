@@ -711,7 +711,15 @@
       "inst": null,
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10378": {
+      "fid": "2399",
+      "title": "10378 Pres radiographie antisemitisme IFOP 16 novembre",
+      "pub": "2026-11-16",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-16T21:02:10.369Z"
+  "checked": "2026-11-17T14:20:17.513Z"
 }
