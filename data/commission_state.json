@@ -735,7 +735,33 @@
       "inst": "IFOP",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10381": {
+      "fid": "2404",
+      "title": "10381 Pres participation 2nd tour JL Melenchon M Le Pen IFOP Franc Tireur 18 novembre",
+      "pub": "2026-11-18",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "sans intentions de vote",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10381-pres-participation-2nd-tour-jl-melenchon-m-le-pen-ifop-franc-tireur-18-novembre.pdf"
+    },
+    "10383": {
+      "fid": "2407",
+      "title": "10383 Pres logement IFOP 18 novembre",
+      "pub": "2026-11-18",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10384": {
+      "fid": "2406",
+      "title": "10384 Pres IV IFOP 18 novembre",
+      "pub": "2026-11-18",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "relevée (1 sondage(s) ajouté(s))",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10384-pres-iv-ifop-18-novembre.pdf"
     }
   },
-  "checked": "2026-11-17T19:51:35.690Z"
+  "checked": "2026-11-18T13:55:27.155Z"
 }

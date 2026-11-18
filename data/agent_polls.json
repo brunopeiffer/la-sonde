@@ -1382,6 +1382,102 @@
           }
         }
       ]
+    },
+    {
+      "survey": "20261113_1116_if_ag1",
+      "institute": "IFOP",
+      "sponsor": "TF1-LCI, Le Figaro, Sud Radio",
+      "start": "2026-11-13",
+      "end": "2026-11-16",
+      "n": 1690,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10384-pres-iv-ifop-18-novembre.pdf",
+      "foundAt": "2026-11-18",
+      "hypotheses": [
+        {
+          "label": "Hypothèse élargie avec Teddy Riner",
+          "results": {
+            "JLM": 17,
+            "FRo": 1.5,
+            "FR": 2,
+            "MT": 2,
+            "RG": 8,
+            "GA": 4.5,
+            "EP": 10,
+            "DV": 1.5,
+            "BR": 4,
+            "DL": 8,
+            "NDA": 1.5,
+            "MLP": 32,
+            "EZ": 3,
+            "NP": 1,
+            "TR": 4
+          }
+        },
+        {
+          "label": "Hypothèse avec quatre candidats de la droite et/ou du centre",
+          "results": {
+            "NA": 0.5,
+            "JLM": 19,
+            "FRo": 1.5,
+            "MT": 2.5,
+            "RG": 10,
+            "GA": 4,
+            "EP": 11,
+            "BR": 4,
+            "DL": 9,
+            "NDA": 1.5,
+            "MLP": 34,
+            "EZ": 3
+          }
+        },
+        {
+          "label": "Hypothèse E. Philippe, B. Retailleau et D. Lisnard",
+          "results": {
+            "JLM": 19.5,
+            "FRo": 2.5,
+            "MT": 2.5,
+            "RG": 10,
+            "EP": 12,
+            "BR": 4,
+            "DL": 10,
+            "NDA": 1.5,
+            "MLP": 35,
+            "EZ": 3
+          }
+        },
+        {
+          "label": "Hypothèse G. Attal, B. Retailleau et D. Lisnard",
+          "results": {
+            "NA": 0.5,
+            "JLM": 19,
+            "FRo": 2,
+            "MT": 2.5,
+            "RG": 11,
+            "GA": 9,
+            "BR": 5,
+            "DL": 11,
+            "NDA": 2,
+            "MLP": 35,
+            "EZ": 3
+          }
+        },
+        {
+          "label": "Hypothèse E. Philippe et D. Lisnard",
+          "results": {
+            "NA": 0.5,
+            "JLM": 19.5,
+            "FRo": 2,
+            "MT": 2.5,
+            "RG": 11,
+            "EP": 14,
+            "DL": 12,
+            "NDA": 1.5,
+            "MLP": 34,
+            "EZ": 3
+          }
+        }
+      ]
     }
   ]
 }
