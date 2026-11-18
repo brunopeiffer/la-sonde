@@ -761,7 +761,15 @@
       "tries": 0,
       "status": "relevée (1 sondage(s) ajouté(s))",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10384-pres-iv-ifop-18-novembre.pdf"
+    },
+    "10386": {
+      "fid": "2408",
+      "title": "10386 Pres programmes ELABE 18 novembre",
+      "pub": "2026-11-18",
+      "inst": "ELABE",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-18T13:55:27.155Z"
+  "checked": "2026-11-18T19:24:27.421Z"
 }
