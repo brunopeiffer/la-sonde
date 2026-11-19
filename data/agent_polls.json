@@ -1478,6 +1478,148 @@
           }
         }
       ]
+    },
+    {
+      "survey": "20261112_1117_yo_ag1",
+      "institute": "YouGov",
+      "sponsor": "Le HuffPost",
+      "start": "2026-11-12",
+      "end": "2026-11-17",
+      "n": 952,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10382-pres-iv-yougov-le-huffpost-19-novembre.pdf",
+      "foundAt": "2026-11-19",
+      "hypotheses": [
+        {
+          "label": "Hypothèse 1",
+          "results": {
+            "BR": 6,
+            "EP": 8,
+            "EZ": 3,
+            "FRo": 2,
+            "GA": 5,
+            "JLM": 19,
+            "MLP": 32,
+            "MT": 4,
+            "NA": 1,
+            "NDA": 2,
+            "RG": 9,
+            "DL": 9
+          }
+        },
+        {
+          "label": "Hypothèse 2 (sans Édouard Philippe)",
+          "results": {
+            "BR": 8,
+            "EZ": 3,
+            "FRo": 2,
+            "GA": 7,
+            "JLM": 19,
+            "MLP": 34,
+            "MT": 6,
+            "NA": 1,
+            "NDA": 1,
+            "RG": 10,
+            "DL": 10
+          }
+        },
+        {
+          "label": "Hypothèse 3 (sans Gabriel Attal)",
+          "results": {
+            "BR": 7,
+            "EZ": 3,
+            "FRo": 3,
+            "EP": 9,
+            "JLM": 19,
+            "MLP": 33,
+            "MT": 4,
+            "NA": 1,
+            "NDA": 2,
+            "RG": 10,
+            "DL": 10
+          }
+        },
+        {
+          "label": "Hypothèse 4",
+          "results": {
+            "EZ": 4,
+            "FRo": 3,
+            "EP": 16,
+            "JLM": 22,
+            "MLP": 40,
+            "NA": 1,
+            "NDA": 2,
+            "RG": 12
+          }
+        },
+        {
+          "label": "Hypothèse 5 (avec Dominique de Villepin et Teddy Riner)",
+          "results": {
+            "BR": 6,
+            "EP": 7,
+            "EZ": 3,
+            "FRo": 2,
+            "GA": 4,
+            "JLM": 17,
+            "MLP": 32,
+            "MT": 5,
+            "NA": 1,
+            "NDA": 2,
+            "RG": 9,
+            "DL": 9,
+            "DV": 2,
+            "TR": 3
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261112_1117_yo_ag2",
+      "institute": "YouGov",
+      "sponsor": "Le HuffPost",
+      "start": "2026-11-12",
+      "end": "2026-11-17",
+      "n": 952,
+      "round": 2,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10382-pres-iv-yougov-le-huffpost-19-novembre.pdf",
+      "foundAt": "2026-11-19",
+      "hypotheses": [
+        {
+          "label": "Hypothèse 1",
+          "results": {
+            "EP": 46,
+            "MLP": 54
+          }
+        },
+        {
+          "label": "Hypothèse 2",
+          "results": {
+            "RG": 42,
+            "MLP": 58
+          }
+        },
+        {
+          "label": "Hypothèse 3",
+          "results": {
+            "JLM": 37,
+            "MLP": 63
+          }
+        },
+        {
+          "label": "Hypothèse 4",
+          "results": {
+            "GA": 45,
+            "MLP": 55
+          }
+        },
+        {
+          "label": "Hypothèse 5",
+          "results": {
+            "EP": 61,
+            "JLM": 39
+          }
+        }
+      ]
     }
   ]
 }

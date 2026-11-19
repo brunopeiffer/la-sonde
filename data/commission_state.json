@@ -745,6 +745,15 @@
       "status": "sans intentions de vote",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10381-pres-participation-2nd-tour-jl-melenchon-m-le-pen-ifop-franc-tireur-18-novembre.pdf"
     },
+    "10382": {
+      "fid": "2410",
+      "title": "10382 Pres IV YOUGOV Le Huffpost 19 novembre",
+      "pub": "2026-11-19",
+      "inst": "YouGov",
+      "tries": 0,
+      "status": "relevée (2 sondage(s) ajouté(s))",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10382-pres-iv-yougov-le-huffpost-19-novembre.pdf"
+    },
     "10383": {
       "fid": "2407",
       "title": "10383 Pres logement IFOP 18 novembre",
@@ -769,7 +778,23 @@
       "inst": "ELABE",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10387": {
+      "fid": "2409",
+      "title": "10387 Pres primaire centre droite IFOP 18 novembre",
+      "pub": "2026-11-18",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10388": {
+      "fid": "2412",
+      "title": "10388 Pres radioscopie du peuple de droite IFOP Valeurs actuelles 19 novembre",
+      "pub": "2026-11-19",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-18T19:24:27.421Z"
+  "checked": "2026-11-19T14:23:13.508Z"
 }
