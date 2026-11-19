@@ -794,7 +794,15 @@
       "inst": "IFOP",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10389": {
+      "fid": "2413",
+      "title": "10389 Pres vieillissement IFOP 19 novembre",
+      "pub": "2026-11-19",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-19T14:23:13.508Z"
+  "checked": "2026-11-19T19:29:14.509Z"
 }
