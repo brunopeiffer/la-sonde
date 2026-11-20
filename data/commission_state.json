@@ -802,7 +802,15 @@
       "inst": "IFOP",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10391": {
+      "fid": "2415",
+      "title": "10391 Pres mouvements lyceens et etudiants ODOXA 19 novembre",
+      "pub": "2026-11-19",
+      "inst": "ODOXA",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-19T19:29:14.509Z"
+  "checked": "2026-11-20T13:58:25.638Z"
 }

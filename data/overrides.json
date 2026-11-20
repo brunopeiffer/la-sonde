@@ -40,6 +40,14 @@
       "en": "Dominique de Villepin confirmed on 3 November 2026 that he would enter the race for the Élysée, without yet having officially announced his candidacy.",
       "source": "https://www.cnews.fr/france/2026-11-03/presidentielle-2027-dominique-de-villepin-sera-bien-candidat-mais-attend-avant-de",
       "agent": true
+    },
+    {
+      "id": "TR",
+      "date": "2026-11-09",
+      "fr": "Le judoka Teddy Riner a annoncé, dans un entretien au Parisien, sa candidature à l'élection présidentielle de 2027.",
+      "en": "Judoka Teddy Riner announced, in an interview with Le Parisien, that he is running in the 2027 French presidential election.",
+      "source": "https://www.cnews.fr/france/2026-11-09/presidentielle-2027-le-judoka-teddy-riner-annonce-sa-candidature-1950691",
+      "agent": true
     }
   ],
   "required": [
@@ -52,5 +60,5 @@
       }
     }
   ],
-  "lastCheck": "2026-11-13"
+  "lastCheck": "2026-11-20"
 }

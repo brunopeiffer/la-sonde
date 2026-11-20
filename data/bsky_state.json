@@ -1,10 +1,10 @@
 {
-  "day": "2026-11-19",
+  "day": "2026-11-20",
   "asOf": "2026-11-17",
-  "lastSurvey": "20261112_1117_yo_ag1",
-  "postedAt": "2026-11-19T14:23:38.054Z",
-  "uri": "at://did:plc:lex3hqga4vdth7qlhbfwbtue/app.bsky.feed.post/3n2objv3u7r2v",
-  "format": "reports",
+  "lastSurvey": "20261112_1117_yg",
+  "postedAt": "2026-11-20T13:58:51.528Z",
+  "uri": "at://did:plc:lex3hqga4vdth7qlhbfwbtue/app.bsky.feed.post/3n2qqmjclps2m",
+  "format": "y2022",
   "history": [
     {
       "at": "2026-10-23T11:20:22.351Z",
@@ -130,6 +130,11 @@
       "at": "2026-11-19T14:23:38.054Z",
       "format": "reports",
       "hash": "425e7e98c5e2"
+    },
+    {
+      "at": "2026-11-20T13:58:51.528Z",
+      "format": "y2022",
+      "hash": "d37bce19319f"
     }
   ]
 }
