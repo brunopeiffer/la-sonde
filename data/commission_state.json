@@ -810,7 +810,15 @@
       "inst": "ODOXA",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10392": {
+      "fid": "2416",
+      "title": "10392 Pres IV IFOP Sud Radio 20 novembre",
+      "pub": "2026-11-20",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "déjà dans la base"
     }
   },
-  "checked": "2026-11-20T13:58:25.638Z"
+  "checked": "2026-11-20T19:06:17.985Z"
 }
