@@ -179,3 +179,5 @@ Object.assign(window.I18N.es, {"dec.with": "con", "dec.without": "sin"});
 Object.assign(window.I18N.es, {"pod.modeA": "Media de encuestas", "pod.modeB": "Si todos se presentaran", "pod.fbVs": "media", "pod.fbEx": "{c} gana {v} pts cuando {r} no está", "pod.fbNote": "Estimación de La Sonde: cada resultado obtenido sin un rival se corrige con la diferencia medida en las mismas encuestas ({ex}), para comparar a todos en la misma papeleta. A la derecha, la media de encuestas para comparar. No es una encuesta."});
 
 Object.assign(window.I18N.es, {"r2.missing": "Nunca probados por los institutos hasta ahora: {l}. Su resultado solo se estima en el simulador de abajo."});
+
+Object.assign(window.I18N.es, {"race.ext": "Prolongar la tendencia", "race.ext0": "No", "race.ext30": "+1 mes", "race.ext60": "+2 meses", "race.extZone": "si la tendencia continúa", "race.extTip": "si la tendencia continúa", "race.extNote": "Punteado: adónde llevaría la tendencia de las últimas 5 semanas si continuara, frenándose poco a poco. No es una previsión: una retirada, un apoyo o cualquier acontecimiento puede cambiarlo todo. La zona sombreada indica el margen (80 %)."});

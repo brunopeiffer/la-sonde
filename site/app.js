@@ -385,7 +385,7 @@
     let ymax = 5, ymin = 100;
     for (const c of vis) {
       D.series[c].v.forEach((v, i) => { if (v != null && days[i] >= x0) { ymax = Math.max(ymax, v); ymin = Math.min(ymin, v); } });
-      MOM[c].proj.forEach(p => { ymax = Math.max(ymax, p.hi); ymin = Math.min(ymin, p.lo); });
+      MOM[c].proj.filter(p => p.k <= 30).forEach(p => { ymax = Math.max(ymax, p.hi); ymin = Math.min(ymin, p.lo); });
     }
     if (!vis.length) ymin = 0;
     const x = d3.scaleTime().domain([x0, x1]).range([m.l, W - m.r]);
@@ -403,7 +403,7 @@
     const ends = [];
     for (const c of vis) {
       const S = D.series[c], pts = days.map((d, i) => ({ d, v: S.v[i] })).filter(p => p.d >= x0 && p.v != null);
-      const P = MOM[c].proj.map(p => ({ d: new Date(+last + p.k * DAY), ...p }));
+      const P = MOM[c].proj.filter(p => p.k <= 30).map(p => ({ d: new Date(+last + p.k * DAY), ...p }));
       g.append('path').datum(P).attr('fill', col(c)).attr('opacity', .13)
         .attr('d', d3.area().x(p => x(p.d)).y0(p => y(p.lo)).y1(p => y(p.hi)).curve(d3.curveMonotoneX));
       g.append('path').datum(pts).attr('fill', 'none').attr('stroke', col(c)).attr('stroke-width', 2.25)
@@ -441,11 +441,19 @@
   }
 
   // ---------- La course ----------
-  const race = { range: store.get('range') || '6m', on: null, dots: true, ev: true };
+  const race = { range: store.get('range') || '6m', ext: +(store.get('ext') || 0), on: null, dots: true, ev: true };
   function renderRaceControls() {
     const seg = $('#rangeSeg');
     seg.innerHTML = ['3m', '6m', '1y', 'all'].map(r => `<button aria-pressed="${race.range === r}" data-r="${r}">${t('range.' + r)}</button>`).join('');
     seg.onclick = e => { const b = e.target.closest('button'); if (!b) return; race.range = b.dataset.r; store.set('range', race.range); renderRaceControls(); drawRace(); };
+    // Prolonger la tendance : non / 1 mois / 2 mois (projection amortie du modèle, pas une prévision).
+    const xs = $('#extSeg');
+    if (xs) {
+      if (D.features.projection === false) { xs.parentNode.hidden = true; race.ext = 0; }
+      xs.innerHTML = [0, 30, 60].map(k => `<button aria-pressed="${race.ext === k}" data-k="${k}">${t('race.ext' + k)}</button>`).join('');
+      xs.onclick = e => { const b = e.target.closest('button'); if (!b) return; race.ext = +b.dataset.k; store.set('ext', String(race.ext)); renderRaceControls(); drawRace(); };
+      const n = $('#extNote'); if (n) n.hidden = !race.ext;
+    }
     // Présélection : même règle que le classement (candidats déclarés à 5 % ou plus, au moins 4).
     if (!race.on) { const d = D.standings.filter(s => s.declared), t5 = d.filter(s => s.v >= 5); race.on = new Set((t5.length >= 4 ? t5 : d.slice(0, 4)).map(s => s.c)); }
     const ids = D.standings.map(s => s.c);
@@ -458,15 +466,19 @@
     const host = $('#raceChart'); host.querySelectorAll('svg').forEach(n => n.remove());
     const W = host.clientWidth, mobile = W < 600, H = mobile ? 360 : 440;
     if (!W) return;   // section masquée (autre thème) : on dessinera à l'ouverture
-    const m = { t: 12, r: mobile ? 92 : 128, b: 46, l: 34 };
+    const m = { t: 12, r: mobile ? (race.ext ? 112 : 92) : 128, b: 46, l: 34 };
     const last = new Date(D.days[D.days.length - 1] + 'T12:00:00Z');
     const span = { '3m': 92, '6m': 183, '1y': 366, all: 4000 }[race.range];
     const x0 = new Date(Math.max(Date.parse(D.days[0] + 'T12:00:00Z'), last - span * DAY));
     const days = D.days.map(d => new Date(d + 'T12:00:00Z'));
     const vis = D.standings.map(s => s.c).filter(c => race.on.has(c) && D.series[c]);
+    const MOM = D.momentum || {}, ext = race.ext || 0, xEnd = new Date(+last + ext * DAY);
+    const PJ = {};   // projection par candidat (jusqu'à ext jours)
+    if (ext) for (const c of vis) { const pr = MOM[c] && MOM[c].proj; if (pr && pr.some(p => p.k >= ext)) PJ[c] = pr.filter(p => p.k <= ext).map(p => ({ d: new Date(+last + p.k * DAY), ...p })); }
     let ymax = 10;
     for (const c of vis) D.series[c].v.forEach((v, i) => { if (v != null && days[i] >= x0) ymax = Math.max(ymax, v + (D.series[c].b[i] || 0)); });
-    const x = d3.scaleTime().domain([x0, last]).range([m.l, W - m.r]);
+    for (const c in PJ) PJ[c].forEach(p => { ymax = Math.max(ymax, p.hi); });
+    const x = d3.scaleTime().domain([x0, xEnd]).range([m.l, W - m.r]);
     const y = d3.scaleLinear().domain([0, Math.ceil((ymax + 2) / 5) * 5]).range([H - m.b, m.t]);
     const svg = d3.select(host).append('svg').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', t('race.title'));
     svg.append('g').attr('class', 'gridl').attr('transform', `translate(${m.l},0)`).call(d3.axisLeft(y).ticks(6).tickSize(-(W - m.l - m.r)).tickFormat(''));
@@ -476,6 +488,12 @@
     const clip = 'clip' + Math.random().toString(36).slice(2);
     svg.append('clipPath').attr('id', clip).append('rect').attr('x', m.l).attr('y', 0).attr('width', W - m.l - m.r).attr('height', H);
     const g = svg.append('g').attr('clip-path', `url(#${clip})`);
+    // Zone « si la tendance se poursuit »
+    if (ext) {
+      svg.insert('rect', '.axis').attr('x', x(last)).attr('y', m.t).attr('width', x(xEnd) - x(last)).attr('height', H - m.b - m.t).attr('fill', css('--surface-2')).attr('opacity', .55);
+      svg.append('line').attr('x1', x(last)).attr('x2', x(last)).attr('y1', m.t).attr('y2', H - m.b).attr('stroke', css('--ink-2')).attr('stroke-dasharray', '3 3');
+      if (!mobile) svg.append('text').attr('class', 'lbl').attr('x', x(last) + 6).attr('y', m.t + 12).attr('fill', css('--muted')).style('font-size', '11px').text(t('race.extZone'));
+    }
     // Événements
     if (race.ev) {
       const evs = D.events.filter(e => new Date(e.date + 'T12:00:00Z') >= x0 && (!e.c || vis.includes(e.c) || e.major));
@@ -511,15 +529,26 @@
         band.attr('opacity', 0).transition().delay(500).duration(900).attr('opacity', .14);
       }
     }
+    // Prolongement : pointillés + marge (80 %) qui s'élargit
+    for (const c in PJ) {
+      const P = PJ[c];
+      g.append('path').datum(P).attr('fill', col(c)).attr('opacity', .1)
+        .attr('d', d3.area().x(p => x(p.d)).y0(p => y(p.lo)).y1(p => y(p.hi)).curve(d3.curveMonotoneX));
+      g.append('path').datum(P).attr('fill', 'none').attr('stroke', col(c)).attr('stroke-width', 2).attr('stroke-dasharray', '5 4')
+        .attr('d', d3.line().x(p => x(p.d)).y(p => y(p.v)).curve(d3.curveMonotoneX));
+    }
     // Étiquettes de fin de ligne
     // Étiquette au dernier point disponible (un candidat peu testé peut s'arrêter avant la fin).
-    const li = declutter(vis.map(c => { let i = days.length - 1; while (i >= 0 && D.series[c].v[i] == null) i--; if (i < 0 || days[i] < x0) return null; const v = D.series[c].v[i]; return { c, v, y: y(v), i }; }).filter(Boolean), 15, m.t + 6, H - m.b);
+    const li = declutter(vis.map(c => { let i = days.length - 1; while (i >= 0 && D.series[c].v[i] == null) i--; if (i < 0 || days[i] < x0) return null; const v = D.series[c].v[i];
+      if (PJ[c]) { const e = PJ[c][PJ[c].length - 1]; return { c, v, i, pv: e.v, y: y(e.v) }; }
+      return { c, v, y: y(v), i }; }).filter(Boolean), 15, m.t + 6, H - m.b);
     const lg = svg.append('g');
     if (animNow) { lg.attr('opacity', 0).transition().delay(1100).duration(400).attr('opacity', 1); g.selectAll('circle').attr('opacity', 0).transition().delay(900).duration(600).attr('opacity', .28); }
     li.forEach(l => {
       lg.append('circle').attr('cx', x(days[l.i])).attr('cy', y(l.v)).attr('r', 4).attr('fill', col(l.c)).attr('stroke', css('--surface')).attr('stroke-width', 2);
-      lg.append('text').attr('class', 'lbl v').attr('x', x(last) + 9).attr('y', l.y + 4).text(fmt(l.v));
-      lg.append('text').attr('class', 'lbl').attr('x', x(last) + (mobile ? 40 : 44)).attr('y', l.y + 4).text(sh(l.c));
+      // Avec prolongement, l'étiquette donne la valeur au bout des pointillés (≈).
+      lg.append('text').attr('class', 'lbl v').attr('x', x(xEnd) + 9).attr('y', l.y + 4).text(l.pv != null ? '≈' + fmt(l.pv) : fmt(l.v));
+      lg.append('text').attr('class', 'lbl').attr('x', x(xEnd) + (mobile ? 50 : 50)).attr('y', l.y + 4).text(sh(l.c));
     });
     // Survol : réticule + infobulle
     const tip = tipFor(host);
@@ -528,6 +557,14 @@
     svg.append('rect').attr('x', m.l).attr('y', m.t).attr('width', W - m.l - m.r).attr('height', H - m.t - m.b - 18).attr('fill', 'transparent')
       .on('pointermove', ev => {
         const [px] = d3.pointer(ev); const dt = x.invert(px);
+        if (ext && dt > last) {   // survol de la zone prolongée
+          const k = Math.min(ext, Math.round((dt - last) / DAY / 5) * 5), cx = x(new Date(+last + k * DAY));
+          cross.attr('x1', cx).attr('x2', cx).attr('opacity', .5);
+          const rows = Object.keys(PJ).map(c => ({ c, p: PJ[c].find(p => p.k === k) })).filter(r => r.p).sort((a, b) => b.p.v - a.p.v);
+          hov.selectAll('circle').data(rows).join('circle').attr('cx', cx).attr('cy', r => y(r.p.v)).attr('r', 4.5).attr('fill', r => col(r.c)).attr('stroke', css('--surface')).attr('stroke-width', 2);
+          tip.show(`<h4>${fdate(new Date(+last + k * DAY).toISOString().slice(0, 10))} · ${esc(t('race.extTip'))}</h4>` + rows.map(r => `<div class="r"><span><i style="background:${col(r.c)}"></i>${esc(sh(r.c))}</span><b class="num">≈${fmt(r.p.v)}${pct} <small style="opacity:.6">(${fmt(r.p.lo)}–${fmt(r.p.hi)})</small></b></div>`).join(''), cx, d3.pointer(ev)[1]);
+          return;
+        }
         const i = Math.max(0, Math.min(days.length - 1, d3.bisectCenter(days.map(d => +d), +dt)));
         const cx = x(days[i]); cross.attr('x1', cx).attr('x2', cx).attr('opacity', .5);
         const rows = vis.map(c => ({ c, v: D.series[c].v[i] })).filter(r => r.v != null).sort((a, b) => b.v - a.v);

@@ -179,3 +179,5 @@ Object.assign(window.I18N.it, {"dec.with": "con", "dec.without": "senza"});
 Object.assign(window.I18N.it, {"pod.modeA": "Media dei sondaggi", "pod.modeB": "Se tutti si candidassero", "pod.fbVs": "media", "pod.fbEx": "{c} guadagna {v} punti quando {r} è assente", "pod.fbNote": "Stima di La Sonde: ogni risultato ottenuto senza un rivale è corretto con lo scarto misurato negli stessi sondaggi ({ex}), per confrontare tutti sulla stessa scheda. A destra, la media dei sondaggi per confronto. Non è un sondaggio."});
 
 Object.assign(window.I18N.it, {"r2.missing": "Mai testati dagli istituti finora: {l}. Il loro esito è solo stimato nel simulatore qui sotto."});
+
+Object.assign(window.I18N.it, {"race.ext": "Prolunga la tendenza", "race.ext0": "No", "race.ext30": "+1 mese", "race.ext60": "+2 mesi", "race.extZone": "se la tendenza continua", "race.extTip": "se la tendenza continua", "race.extNote": "Tratteggio: dove porterebbe la tendenza delle ultime 5 settimane se continuasse, rallentando gradualmente. Non è una previsione: un ritiro, un sostegno o un evento può cambiare tutto. L'area colorata indica il margine (80 %)."});

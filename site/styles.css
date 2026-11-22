@@ -802,3 +802,8 @@ body.cpage.seo .chero h1 span { display: block; }
 .pmode button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.12)}
 .duel .undecl{font-style:normal;font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:1px 7px;margin-left:6px}
 .r2miss{margin-top:10px}
+
+/* Prolonger la tendance (course) */
+.extwrap { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.extlbl { font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.extnote { margin: 8px 0 0; font-size: 12.5px; color: var(--muted); line-height: 1.45; }

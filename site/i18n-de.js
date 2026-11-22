@@ -179,3 +179,5 @@ Object.assign(window.I18N.de, {"dec.with": "mit", "dec.without": "ohne"});
 Object.assign(window.I18N.de, {"pod.modeA": "Umfragedurchschnitt", "pod.modeB": "Wenn alle anträten", "pod.fbVs": "Durchschnitt", "pod.fbEx": "{c} gewinnt {v} Pkt., wenn {r} fehlt", "pod.fbNote": "Schätzung von La Sonde: Jeder ohne einen Rivalen erzielte Wert wird um die in denselben Umfragen gemessene Abweichung korrigiert ({ex}), damit alle Kandidaten auf demselben Stimmzettel verglichen werden. Rechts zum Vergleich der Umfragedurchschnitt. Keine Umfrage."});
 
 Object.assign(window.I18N.de, {"r2.missing": "Bisher von keinem Institut getestet: {l}. Ihr Ausgang wird nur im Simulator unten geschätzt."});
+
+Object.assign(window.I18N.de, {"race.ext": "Trend verlängern", "race.ext0": "Nein", "race.ext30": "+1 Monat", "race.ext60": "+2 Monate", "race.extZone": "wenn der Trend anhält", "race.extTip": "wenn der Trend anhält", "race.extNote": "Gepunktet: wohin der Trend der letzten 5 Wochen führen würde, wenn er sich allmählich abschwächend fortsetzte. Keine Prognose: ein Rückzug, eine Unterstützung oder ein Ereignis kann alles ändern. Die Fläche zeigt die Spanne (80 %)."});

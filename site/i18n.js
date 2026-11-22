@@ -380,3 +380,7 @@ Object.assign(window.I18N.en, {"pod.modeA": "Polling average", "pod.modeB": "If 
 Object.assign(window.I18N.fr, {"r2.missing": "Jamais testés par les instituts à ce jour : {l}. Leur issue n'est estimée que dans le simulateur ci-dessous."});
 
 Object.assign(window.I18N.en, {"r2.missing": "Never tested by pollsters so far: {l}. Their outcome is only estimated in the simulator below."});
+
+Object.assign(window.I18N.fr, {"race.ext": "Prolonger la tendance", "race.ext0": "Non", "race.ext30": "+1 mois", "race.ext60": "+2 mois", "race.extZone": "si la tendance se poursuit", "race.extTip": "si la tendance se poursuit", "race.extNote": "Pointillés : où mènerait la tendance des 5 dernières semaines si elle se poursuivait, en ralentissant peu à peu. Ce n'est pas une prévision : un retrait, un ralliement ou un événement peut tout changer. La zone colorée donne la marge (80 %)."});
+
+Object.assign(window.I18N.en, {"race.ext": "Extend the trend", "race.ext0": "No", "race.ext30": "+1 month", "race.ext60": "+2 months", "race.extZone": "if the trend continues", "race.extTip": "if the trend continues", "race.extNote": "Dotted lines: where the last 5 weeks' trend would lead if it continued, gradually slowing down. This is not a forecast: a withdrawal, an endorsement or any event can change everything. The shaded area shows the margin (80%)."});
