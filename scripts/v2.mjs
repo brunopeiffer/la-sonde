@@ -31,7 +31,8 @@ export function momentum(FR, standings) {
     const d14 = 14 * b, pUp = normCdf(b / se);
     const state = pUp >= 0.9 && d14 >= 0.4 ? 'up' : pUp <= 0.1 && d14 <= -0.4 ? 'down' : 'flat';
     const sd0 = (s.band || 1) / 1.96;
-    const proj = [0, 5, 10, 15, 20, 25, 30].map(k => {
+    // Jusqu'à 60 jours (la course peut prolonger d'un ou deux mois) ; la tendance s'amortit avec le temps.
+    const proj = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60].map(k => {
       const v = s.v + b * S(k), sd = Math.sqrt((S(k) * se) ** 2 + sd0 ** 2 * (k ? 1 : 0) + 0.05 * k);
       return { k, v: round1(v), lo: round1(Math.max(0, v - Z80 * sd)), hi: round1(v + Z80 * sd), sd };
     });

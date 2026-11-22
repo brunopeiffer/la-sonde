@@ -106,7 +106,9 @@ function firstRound(polls) {
   const gridAll = []; for (let t = start; t <= end; t++) gridAll.push(t);
   const ids = {};
   for (const p of r1) for (const c in p.results) ids[c] = (ids[c] || 0) + 1;
-  const cands = Object.keys(ids).filter(c => ids[c] >= 6);
+  // Au moins 6 tests ; 3 suffisent pour un candidat déclaré (nouvel entrant encore peu testé).
+  const dcl = new Set(ROSTER.filter(r => r.annonce_candidature && !r.retrait_candidature).map(r => r.candidate_id));
+  const cands = Object.keys(ids).filter(c => ids[c] >= 6 || (dcl.has(c) && ids[c] >= 3));
 
   const house = {}; // house[c][inst] = effet
   const trends = {};
