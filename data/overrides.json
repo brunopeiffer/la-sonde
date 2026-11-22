@@ -14,6 +14,13 @@
       "fr": "Ségolène Royal, battue à la primaire socialiste, n'est plus candidate",
       "en": "Ségolène Royal, beaten in the Socialist primary, is no longer running",
       "source": "https://lcp.fr/actualites/primaire-socialiste-vainqueur-des-le-1er-tour-raphael-glucksmann-sera-le-candidat-de-la"
+    },
+    {
+      "id": "FR",
+      "date": "2026-11-22",
+      "fr": "François Ruffin retire sa candidature, sans soutenir d'autre candidat",
+      "en": "François Ruffin withdraws his candidacy, without endorsing another candidate",
+      "source": "https://www.ouest-france.fr/elections/presidentielle/presidentielle-2027-francois-ruffin-retire-sa-candidature-2e91a6fc-e5cd-11f1-bd4e-6f30b8f49e21"
     }
   ],
   "declarations": [
@@ -60,5 +67,5 @@
       }
     }
   ],
-  "lastCheck": "2026-11-20"
+  "lastCheck": "2026-11-22"
 }

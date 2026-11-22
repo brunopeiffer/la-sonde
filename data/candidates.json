@@ -193,5 +193,12 @@
   },
   "_default": {
     "color": "#9aa0ad"
+  },
+  "TR": {
+    "name": "Teddy Riner",
+    "short": "Riner",
+    "party": "Sans étiquette",
+    "color": "#c9a227",
+    "colorDark": "#e0bd4a"
   }
 }
