@@ -818,7 +818,24 @@
       "inst": "IFOP",
       "tries": 0,
       "status": "déjà dans la base"
+    },
+    "10393": {
+      "fid": "2417",
+      "title": "10393 Pres IV Vague 10 TOLUNA HARRIS INTERACTIVE 23 novembre",
+      "pub": "2026-11-23",
+      "inst": "Toluna Harris Interactive",
+      "tries": 0,
+      "status": "relevée (2 sondage(s) ajouté(s))",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10393-pres-iv-vague-10-toluna-harris-interactive-23-novembre.pdf"
+    },
+    "10394": {
+      "fid": "2418",
+      "title": "10394 Pres indices popularite IFOP 22 novembre",
+      "pub": "2026-11-22",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-22T18:56:18.148Z"
+  "checked": "2026-11-23T15:55:07.094Z"
 }

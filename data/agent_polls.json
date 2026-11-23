@@ -1620,6 +1620,94 @@
           }
         }
       ]
+    },
+    {
+      "survey": "20261118_1119_to_ag1",
+      "institute": "Toluna Harris Interactive",
+      "sponsor": "M6, RTL, L'Express",
+      "start": "2026-11-18",
+      "end": "2026-11-19",
+      "n": 2088,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10393-pres-iv-vague-10-toluna-harris-interactive-23-novembre.pdf",
+      "foundAt": "2026-11-23",
+      "hypotheses": [
+        {
+          "label": "Hypothèse Gabriel Attal et Édouard Philippe",
+          "results": {
+            "NA": 1,
+            "JLM": 18,
+            "FRo": 1,
+            "MT": 1,
+            "RG": 11,
+            "GA": 4,
+            "EP": 9,
+            "DV": 1,
+            "DL": 11,
+            "BR": 4,
+            "NDA": 1,
+            "MLP": 31,
+            "EZ": 3,
+            "TR": 4
+          }
+        },
+        {
+          "label": "Hypothèse Édouard Philippe",
+          "results": {
+            "NA": 1,
+            "JLM": 19,
+            "FRo": 1,
+            "MT": 1,
+            "RG": 11,
+            "EP": 10,
+            "DV": 2,
+            "DL": 11,
+            "BR": 4,
+            "NDA": 1,
+            "MLP": 31,
+            "EZ": 4,
+            "TR": 4
+          }
+        },
+        {
+          "label": "Hypothèse Gabriel Attal",
+          "results": {
+            "NA": 1,
+            "JLM": 19,
+            "FRo": 1,
+            "MT": 2,
+            "RG": 11,
+            "GA": 7,
+            "DV": 2,
+            "DL": 12,
+            "BR": 5,
+            "NDA": 1,
+            "MLP": 30,
+            "EZ": 4,
+            "TR": 5
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261118_1119_to_ag2",
+      "institute": "Toluna Harris Interactive",
+      "sponsor": "M6, RTL, L'Express",
+      "start": "2026-11-18",
+      "end": "2026-11-19",
+      "n": 2088,
+      "round": 2,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10393-pres-iv-vague-10-toluna-harris-interactive-23-novembre.pdf",
+      "foundAt": "2026-11-23",
+      "hypotheses": [
+        {
+          "label": "Hypothèse Marine Le Pen et Jean-Luc Mélenchon",
+          "results": {
+            "MLP": 65,
+            "JLM": 35
+          }
+        }
+      ]
     }
   ]
 }
