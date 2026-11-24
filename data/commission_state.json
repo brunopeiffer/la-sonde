@@ -835,7 +835,16 @@
       "inst": "IFOP",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10395": {
+      "fid": "2419",
+      "title": "10395 Pres barometre politique ODOXA 24 novembre",
+      "pub": "2026-11-24",
+      "inst": "ODOXA",
+      "tries": 0,
+      "status": "sans intentions de vote",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10395-pres-barometre-politique-odoxa-24-novembre.pdf"
     }
   },
-  "checked": "2026-11-23T22:38:58.142Z"
+  "checked": "2026-11-24T15:48:42.190Z"
 }
