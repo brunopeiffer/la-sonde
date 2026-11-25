@@ -1,10 +1,10 @@
 {
-  "day": "2026-11-24",
+  "day": "2026-11-25",
   "asOf": "2026-11-19",
-  "lastSurvey": "20261118_1119_to_ag1",
-  "postedAt": "2026-11-24T15:49:07.648Z",
-  "uri": "at://did:plc:lex3hqga4vdth7qlhbfwbtue/app.bsky.feed.post/3n32ynemw5m2q",
-  "format": "duels",
+  "lastSurvey": "20261118_1119_hi",
+  "postedAt": "2026-11-25T15:33:32.916Z",
+  "uri": "at://did:plc:lex3hqga4vdth7qlhbfwbtue/app.bsky.feed.post/3n35iahitge2x",
+  "format": "qualif",
   "history": [
     {
       "at": "2026-10-23T11:20:22.351Z",
@@ -150,6 +150,11 @@
       "at": "2026-11-24T15:49:07.648Z",
       "format": "duels",
       "hash": "f03f78b77b19"
+    },
+    {
+      "at": "2026-11-25T15:33:32.916Z",
+      "format": "qualif",
+      "hash": "0bf9f9677952"
     }
   ]
 }
