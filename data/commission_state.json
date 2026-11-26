@@ -844,7 +844,31 @@
       "tries": 0,
       "status": "sans intentions de vote",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10395-pres-barometre-politique-odoxa-24-novembre.pdf"
+    },
+    "10397": {
+      "fid": "2422",
+      "title": "10397 Pres tableau de bord des personnalites IFOP 24 novembre",
+      "pub": "2026-11-24",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10398": {
+      "fid": "2421",
+      "title": "10398 Pres primaire droite et centre calendrier ELABE 25 novembre",
+      "pub": "2026-11-25",
+      "inst": "ELABE",
+      "tries": 0,
+      "status": "hors sujet"
+    },
+    "10399": {
+      "fid": "2420",
+      "title": "10399 Pres sphere locale IFOP Regions magazine 26 novembre",
+      "pub": "2026-11-26",
+      "inst": "IFOP",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-25T20:28:34.372Z"
+  "checked": "2026-11-26T15:07:38.999Z"
 }
