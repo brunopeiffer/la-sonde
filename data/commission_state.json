@@ -868,7 +868,24 @@
       "inst": "IFOP",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10400": {
+      "fid": "2424",
+      "title": "10400 Pres IV Vague 5 OPINIONWAY 26 novembre",
+      "pub": "2026-11-26",
+      "inst": "OpinionWay",
+      "tries": 0,
+      "status": "relevée (2 sondage(s) ajouté(s))",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10400-pres-iv-vague-5-opinionway-26-novembre.pdf"
+    },
+    "10401": {
+      "fid": "2425",
+      "title": "10401 Pres duel E Philippe D Lisnard OPINIONWAY 26 novembre",
+      "pub": "2026-11-26",
+      "inst": "OpinionWay",
+      "tries": 0,
+      "status": "hors sujet"
     }
   },
-  "checked": "2026-11-26T15:07:38.999Z"
+  "checked": "2026-11-26T20:11:50.217Z"
 }

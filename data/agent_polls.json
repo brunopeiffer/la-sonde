@@ -1708,6 +1708,80 @@
           }
         }
       ]
+    },
+    {
+      "survey": "20261125_1126_op_ag1",
+      "institute": "OpinionWay",
+      "sponsor": "CNews",
+      "start": "2026-11-25",
+      "end": "2026-11-26",
+      "n": 912,
+      "round": 1,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10400-pres-iv-vague-5-opinionway-26-novembre.pdf",
+      "foundAt": "2026-11-26",
+      "hypotheses": [
+        {
+          "label": "Premier tour (liste de base)",
+          "results": {
+            "NA": 1,
+            "JLM": 16,
+            "FRo": 2,
+            "MT": 1,
+            "RG": 10,
+            "KB": 0.5,
+            "DV": 2,
+            "GA": 4,
+            "EP": 8,
+            "TR": 2,
+            "BR": 4,
+            "DL": 12,
+            "NDA": 2,
+            "EZ": 3,
+            "MLP": 33
+          }
+        }
+      ]
+    },
+    {
+      "survey": "20261125_1126_op_ag2",
+      "institute": "OpinionWay",
+      "sponsor": "CNews",
+      "start": "2026-11-25",
+      "end": "2026-11-26",
+      "n": 912,
+      "round": 2,
+      "source": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10400-pres-iv-vague-5-opinionway-26-novembre.pdf",
+      "foundAt": "2026-11-26",
+      "hypotheses": [
+        {
+          "label": "Hypothèse avec Édouard Philippe",
+          "results": {
+            "EP": 41,
+            "MLP": 59
+          }
+        },
+        {
+          "label": "Hypothèse avec Jean-Luc Mélenchon",
+          "results": {
+            "JLM": 31,
+            "MLP": 69
+          }
+        },
+        {
+          "label": "Hypothèse avec Raphaël Glucksmann",
+          "results": {
+            "RG": 42,
+            "MLP": 58
+          }
+        },
+        {
+          "label": "Hypothèse avec David Lisnard",
+          "results": {
+            "DL": 45,
+            "MLP": 55
+          }
+        }
+      ]
     }
   ]
 }
