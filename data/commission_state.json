@@ -687,6 +687,15 @@
       "status": "sans intentions de vote",
       "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10373-pres-barometre-politique-ipsos-bva-la-tribune-dimanche-14-novembre.pdf"
     },
+    "10374": {
+      "fid": "2427",
+      "title": "10374 Pres barometre politique YOUGOV LInternaute 12 novembre",
+      "pub": "2026-11-12",
+      "inst": "YouGov",
+      "tries": 0,
+      "status": "sans intentions de vote",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10374-pres-barometre-politique-yougov-linternaute-12-novembre.pdf"
+    },
     "10375": {
       "fid": "2394",
       "title": "10375 Pres IV ELABE 14 novembre",
@@ -887,5 +896,5 @@
       "status": "hors sujet"
     }
   },
-  "checked": "2026-11-26T20:11:50.217Z"
+  "checked": "2026-11-27T14:59:01.707Z"
 }
