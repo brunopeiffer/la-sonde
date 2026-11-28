@@ -894,7 +894,16 @@
       "inst": "OpinionWay",
       "tries": 0,
       "status": "hors sujet"
+    },
+    "10403": {
+      "fid": "2428",
+      "title": "10403 Pres barometre confiance politique TOLUNA HARRIS INTERACTIVE 27 novembre",
+      "pub": "2026-11-27",
+      "inst": "Toluna Harris Interactive",
+      "tries": 0,
+      "status": "sans intentions de vote",
+      "url": "https://www.commission-des-sondages.fr/notices/files/notices/2026/novembre/10403-pres-barometre-confiance-politique-toluna-harris-interactive-27-novembre.pdf"
     }
   },
-  "checked": "2026-11-27T19:57:40.909Z"
+  "checked": "2026-11-28T14:08:50.874Z"
 }
